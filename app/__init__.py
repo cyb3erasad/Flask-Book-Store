@@ -9,12 +9,13 @@ def create_app():
     login_manager.init_app(app)
     migrate.init_app(app, db)
     
-
-    from auth import auth_bp
-    from books import books_bp
-    from cart import cart_bp
-    from orders import orders_bp
-    from admin import admin_bp
+    from. import models
+    
+    from .auth import auth_bp
+    from .books import books_bp
+    from .cart import cart_bp
+    from .orders import orders_bp
+    from .admin import admin_bp
 
     app.register_blueprint(auth_bp)
     app.register_blueprint(books_bp)
