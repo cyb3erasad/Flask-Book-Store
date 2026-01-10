@@ -7,7 +7,7 @@ class User(db.Model, UserMixin):
     id = db.Column(db.Integer, primary_key=True)
     full_name = db.Column(db.String(100), nullable=False)
     email = db.Column(db.String(50), nullable=False, unique=True)
-    password = db.Column(db.String(100), nullable=False)
+    password = db.Column(db.String(255), nullable=False)
 
     orders = db.relationship("Order", backref='user', lazy=True)
 
@@ -24,7 +24,7 @@ class Books(db.Model):
     stock = db.Column(db.Integer, default=0)
     image = db.Column(db.String(300))
 
-    order_items = db.relationship('OrderItem', backref='book', lazy=True)
+    order_items = db.relationship('Order_Item', backref='book', lazy=True)
 
 class Order(db.Model):
         __tablename__ = "orders"
