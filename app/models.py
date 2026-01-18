@@ -22,7 +22,7 @@ class Books(db.Model):
     author = db.Column(db.String(100), nullable=False)
     price = db.Column(db.Float, nullable=False)
     stock = db.Column(db.Integer, default=0)
-    image = db.Column(db.String(300))
+    image = db.Column(db.String(300), nullable=False)
 
     order_items = db.relationship('Order_Item', backref='book', lazy=True)
 
@@ -44,4 +44,6 @@ class Order_Item(db.Model):
      book_id = db.Column(db.Integer, db.ForeignKey("books.id"), nullable=False)
      quantity = db.Column(db.Integer, nullable=False)
      price = db.Column(db.Float, nullable=False)
+
+     book = db.relationship("Books", backref="order_items")
      
