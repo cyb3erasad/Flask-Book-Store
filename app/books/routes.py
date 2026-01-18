@@ -5,7 +5,7 @@ from app.extension import db
 books_bp = Blueprint("books", __name__)
 
 @books_bp.route("/")
-def home():
+def list_books():
     all_books = Books.query.all()
 
     top_selling = (
