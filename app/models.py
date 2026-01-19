@@ -8,6 +8,7 @@ class User(db.Model, UserMixin):
     full_name = db.Column(db.String(100), nullable=False)
     email = db.Column(db.String(50), nullable=False, unique=True)
     password = db.Column(db.String(255), nullable=False)
+    id_admin = db.Column(db.Boolean, default=False)
 
     orders = db.relationship("Order", backref='user', lazy=True)
 
@@ -33,7 +34,7 @@ class Order(db.Model):
         user_id = db.Column(db.Integer, db.ForeignKey("users.id"), nullable=False)
         total_amount = db.Column(db.Float, nullable=False)
         payment_method = db.Column(db.String(50), default='COD')
-        status = db.Column(db.DateTime, default=datetime.utcnow)
+        status = db.Column(db.String(100), default="Pending")
 
         items = db.relationship("Order_Item", backref='order', lazy=True)
 
