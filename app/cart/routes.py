@@ -77,17 +77,35 @@ def checkout():
     db.session.add(order)
     db.session.commit()
 
-    for book in books:
-        order_item = Order_Item(
-            order_id=order.id,
-            book_id=book.id,
-            quantity=cart[str(book.id)],
-            price=book.price
-        )
-        db.session.add(order_item)
-    db.session.commit()
-    session.pop("cart", None)
+    try:
+        for book in books:
+            quantity = cart[str(book.id)]
 
-    flash("Order placed successfully", "success")
-    return redirect(url_for("books.list_books"))   
+            if book.stock < quantity:
+                flash(f"Not enough stock for {book.title}", "danger")
+                return redirect(url_for("cart.view_cart"))
+            book.stock -= quantity
+
+            order_item = Order_Item(
+                order_id=order.id,
+                book_id=book.id,
+                quantity=quantity,
+                price=book.price
+            )
+            db.session.add(order_item)
+        db.session.commit()
+        session.pop("cart", None)
+
+        flash("Order placed successfully  (Cash on Delivery)", "success")
+        return redirect(url_for("books.list_books"))
+
+    except Exception as a:
+        db.session.rollback()
+        flash("Error while placing your order", "danger")
+        return redirect(url_for("cart.view_cart"))
+            
+
+
+
+
      
