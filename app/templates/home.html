@@ -1,0 +1,48 @@
+{% extends "base.html" %}
+
+{% block title %}Home - Book Store{% endblock %}
+
+{% block content %}
+
+<h2>Available Books</h2>
+
+{% if books %}
+<div class="books-grid">
+    {% for book in books %}
+    <div class="book-card">
+        <div class="book-image">
+            {% if book.image %}
+                <img src="{{ url_for('static', filename=book.image) }}" alt="{{ book.title }}">
+            {% else %}
+                <img src="{{ url_for('static', filename='uploads/books/default.jpg') }}" alt="No Image">
+            {% endif %}
+        </div>
+
+        <div class="book-info">
+            <h3>{{ book.title }}</h3>
+            <p class="author">by {{ book.author }}</p>
+            <p class="price">PKR {{ book.price }}</p>
+
+            {% if book.stock > 0 %}
+                {% if current_user.is_authenticated %}
+                    <form action="{{ url_for('cart.add_to_cart', book_id=book.id) }}" method="POST">
+                        <button type="submit" class="btn-primary">Add to Cart</button>
+                    </form>
+                {% else %}
+                    <a href="{{ url_for('auth.login') }}" class="btn-secondary">
+                        Login to Buy
+                    </a>
+                {% endif %}
+            {% else %}
+                <span class="out-of-stock">Out of Stock</span>
+            {% endif %}
+        </div>
+    </div>
+    {% endfor %}
+</div>
+
+{% else %}
+<p>No books available at the moment.</p>
+{% endif %}
+
+{% endblock %}

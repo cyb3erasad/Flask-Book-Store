@@ -46,5 +46,5 @@ class Order_Item(db.Model):
      quantity = db.Column(db.Integer, nullable=False)
      price = db.Column(db.Float, nullable=False)
 
-     book = db.relationship("Books", backref="order_items")
+    #  book = db.relationship("Books", backref="order_items")
      

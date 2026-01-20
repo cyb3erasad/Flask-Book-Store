@@ -1,8 +1,8 @@
 from flask import Blueprint, render_template
 from app.models import Books, Order_Item
 from app.extension import db
+from . import books_bp
 
-books_bp = Blueprint("books", __name__)
 
 @books_bp.route("/")
 def list_books():
