@@ -40,7 +40,11 @@ def login():
         if user and check_password_hash(user.password, password):
             login_user(user)
             flash("Logged in successfully", "success")
-            return redirect(url_for("books.list_books"))
+            if user.is_admin:
+                return redirect(url_for("admin.dashboard"))
+            else:
+                return redirect(url_for("books.list_books"))
+            
         flash("Invalid email or password", "danger")
     return render_template("login.html")
     

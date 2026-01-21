@@ -22,7 +22,7 @@ def add_book():
         author = request.form.get("author")
         price = request.form.get("price")
         stock = request.form.get("stock")
-        image = request.form.get("image")
+        image = request.files.get("image")
 
         if not title or not author or not price or not stock or not image:
             flash("All fields are required", "danger")
@@ -68,7 +68,7 @@ def delete_book(book_id):
         if os.path.exists(image_path):
             os.remove(image_path)
 
-    db.session.add(book)
+    db.session.delete(book)
     db.session.commit()
     flash("Book deleted successfully", "success")
     return redirect(url_for("admin.manage_books"))        

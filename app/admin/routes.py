@@ -31,7 +31,7 @@ def dashboard():
         .all()
     )
 
-    low_stock_books = Books.query.filter_by(Books.stock <=5).order_by(Books.stock).all()
+    low_stock_books = Books.query.filter(Books.stock <=5).order_by(Books.stock).all()
 
     return render_template(
         "admin/dashboard.html",

@@ -33,7 +33,7 @@ def admin_all_orders():
         return "Unauthorized", 403
     
     orders = Order.query.order_by(Order.id.desc()).all()
-    return render_template("admin_order.html", orders=orders)
+    return render_template("admin/admin_order.html", orders=orders)
 
 @orders_bp.route("/admin/order/<int:order_id>")
 @login_required
@@ -44,7 +44,7 @@ def admin_order_details(order_id):
     
     order = Order.query.get_or_404(order_id)
     items = Order_Item.query.filter_by(order_id=order.id).all()
-    return render_template("admin_order_details.html", order=order, items=items)
+    return render_template("admin/admin_order_details.html", order=order, items=items)
 
 
 @orders_bp.route("/admin/order/<int:order_id>/status/<string:new_status>")
@@ -63,7 +63,7 @@ def update_order_status(order_id, new_status):
         return redirect(url_for("orders.admin_all_orders"))
     
     order.status = new_status
-    db.session.add(new_status)
+    db.session.add(order)
     db.session.commit()
 
     flash(f"Order {order.id} updated to {new_status}", "success")

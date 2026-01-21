@@ -45,7 +45,7 @@ def view_cart():
 def remove_from_cart(book_id):
     cart = session.get("cart", {})
 
-    cart.pop(str[book_id], None)
+    cart.pop(str(book_id), None)
     session["cart"] = cart
     flash("book remove from cart", "danger")
 
