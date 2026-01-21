@@ -15,7 +15,9 @@ def dashboard():
     total_oders = Order.query.count()
 
     total_revenue = db.session.query(
-        db.func.sum(Order_Item.price * Order_Item.quantity)
+        db.func.sum(Order.total_amount)
+    ).filter(
+        Order.payment_status.in_(["Approved", "Paid", "Completed"])
     ).scalar() or 0
 
     recent_orders = Order.query.order_by(Order.id.desc()).limit(10).all()
