@@ -1,4 +1,4 @@
-from flask import Blueprint, render_template
+from flask import Blueprint, render_template, request, redirect, url_for
 from app.models import Books, Order_Item
 from app.extension import db
 from . import books_bp
@@ -17,3 +17,19 @@ def list_books():
         .all()
     )
     return render_template("home.html", books=all_books, top_selling=top_selling)
+
+@books_bp.route("/search")
+def search_books():
+    query = request.args.get("q", "").strip()
+
+    if not query:
+        return redirect(url_for("books.list_books"))
+    
+    books = Books.query.filter(
+        db.or_(
+            Books.title.ilike(f"%{query}%"),
+            Books.author.ilike(f"%{query}%")
+        )
+    ).all()
+
+    return render_template("home.html", search_query=query, books=books, top_selling=[])

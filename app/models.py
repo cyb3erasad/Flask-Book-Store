@@ -32,11 +32,27 @@ class Order(db.Model):
 
         id = db.Column(db.Integer, primary_key=True)
         user_id = db.Column(db.Integer, db.ForeignKey("users.id"), nullable=False)
-        total_amount = db.Column(db.Float, nullable=False)
-        payment_method = db.Column(db.String(50), default='COD')
-        status = db.Column(db.String(100), default="Pending")
 
-        items = db.relationship("Order_Item", backref='order', lazy=True)
+        first_name = db.Column(db.String(100), nullable=False)
+        last_name = db.Column(db.String(100), nullable=False)
+        country = db.Column(db.String(100), nullable=False)
+        street_address = db.Column(db.String(250), nullable=False)
+        appartment = db.Column(db.String(250), nullable=True)
+        city = db.Column(db.String(100), nullable=False)
+        state = db.Column(db.String(100), nullable=False)
+        phone = db.Column(db.String(20), nullable=False)
+        email = db.Column(db.String(100), nullable=False)
+
+        sub_total = db.Column(db.Float, nullable=False)
+        shipping_fee = db.Column(db.Float, nullable=False, default=250.0)
+        total_amount = db.Column(db.Float, nullable=False)
+        status = db.Column(db.String(100), default="Pending")
+        created_at = db.Column(db.DateTime, default=db.func.now())
+
+        payment_method = db.Column(db.String(20), nullable=False, default='COD')
+        payment_status = db.Column(db.String(30), nullable=False, default='Pending') 
+
+        items = db.relationship("Order_Item", backref='order', lazy=True, cascade="all, delete-orphan")
 
 class Order_Item(db.Model):
      __tablename__ = "order_items"
