@@ -19,7 +19,7 @@ def orders_details(order_id):
     if order.user_id != current_user.id:
         return "Unauthorized", 403
     
-    items = Order_Item.query.filter_by(order_id=order.id).all
+    items = Order_Item.query.filter_by(order_id=order.id).all()
 
     return render_template("order_details.html", order=order, items=items)
 
@@ -51,8 +51,6 @@ def admin_order_details(order_id):
 @login_required
 @admin_required
 def update_order_status(order_id, new_status):
-    if not current_user.is_admin:
-        return "Unauthorized", 403
     
     order = Order.query.get_or_404(order_id)
 
@@ -63,8 +61,14 @@ def update_order_status(order_id, new_status):
         return redirect(url_for("orders.admin_all_orders"))
     
     order.status = new_status
-    db.session.add(order)
+    if new_status == "Delivered":
+        order.payment_status = "Approved"
+    elif new_status == "Cancelled":
+        order.payment_status = "Cancelled"
+
     db.session.commit()
+    
+        
 
     flash(f"Order {order.id} updated to {new_status}", "success")
     return redirect(url_for("orders.admin_all_orders"))
