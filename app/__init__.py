@@ -23,5 +23,12 @@ def create_app():
     app.register_blueprint(orders_bp)
     app.register_blueprint(admin_bp)
 
+    @app.context_processor
+    def inject_cart_count():
+        from flask import session
+        cart = session.get("cart", {})
+        cart_count = sum(cart.values())
+        return dict(cart_count=cart_count)
+
 
     return app
