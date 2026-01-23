@@ -1,0 +1,338 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Shopping Cart - Online Book Store</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        'main-bg': '#FCF8F8',
+                        'card-bg': '#FBEFEF',
+                        'highlight-bg': '#F9DFDF',
+                        'accent': '#F5AFAF',
+                        'primary-text': '#3A2E2E',
+                        'secondary-text': '#4A3A3A',
+                        'muted-text': '#7A6A6A'
+                    }
+                }
+            }
+        }
+    </script>
+</head>
+
+<body class="bg-main-bg text-primary-text">
+
+    <!-- Navbar -->
+    <nav class="bg-accent sticky top-0 z-50 shadow-md">
+        <div class="container mx-auto px-4 py-4">
+            <div class="flex items-center justify-between">
+                <!-- Logo -->
+                <div class="flex items-center">
+                    <a href="/" class="text-2xl font-bold text-primary-text flex items-center">
+                        <i class="fas fa-book-open mr-2"></i>
+                        BookStore
+                    </a>
+                </div>
+
+                <!-- Search Bar (Desktop) -->
+                <div class="hidden md:flex flex-1 max-w-md mx-8">
+                    <form action="/search" method="GET" class="w-full">
+                        <div class="relative">
+                            <input type="text" name="q" placeholder="Search by title or author..."
+                                class="w-full px-4 py-2 pr-10 rounded-lg bg-main-bg text-primary-text placeholder-muted-text focus:outline-none focus:ring-2 focus:ring-primary-text">
+                            <button type="submit"
+                                class="absolute right-3 top-1/2 transform -translate-y-1/2 text-muted-text hover:text-primary-text">
+                                <i class="fas fa-search"></i>
+                            </button>
+                        </div>
+                    </form>
+                </div>
+
+                <!-- Right Side Nav -->
+                <div class="flex items-center space-x-6">
+                    <!-- Cart Icon -->
+                    <a href="/cart" class="relative text-primary-text hover:text-secondary-text transition">
+                        <i class="fas fa-shopping-cart text-xl"></i>
+                        <span
+                            class="absolute -top-2 -right-2 bg-primary-text text-accent text-xs rounded-full w-5 h-5 flex items-center justify-center">{{
+                            cart_items|length }}</span>
+                    </a>
+
+                    <!-- Auth Links -->
+                    {% if session.get('user_id') %}
+                    <a href="/my-orders"
+                        class="hidden md:block text-primary-text hover:text-secondary-text font-medium transition">My
+                        Orders</a>
+                    <a href="/auth/logout"
+                        class="hidden md:block text-primary-text hover:text-secondary-text font-medium transition">Logout</a>
+                    {% else %}
+                    <a href="/auth/login"
+                        class="hidden md:block text-primary-text hover:text-secondary-text font-medium transition">Login</a>
+                    <a href="/auth/signup"
+                        class="hidden md:block text-primary-text hover:text-secondary-text font-medium transition">Signup</a>
+                    {% endif %}
+
+                    <!-- Mobile Menu Button -->
+                    <button id="mobile-menu-btn" class="md:hidden text-primary-text">
+                        <i class="fas fa-bars text-xl"></i>
+                    </button>
+                </div>
+            </div>
+
+            <!-- Mobile Menu -->
+            <div id="mobile-menu"
+                class="hidden md:hidden mt-4 pb-4 border-t border-primary-text border-opacity-20 pt-4">
+                {% if session.get('user_id') %}
+                <a href="/my-orders"
+                    class="block py-2 text-primary-text hover:text-secondary-text font-medium transition">My Orders</a>
+                <a href="/auth/logout"
+                    class="block py-2 text-primary-text hover:text-secondary-text font-medium transition">Logout</a>
+                {% else %}
+                <a href="/auth/login"
+                    class="block py-2 text-primary-text hover:text-secondary-text font-medium transition">Login</a>
+                <a href="/auth/signup"
+                    class="block py-2 text-primary-text hover:text-secondary-text font-medium transition">Signup</a>
+                {% endif %}
+            </div>
+        </div>
+    </nav>
+
+    <!-- Flash Messages -->
+    {% with messages = get_flashed_messages(with_categories=true) %}
+    {% if messages %}
+    <div class="container mx-auto px-4 mt-4">
+        {% for category, message in messages %}
+        <div
+            class="mb-4 p-4 rounded-lg {% if category == 'success' %}bg-green-100 text-green-800{% elif category == 'danger' %}bg-red-100 text-red-800{% else %}bg-yellow-100 text-yellow-800{% endif %}">
+            <i
+                class="fas {% if category == 'success' %}fa-check-circle{% elif category == 'danger' %}fa-exclamation-circle{% else %}fa-info-circle{% endif %} mr-2"></i>
+            {{ message }}
+        </div>
+        {% endfor %}
+    </div>
+    {% endif %}
+    {% endwith %}
+
+    <!-- Cart Section -->
+    <section class="container mx-auto px-4 py-12">
+        <h1 class="text-4xl font-bold text-primary-text mb-8">Shopping Cart</h1>
+
+        {% if cart_items %}
+        <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+            <!-- Cart Items -->
+            <div class="lg:col-span-2">
+                <div class="bg-card-bg rounded-lg shadow-lg overflow-hidden">
+                    <!-- Cart Header -->
+                    <div
+                        class="hidden md:grid grid-cols-12 gap-4 bg-highlight-bg px-6 py-4 font-semibold text-primary-text">
+                        <div class="col-span-5">Book</div>
+                        <div class="col-span-2 text-center">Price</div>
+                        <div class="col-span-2 text-center">Quantity</div>
+                        <div class="col-span-2 text-center">Subtotal</div>
+                        <div class="col-span-1 text-center">Remove</div>
+                    </div>
+
+                    <!-- Cart Items List -->
+                    <div class="divide-y divide-gray-200">
+                        {% for item in cart_items %}
+                        <div class="p-6 hover:bg-main-bg transition">
+                            <div class="grid grid-cols-1 md:grid-cols-12 gap-4 items-center">
+                                <!-- Book Info -->
+                                <div class="md:col-span-5 flex items-center space-x-4">
+                                    <div
+                                        class="w-20 h-28 bg-gradient-to-br from-accent to-highlight-bg rounded flex items-center justify-center flex-shrink-0">
+                                        {% if item.book.image %}
+                                        <img src="{{ url_for('static', filename=item.book.image) }}"
+                                            alt="{{ item.book.title }}" class="h-full object-contain">
+                                        {% else %}
+                                        <i class="fas fa-book text-3xl text-primary-text opacity-30"></i>
+                                        {% endif %}
+                                    </div>
+                                    <div>
+                                        <h3 class="font-bold text-primary-text mb-1">{{ item.book.title }}</h3>
+                                        <p class="text-sm text-muted-text">by {{ item.book.author }}</p>
+                                    </div>
+                                </div>
+
+                                <!-- Price -->
+                                <div class="md:col-span-2 md:text-center">
+                                    <span class="md:hidden font-semibold text-muted-text">Price: </span>
+                                    <span class="font-semibold text-primary-text">Rs {{ item.book.price }}</span>
+                                </div>
+
+                                <!-- Quantity -->
+                                <div class="md:col-span-2 md:text-center">
+                                    <span class="md:hidden font-semibold text-muted-text">Quantity: </span>
+                                    <div class="inline-flex items-center space-x-2 bg-main-bg rounded-lg px-3 py-2">
+                                        <button onclick="updateQuantity({{ item.book.id }}, -1)"
+                                            class="text-muted-text hover:text-primary-text">
+                                            <i class="fas fa-minus"></i>
+                                        </button>
+                                        <span class="w-8 text-center font-semibold text-primary-text"
+                                            id="qty-{{ item.book.id }}">{{ item.quantity }}</span>
+                                        <button onclick="updateQuantity({{ item.book.id }}, 1)"
+                                            class="text-muted-text hover:text-primary-text">
+                                            <i class="fas fa-plus"></i>
+                                        </button>
+                                    </div>
+                                </div>
+
+                                <!-- Subtotal -->
+                                <div class="md:col-span-2 md:text-center">
+                                    <span class="md:hidden font-semibold text-muted-text">Subtotal: </span>
+                                    <span class="font-bold text-primary-text text-lg">Rs {{ item.subtotal }}</span>
+                                </div>
+
+                                <!-- Remove Button -->
+                                <div class="md:col-span-1 md:text-center">
+                                    <a href="/remove-from-cart/{{ item.book.id }}"
+                                        class="text-red-500 hover:text-red-700 transition">
+                                        <i class="fas fa-trash-alt text-xl"></i>
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                        {% endfor %}
+                    </div>
+                </div>
+
+                <!-- Continue Shopping Button -->
+                <div class="mt-6">
+                    <a href="/"
+                        class="inline-flex items-center text-accent hover:text-primary-text transition font-medium">
+                        <i class="fas fa-arrow-left mr-2"></i>
+                        Continue Shopping
+                    </a>
+                </div>
+            </div>
+
+            <!-- Cart Summary -->
+            <div class="lg:col-span-1">
+                <div class="bg-card-bg rounded-lg shadow-lg p-6 sticky top-24">
+                    <h2 class="text-2xl font-bold text-primary-text mb-6">Cart Summary</h2>
+
+                    <div class="space-y-4 mb-6">
+                        <div class="flex justify-between text-secondary-text">
+                            <span>Items ({{ cart_items|length }})</span>
+                            <span>Rs {{ total }}</span>
+                        </div>
+                        <div class="flex justify-between text-secondary-text">
+                            <span>Shipping</span>
+                            <span class="text-sm text-muted-text">Calculated at checkout</span>
+                        </div>
+                    </div>
+
+                    <div class="border-t border-gray-300 pt-4 mb-6">
+                        <div class="flex justify-between items-center">
+                            <span class="text-xl font-bold text-primary-text">Total</span>
+                            <span class="text-2xl font-bold text-primary-text">Rs {{ total }}</span>
+                        </div>
+                    </div>
+
+                    <a href="/checkout"
+                        class="block w-full bg-accent text-primary-text text-center py-3 rounded-lg font-semibold hover:bg-opacity-80 transition shadow-md mb-3">
+                        <i class="fas fa-lock mr-2"></i>Proceed to Checkout
+                    </a>
+
+                    <p class="text-xs text-muted-text text-center">
+                        <i class="fas fa-shield-alt mr-1"></i>Secure checkout · Cash on Delivery
+                    </p>
+                </div>
+            </div>
+        </div>
+
+        {% else %}
+        <!-- Empty Cart -->
+        <div class="text-center py-16 bg-card-bg rounded-lg shadow-lg">
+            <i class="fas fa-shopping-cart text-6xl text-muted-text mb-6"></i>
+            <h2 class="text-2xl font-bold text-primary-text mb-4">Your cart is empty</h2>
+            <p class="text-secondary-text mb-8">Add some books to get started!</p>
+            <a href="/"
+                class="inline-block bg-accent text-primary-text px-8 py-3 rounded-lg font-semibold hover:bg-opacity-80 transition">
+                Browse Books
+            </a>
+        </div>
+        {% endif %}
+    </section>
+
+    <!-- Footer -->
+    <footer class="bg-card-bg py-12 mt-16">
+        <div class="container mx-auto px-4">
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                <!-- About Section -->
+                <div>
+                    <h3 class="text-xl font-bold text-primary-text mb-4">About BookStore</h3>
+                    <p class="text-secondary-text leading-relaxed">
+                        Your trusted online destination for discovering and purchasing books across all genres. We bring
+                        stories to your doorstep.
+                    </p>
+                </div>
+
+                <!-- Contact Info -->
+                <div>
+                    <h3 class="text-xl font-bold text-primary-text mb-4">Contact Us</h3>
+                    <p class="text-secondary-text mb-2">
+                        <i class="fas fa-envelope mr-2"></i>info@bookstore.com
+                    </p>
+                    <p class="text-secondary-text">
+                        <i class="fas fa-phone mr-2"></i>+92 300 1234567
+                    </p>
+                </div>
+
+                <!-- Social Links -->
+                <div>
+                    <h3 class="text-xl font-bold text-primary-text mb-4">Follow Us</h3>
+                    <div class="flex space-x-4">
+                        <a href="https://instagram.com" target="_blank"
+                            class="text-primary-text hover:text-accent transition text-2xl">
+                            <i class="fab fa-instagram"></i>
+                        </a>
+                        <a href="https://wa.me/923001234567" target="_blank"
+                            class="text-primary-text hover:text-accent transition text-2xl">
+                            <i class="fab fa-whatsapp"></i>
+                        </a>
+                    </div>
+                </div>
+            </div>
+
+            <div class="border-t border-primary-text border-opacity-20 mt-8 pt-8 text-center">
+                <p class="text-muted-text">&copy; 2024 BookStore. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Mobile menu toggle
+        const mobileMenuBtn = document.getElementById('mobile-menu-btn');
+        const mobileMenu = document.getElementById('mobile-menu');
+
+        mobileMenuBtn.addEventListener('click', () => {
+            mobileMenu.classList.toggle('hidden');
+        });
+
+        // Update quantity (placeholder - you'll need to implement backend route)
+        function updateQuantity(bookId, change) {
+            const qtyElement = document.getElementById(`qty-${bookId}`);
+            let currentQty = parseInt(qtyElement.textContent);
+            let newQty = currentQty + change;
+
+            if (newQty < 1) return; // Don't go below 1
+
+            // Update the display
+            qtyElement.textContent = newQty;
+
+            // TODO: Make AJAX call to update cart in session
+            // For now, reload the page with updated quantity
+            window.location.href = `/update-cart/${bookId}/${newQty}`;
+        }
+    </script>
+
+</body>
+
+</html>

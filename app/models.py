@@ -58,9 +58,11 @@ class Order_Item(db.Model):
      __tablename__ = "order_items"
      id = db.Column(db.Integer, primary_key=True)
      order_id = db.Column(db.Integer, db.ForeignKey("orders.id"), nullable=False)
-     book_id = db.Column(db.Integer, db.ForeignKey("books.id"), nullable=False)
+     book_id = db.Column(db.Integer, db.ForeignKey("books.id"), nullable=True)
      quantity = db.Column(db.Integer, nullable=False)
      price = db.Column(db.Float, nullable=False)
 
+     book_title = db.Column(db.String(200))
+     book_author = db.Column(db.String(200))
     #  book = db.relationship("Books", backref="order_items")
      

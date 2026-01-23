@@ -185,7 +185,9 @@ def place_order():
                 order_id=order.id,
                 book_id=book.id,
                 quantity=quantity,
-                price=book.price
+                price=book.price,
+                book_title=book.title,
+                book_author=book.author
             )
             db.session.add(order_item)
         
