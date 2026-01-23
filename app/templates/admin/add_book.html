@@ -1,281 +1,335 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Add Book - Admin Panel</title>
-    <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-
-        body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background-color: #f5f5f5;
-            display: flex;
-        }
-
-        /* Sidebar */
-        .sidebar {
-            width: 250px;
-            background-color: #2c3e50;
-            height: 100vh;
-            position: fixed;
-            left: 0;
-            top: 0;
-            overflow-y: auto;
-        }
-
-        .sidebar-header {
-            padding: 1.5rem;
-            background-color: #1a252f;
-            color: white;
-            text-align: center;
-        }
-
-        .sidebar-header h2 {
-            font-size: 1.3rem;
-        }
-
-        .sidebar-menu {
-            list-style: none;
-            padding: 1rem 0;
-        }
-
-        .sidebar-menu li a {
-            display: block;
-            padding: 1rem 1.5rem;
-            color: #ecf0f1;
-            text-decoration: none;
-            transition: background-color 0.3s;
-        }
-
-        .sidebar-menu li a:hover,
-        .sidebar-menu li a.active {
-            background-color: #34495e;
-        }
-
-        /* Main Content */
-        .main-content {
-            margin-left: 250px;
-            flex: 1;
-            padding: 2rem;
-        }
-
-        /* Top Bar */
-        .top-bar {
-            background: white;
-            padding: 1rem 1.5rem;
-            border-radius: 10px;
-            margin-bottom: 2rem;
-            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-
-        .top-bar h1 {
-            color: #2c3e50;
-            font-size: 1.8rem;
-        }
-
-        .btn-logout {
-            background-color: #e74c3c;
-            color: white;
-            padding: 0.5rem 1rem;
-            text-decoration: none;
-            border-radius: 5px;
-            transition: background-color 0.3s;
-        }
-
-        .btn-logout:hover {
-            background-color: #c0392b;
-        }
-
-        /* Flash Messages */
-        .flash-messages {
-            margin-bottom: 1.5rem;
-        }
-
-        .alert {
-            padding: 1rem;
-            border-radius: 5px;
-            margin-bottom: 1rem;
-        }
-
-        .alert-success {
-            background-color: #d4edda;
-            color: #155724;
-            border: 1px solid #c3e6cb;
-        }
-
-        .alert-danger {
-            background-color: #f8d7da;
-            color: #721c24;
-            border: 1px solid #f5c6cb;
-        }
-
-        /* Form Container */
-        .form-container {
-            background: white;
-            padding: 2rem;
-            border-radius: 10px;
-            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
-            max-width: 600px;
-        }
-
-        .form-group {
-            margin-bottom: 1.5rem;
-        }
-
-        .form-group label {
-            display: block;
-            margin-bottom: 0.5rem;
-            color: #2c3e50;
-            font-weight: 600;
-        }
-
-        .form-group input,
-        .form-group textarea {
-            width: 100%;
-            padding: 0.8rem;
-            border: 1px solid #ddd;
-            border-radius: 5px;
-            font-size: 1rem;
-            font-family: inherit;
-        }
-
-        .form-group input:focus,
-        .form-group textarea:focus {
-            outline: none;
-            border-color: #3498db;
-        }
-
-        .form-group small {
-            color: #7f8c8d;
-            font-size: 0.85rem;
-            display: block;
-            margin-top: 0.3rem;
-        }
-
-        .btn-submit {
-            background-color: #27ae60;
-            color: white;
-            border: none;
-            padding: 0.8rem 2rem;
-            border-radius: 5px;
-            font-size: 1rem;
-            cursor: pointer;
-            transition: background-color 0.3s;
-        }
-
-        .btn-submit:hover {
-            background-color: #229954;
-        }
-
-        .btn-cancel {
-            background-color: #95a5a6;
-            color: white;
-            border: none;
-            padding: 0.8rem 2rem;
-            border-radius: 5px;
-            font-size: 1rem;
-            cursor: pointer;
-            text-decoration: none;
-            display: inline-block;
-            margin-left: 1rem;
-            transition: background-color 0.3s;
-        }
-
-        .btn-cancel:hover {
-            background-color: #7f8c8d;
-        }
-
-        /* Responsive */
-        @media (max-width: 768px) {
-            .sidebar {
-                transform: translateX(-100%);
-            }
-
-            .main-content {
-                margin-left: 0;
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        'main-bg': '#FCF8F8',
+                        'card-bg': '#FBEFEF',
+                        'highlight-bg': '#F9DFDF',
+                        'accent': '#F5AFAF',
+                        'primary-text': '#3A2E2E',
+                        'secondary-text': '#4A3A3A',
+                        'muted-text': '#7A6A6A'
+                    }
+                }
             }
         }
-    </style>
+    </script>
 </head>
-<body>
-    <!-- Sidebar -->
-    <aside class="sidebar">
-        <div class="sidebar-header">
-            <h2>📚 Admin Panel</h2>
-        </div>
-        <ul class="sidebar-menu">
-            <li><a href="{{ url_for('admin.dashboard') }}">📊 Dashboard</a></li>
-            <li><a href="{{ url_for('admin.add_book') }}" class="active">➕ Add Book</a></li>
-            <li><a href="{{ url_for('admin.manage_books') }}">📚 Manage Books</a></li>
-            <li><a href="{{ url_for('orders.admin_all_orders') }}">📦 All Orders</a></li>
-            <li><a href="{{ url_for('books.list_books') }}">🏠 View Store</a></li>
-        </ul>
-    </aside>
 
-    <!-- Main Content -->
-    <main class="main-content">
-        <!-- Top Bar -->
-        <div class="top-bar">
-            <h1>Add New Book</h1>
-            <a href="{{ url_for('auth.logout') }}" class="btn-logout">Logout</a>
-        </div>
+<body class="bg-main-bg text-primary-text">
 
-        <!-- Flash Messages -->
-        {% with messages = get_flashed_messages(with_categories=true) %}
-            {% if messages %}
-                <div class="flash-messages">
-                    {% for category, message in messages %}
-                        <div class="alert alert-{{ category }}">
-                            {{ message }}
+    <div class="flex h-screen overflow-hidden">
+        <!-- Sidebar -->
+        <aside id="sidebar"
+            class="w-64 bg-card-bg shadow-xl fixed lg:static inset-y-0 left-0 z-50 transform -translate-x-full lg:translate-x-0 transition-transform duration-300">
+            <div class="flex flex-col h-full">
+                <!-- Logo -->
+                <div class="bg-accent p-6 flex items-center justify-between">
+                    <a href="/" class="text-2xl font-bold text-primary-text flex items-center">
+                        <i class="fas fa-book-open mr-2"></i>
+                        BookStore
+                    </a>
+                    <button id="close-sidebar" class="lg:hidden text-primary-text">
+                        <i class="fas fa-times text-xl"></i>
+                    </button>
+                </div>
+
+                <!-- Admin Info -->
+                <div class="p-6 border-b border-gray-200">
+                    <div class="flex items-center space-x-3">
+                        <div class="bg-accent rounded-full w-12 h-12 flex items-center justify-center">
+                            <i class="fas fa-user-shield text-xl text-primary-text"></i>
                         </div>
-                    {% endfor %}
+                        <div>
+                            <p class="font-bold text-primary-text">Admin Panel</p>
+                            <p class="text-sm text-muted-text">Administrator</p>
+                        </div>
+                    </div>
                 </div>
+
+                <!-- Navigation -->
+                <nav class="flex-1 overflow-y-auto p-4">
+                    <ul class="space-y-2">
+                        <li>
+                            <a href="/admin/dashboard"
+                                class="flex items-center space-x-3 p-3 rounded-lg text-secondary-text hover:bg-highlight-bg hover:text-primary-text transition">
+                                <i class="fas fa-chart-line w-5"></i>
+                                <span>Dashboard</span>
+                            </a>
+                        </li>
+                        <li>
+                            <a href="/admin/add-book"
+                                class="flex items-center space-x-3 p-3 rounded-lg bg-accent text-primary-text font-semibold transition">
+                                <i class="fas fa-plus-circle w-5"></i>
+                                <span>Add Book</span>
+                            </a>
+                        </li>
+                        <li>
+                            <a href="/admin/manage-book"
+                                class="flex items-center space-x-3 p-3 rounded-lg text-secondary-text hover:bg-highlight-bg hover:text-primary-text transition">
+                                <i class="fas fa-books w-5"></i>
+                                <span>Manage Books</span>
+                            </a>
+                        </li>
+                        <li>
+                            <a href="/admin/all-orders"
+                                class="flex items-center space-x-3 p-3 rounded-lg text-secondary-text hover:bg-highlight-bg hover:text-primary-text transition">
+                                <i class="fas fa-shopping-bag w-5"></i>
+                                <span>All Orders</span>
+                            </a>
+                        </li>
+                        <li>
+                            <a href="/"
+                                class="flex items-center space-x-3 p-3 rounded-lg text-secondary-text hover:bg-highlight-bg hover:text-primary-text transition">
+                                <i class="fas fa-store w-5"></i>
+                                <span>View Store</span>
+                            </a>
+                        </li>
+                        <li>
+                            <a href="/logout"
+                                class="flex items-center space-x-3 p-3 rounded-lg text-red-600 hover:bg-red-50 transition">
+                                <i class="fas fa-sign-out-alt w-5"></i>
+                                <span>Logout</span>
+                            </a>
+                        </li>
+                    </ul>
+                </nav>
+            </div>
+        </aside>
+
+        <!-- Sidebar Overlay (Mobile) -->
+        <div id="sidebar-overlay" class="fixed inset-0 bg-primary-text bg-opacity-50 z-40 hidden lg:hidden"></div>
+
+        <!-- Main Content -->
+        <main class="flex-1 overflow-y-auto">
+            <!-- Top Bar -->
+            <header class="bg-white shadow-sm sticky top-0 z-30">
+                <div class="flex items-center justify-between p-4">
+                    <div class="flex items-center space-x-4">
+                        <button id="open-sidebar" class="lg:hidden text-primary-text">
+                            <i class="fas fa-bars text-xl"></i>
+                        </button>
+                        <h1 class="text-2xl font-bold text-primary-text">Add New Book</h1>
+                    </div>
+                    <a href="/admin/manage-book" class="text-accent hover:text-primary-text transition font-medium">
+                        <i class="fas fa-arrow-left mr-2"></i>Back to Books
+                    </a>
+                </div>
+            </header>
+
+            <!-- Flash Messages -->
+            {% with messages = get_flashed_messages(with_categories=true) %}
+            {% if messages %}
+            <div class="p-4">
+                {% for category, message in messages %}
+                <div
+                    class="mb-4 p-4 rounded-lg {% if category == 'success' %}bg-green-100 text-green-800{% elif category == 'danger' %}bg-red-100 text-red-800{% else %}bg-yellow-100 text-yellow-800{% endif %}">
+                    <i
+                        class="fas {% if category == 'success' %}fa-check-circle{% elif category == 'danger' %}fa-exclamation-circle{% else %}fa-info-circle{% endif %} mr-2"></i>
+                    {{ message }}
+                </div>
+                {% endfor %}
+            </div>
             {% endif %}
-        {% endwith %}
+            {% endwith %}
 
-        <!-- Form -->
-        <div class="form-container">
-            <form method="POST" enctype="multipart/form-data">
-                <div class="form-group">
-                    <label for="title">Book Title *</label>
-                    <input type="text" id="title" name="title" required>
-                </div>
+            <!-- Add Book Form -->
+            <div class="p-6">
+                <div class="max-w-3xl mx-auto">
+                    <div class="bg-card-bg rounded-lg shadow-lg p-8">
+                        <div class="mb-6">
+                            <h2 class="text-2xl font-bold text-primary-text mb-2">Book Information</h2>
+                            <p class="text-secondary-text">Fill in the details to add a new book to your inventory</p>
+                        </div>
 
-                <div class="form-group">
-                    <label for="author">Author *</label>
-                    <input type="text" id="author" name="author" required>
-                </div>
+                        <form action="/admin/add-book" method="POST" enctype="multipart/form-data" id="add-book-form">
+                            <!-- Book Title -->
+                            <div class="mb-6">
+                                <label for="title" class="block text-sm font-semibold text-primary-text mb-2">
+                                    Book Title <span class="text-red-500">*</span>
+                                </label>
+                                <input type="text" id="title" name="title" required
+                                    class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-accent bg-main-bg text-primary-text"
+                                    placeholder="Enter book title">
+                            </div>
 
-                <div class="form-group">
-                    <label for="price">Price ($) *</label>
-                    <input type="number" id="price" name="price" step="0.01" min="0" required>
-                </div>
+                            <!-- Author -->
+                            <div class="mb-6">
+                                <label for="author" class="block text-sm font-semibold text-primary-text mb-2">
+                                    Author <span class="text-red-500">*</span>
+                                </label>
+                                <input type="text" id="author" name="author" required
+                                    class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-accent bg-main-bg text-primary-text"
+                                    placeholder="Enter author name">
+                            </div>
 
-                <div class="form-group">
-                    <label for="stock">Stock Quantity *</label>
-                    <input type="number" id="stock" name="stock" min="0" required>
-                </div>
+                            <!-- Price and Stock -->
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
+                                <!-- Price -->
+                                <div>
+                                    <label for="price" class="block text-sm font-semibold text-primary-text mb-2">
+                                        Price (Rs) <span class="text-red-500">*</span>
+                                    </label>
+                                    <input type="number" id="price" name="price" required min="0" step="0.01"
+                                        class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-accent bg-main-bg text-primary-text"
+                                        placeholder="0.00">
+                                </div>
 
-                <div class="form-group">
-                    <label for="image">Book Cover Image *</label>
-                    <input type="file" id="image" name="image" accept="image/png, image/jpeg, image/jpg" required>
-                    <small>Allowed formats: PNG, JPG, JPEG</small>
-                </div>
+                                <!-- Stock -->
+                                <div>
+                                    <label for="stock" class="block text-sm font-semibold text-primary-text mb-2">
+                                        Stock Quantity <span class="text-red-500">*</span>
+                                    </label>
+                                    <input type="number" id="stock" name="stock" required min="0"
+                                        class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-accent bg-main-bg text-primary-text"
+                                        placeholder="0">
+                                </div>
+                            </div>
 
-                <div>
-                    <button type="submit" class="btn-submit">Add Book</button>
-                    <a href="{{ url_for('admin.manage_books') }}" class="btn-cancel">Cancel</a>
+                            <!-- Book Image -->
+                            <div class="mb-8">
+                                <label for="image" class="block text-sm font-semibold text-primary-text mb-2">
+                                    Book Cover Image <span class="text-red-500">*</span>
+                                </label>
+                                <div class="flex items-center space-x-4">
+                                    <label for="image" class="flex-1 cursor-pointer">
+                                        <div
+                                            class="border-2 border-dashed border-gray-300 rounded-lg p-6 text-center hover:border-accent transition">
+                                            <i class="fas fa-cloud-upload-alt text-4xl text-muted-text mb-2"></i>
+                                            <p class="text-secondary-text mb-1">
+                                                <span class="text-accent font-semibold">Click to upload</span> or drag
+                                                and drop
+                                            </p>
+                                            <p class="text-xs text-muted-text">PNG, JPG or JPEG (MAX. 5MB)</p>
+                                        </div>
+                                        <input type="file" id="image" name="image" required accept=".png,.jpg,.jpeg"
+                                            class="hidden" onchange="previewImage(event)">
+                                    </label>
+
+                                    <!-- Image Preview -->
+                                    <div id="image-preview" class="hidden">
+                                        <div
+                                            class="w-32 h-44 bg-gradient-to-br from-accent to-highlight-bg rounded-lg flex items-center justify-center overflow-hidden">
+                                            <img id="preview-img" src="" alt="Preview" class="h-full object-contain">
+                                        </div>
+                                    </div>
+                                </div>
+                                <p id="file-name" class="text-sm text-muted-text mt-2"></p>
+                            </div>
+
+                            <!-- Submit Buttons -->
+                            <div class="flex flex-col sm:flex-row gap-4">
+                                <button type="submit"
+                                    class="flex-1 bg-accent text-primary-text py-3 rounded-lg font-bold hover:bg-opacity-80 transition shadow-md">
+                                    <i class="fas fa-plus-circle mr-2"></i>
+                                    Add Book
+                                </button>
+                                <a href="/admin/manage-book"
+                                    class="flex-1 bg-gray-300 text-primary-text py-3 rounded-lg font-bold hover:bg-gray-400 transition text-center">
+                                    <i class="fas fa-times mr-2"></i>
+                                    Cancel
+                                </a>
+                            </div>
+                        </form>
+                    </div>
                 </div>
-            </form>
-        </div>
-    </main>
+            </div>
+        </main>
+    </div>
+
+    <script>
+        // Sidebar toggle (Mobile)
+        const sidebar = document.getElementById('sidebar');
+        const sidebarOverlay = document.getElementById('sidebar-overlay');
+        const openSidebar = document.getElementById('open-sidebar');
+        const closeSidebar = document.getElementById('close-sidebar');
+
+        openSidebar.addEventListener('click', () => {
+            sidebar.classList.remove('-translate-x-full');
+            sidebarOverlay.classList.remove('hidden');
+        });
+
+        closeSidebar.addEventListener('click', () => {
+            sidebar.classList.add('-translate-x-full');
+            sidebarOverlay.classList.add('hidden');
+        });
+
+        sidebarOverlay.addEventListener('click', () => {
+            sidebar.classList.add('-translate-x-full');
+            sidebarOverlay.classList.add('hidden');
+        });
+
+        // Image preview
+        function previewImage(event) {
+            const file = event.target.files[0];
+            const preview = document.getElementById('image-preview');
+            const previewImg = document.getElementById('preview-img');
+            const fileName = document.getElementById('file-name');
+
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = function (e) {
+                    previewImg.src = e.target.result;
+                    preview.classList.remove('hidden');
+                };
+                reader.readAsDataURL(file);
+                fileName.textContent = `Selected: ${file.name}`;
+            }
+        }
+
+        // Form validation
+        document.getElementById('add-book-form').addEventListener('submit', function (e) {
+            const title = document.getElementById('title').value.trim();
+            const author = document.getElementById('author').value.trim();
+            const price = document.getElementById('price').value;
+            const stock = document.getElementById('stock').value;
+            const image = document.getElementById('image').files[0];
+
+            if (!title || !author || !price || !stock || !image) {
+                e.preventDefault();
+                alert('All fields are required!');
+                return false;
+            }
+
+            if (parseFloat(price) < 0) {
+                e.preventDefault();
+                alert('Price must be a positive number!');
+                return false;
+            }
+
+            if (parseInt(stock) < 0) {
+                e.preventDefault();
+                alert('Stock must be a positive number!');
+                return false;
+            }
+
+            // Check file type
+            const allowedTypes = ['image/png', 'image/jpeg', 'image/jpg'];
+            if (!allowedTypes.includes(image.type)) {
+                e.preventDefault();
+                alert('Only PNG, JPG, and JPEG images are allowed!');
+                return false;
+            }
+
+            // Check file size (5MB max)
+            if (image.size > 5 * 1024 * 1024) {
+                e.preventDefault();
+                alert('Image size must be less than 5MB!');
+                return false;
+            }
+        });
+    </script>
+
 </body>
+
 </html>
