@@ -1,0 +1,308 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Order #{{ order.id }} - Online Book Store</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        'main-bg': '#FCF8F8',
+                        'card-bg': '#FBEFEF',
+                        'highlight-bg': '#F9DFDF',
+                        'accent': '#F5AFAF',
+                        'primary-text': '#3A2E2E',
+                        'secondary-text': '#4A3A3A',
+                        'muted-text': '#7A6A6A'
+                    }
+                }
+            }
+        }
+    </script>
+</head>
+<body class="bg-main-bg text-primary-text">
+    
+    <!-- Navbar -->
+    <nav class="bg-accent sticky top-0 z-50 shadow-md">
+        <div class="container mx-auto px-4 py-4">
+            <div class="flex items-center justify-between">
+                <!-- Logo -->
+                <div class="flex items-center">
+                    <a href="/" class="text-2xl font-bold text-primary-text flex items-center">
+                        <i class="fas fa-book-open mr-2"></i>
+                        BookStore
+                    </a>
+                </div>
+
+                <!-- Search Bar (Desktop) -->
+                <div class="hidden md:flex flex-1 max-w-md mx-8">
+                    <form action="/search" method="GET" class="w-full">
+                        <div class="relative">
+                            <input 
+                                type="text" 
+                                name="q" 
+                                placeholder="Search by title or author..." 
+                                class="w-full px-4 py-2 pr-10 rounded-lg bg-main-bg text-primary-text placeholder-muted-text focus:outline-none focus:ring-2 focus:ring-primary-text"
+                            >
+                            <button type="submit" class="absolute right-3 top-1/2 transform -translate-y-1/2 text-muted-text hover:text-primary-text">
+                                <i class="fas fa-search"></i>
+                            </button>
+                        </div>
+                    </form>
+                </div>
+
+                <!-- Right Side Nav -->
+                <div class="flex items-center space-x-6">
+                    <!-- Cart Icon -->
+                    <a href="/cart" class="relative text-primary-text hover:text-secondary-text transition">
+                        <i class="fas fa-shopping-cart text-xl"></i>
+                        <span class="absolute -top-2 -right-2 bg-primary-text text-accent text-xs rounded-full w-5 h-5 flex items-center justify-center">0</span>
+                    </a>
+
+                    <!-- Auth Links -->
+                    <a href="/my-orders" class="hidden md:block text-primary-text hover:text-secondary-text font-medium transition">My Orders</a>
+                    <a href="/auth/logout" class="hidden md:block text-primary-text hover:text-secondary-text font-medium transition">Logout</a>
+
+                    <!-- Mobile Menu Button -->
+                    <button id="mobile-menu-btn" class="md:hidden text-primary-text">
+                        <i class="fas fa-bars text-xl"></i>
+                    </button>
+                </div>
+            </div>
+
+            <!-- Mobile Menu -->
+            <div id="mobile-menu" class="hidden md:hidden mt-4 pb-4 border-t border-primary-text border-opacity-20 pt-4">
+                <a href="/my-orders" class="block py-2 text-primary-text hover:text-secondary-text font-medium transition">My Orders</a>
+                <a href="/auth/logout" class="block py-2 text-primary-text hover:text-secondary-text font-medium transition">Logout</a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Order Details Section -->
+    <section class="container mx-auto px-4 py-12">
+        <!-- Breadcrumb -->
+        <div class="mb-6">
+            <a href="/my-orders" class="text-accent hover:text-primary-text transition font-medium">
+                <i class="fas fa-arrow-left mr-2"></i>Back to My Orders
+            </a>
+        </div>
+
+        <!-- Order Header -->
+        <div class="bg-highlight-bg rounded-t-lg px-6 py-6 shadow-lg">
+            <div class="flex flex-wrap items-center justify-between gap-4">
+                <div>
+                    <h1 class="text-3xl font-bold text-primary-text mb-2">Order #{{ order.id }}</h1>
+                    <p class="text-secondary-text">
+                        <i class="fas fa-calendar mr-2"></i>
+                        Placed on {{ order.created_at.strftime('%B %d, %Y at %I:%M %p') }}
+                    </p>
+                </div>
+                
+                <span class="px-6 py-3 rounded-full text-lg font-bold
+                    {% if order.status == 'Pending' %}bg-yellow-100 text-yellow-800
+                    {% elif order.status == 'Processing' %}bg-blue-100 text-blue-800
+                    {% elif order.status == 'Shipped' %}bg-purple-100 text-purple-800
+                    {% elif order.status == 'Delivered' %}bg-green-100 text-green-800
+                    {% elif order.status == 'Cancelled' %}bg-red-100 text-red-800
+                    {% else %}bg-gray-100 text-gray-800{% endif %}">
+                    <i class="fas 
+                        {% if order.status == 'Pending' %}fa-clock
+                        {% elif order.status == 'Processing' %}fa-cog fa-spin
+                        {% elif order.status == 'Shipped' %}fa-shipping-fast
+                        {% elif order.status == 'Delivered' %}fa-check-circle
+                        {% elif order.status == 'Cancelled' %}fa-times-circle
+                        {% else %}fa-info-circle{% endif %} mr-2"></i>
+                    {{ order.status }}
+                </span>
+            </div>
+        </div>
+
+        <div class="grid grid-cols-1 lg:grid-cols-3 gap-6 mt-6">
+            <!-- Order Items -->
+            <div class="lg:col-span-2">
+                <div class="bg-card-bg rounded-lg shadow-lg overflow-hidden">
+                    <div class="bg-highlight-bg px-6 py-4 border-b border-gray-200">
+                        <h2 class="text-xl font-bold text-primary-text">Order Items</h2>
+                    </div>
+
+                    <div class="divide-y divide-gray-200">
+                        {% for item in items %}
+                        <div class="p-6 hover:bg-main-bg transition">
+                            <div class="flex items-start space-x-4">
+                                <!-- Book Image -->
+                                <div class="w-24 h-32 bg-gradient-to-br from-accent to-highlight-bg rounded flex items-center justify-center flex-shrink-0">
+                                    {% if item.book.image %}
+                                        <img src="{{ url_for('static', filename=item.book.image) }}" alt="{{ item.book.title }}" class="h-full object-contain">
+                                    {% else %}
+                                        <i class="fas fa-book text-4xl text-primary-text opacity-30"></i>
+                                    {% endif %}
+                                </div>
+
+                                <!-- Book Details -->
+                                <div class="flex-1">
+                                    <h3 class="text-lg font-bold text-primary-text mb-1">{{ item.book.title }}</h3>
+                                    <p class="text-sm text-muted-text mb-3">by {{ item.book.author }}</p>
+                                    
+                                    <div class="flex flex-wrap items-center gap-4 text-sm">
+                                        <div class="flex items-center">
+                                            <span class="text-muted-text mr-2">Price:</span>
+                                            <span class="font-semibold text-primary-text">Rs {{ item.price }}</span>
+                                        </div>
+                                        <div class="flex items-center">
+                                            <span class="text-muted-text mr-2">Quantity:</span>
+                                            <span class="font-semibold text-primary-text">{{ item.quantity }}</span>
+                                        </div>
+                                        <div class="flex items-center">
+                                            <span class="text-muted-text mr-2">Subtotal:</span>
+                                            <span class="font-bold text-primary-text text-lg">Rs {{ item.price * item.quantity }}</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        {% endfor %}
+                    </div>
+                </div>
+            </div>
+
+            <!-- Order Summary & Info -->
+            <div class="lg:col-span-1 space-y-6">
+                <!-- Order Summary -->
+                <div class="bg-card-bg rounded-lg shadow-lg p-6">
+                    <h2 class="text-xl font-bold text-primary-text mb-4">Order Summary</h2>
+                    
+                    <div class="space-y-3 mb-4">
+                        <div class="flex justify-between text-secondary-text">
+                            <span>Subtotal</span>
+                            <span class="font-semibold">Rs {{ order.sub_total }}</span>
+                        </div>
+                        <div class="flex justify-between text-secondary-text">
+                            <span>Shipping Fee</span>
+                            <span class="font-semibold">Rs {{ order.shipping_fee }}</span>
+                        </div>
+                    </div>
+
+                    <div class="border-t border-gray-300 pt-4">
+                        <div class="flex justify-between items-center">
+                            <span class="text-lg font-bold text-primary-text">Total</span>
+                            <span class="text-2xl font-bold text-primary-text">Rs {{ order.total_amount }}</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Payment Information -->
+                <div class="bg-card-bg rounded-lg shadow-lg p-6">
+                    <h2 class="text-xl font-bold text-primary-text mb-4">Payment Information</h2>
+                    
+                    <div class="space-y-3">
+                        <div class="flex items-center space-x-3 bg-highlight-bg p-3 rounded-lg">
+                            <i class="fas fa-money-bill-wave text-2xl text-primary-text"></i>
+                            <div>
+                                <p class="font-semibold text-primary-text">{{ order.payment_method }}</p>
+                                <p class="text-sm text-muted-text">Cash on Delivery</p>
+                            </div>
+                        </div>
+                        
+                        <div class="text-sm">
+                            <span class="text-muted-text">Payment Status:</span>
+                            <span class="ml-2 px-3 py-1 rounded-full text-xs font-semibold
+                                {% if order.payment_status == 'Pending' %}bg-yellow-100 text-yellow-800
+                                {% elif order.payment_status == 'Paid' %}bg-green-100 text-green-800
+                                {% else %}bg-gray-100 text-gray-800{% endif %}">
+                                {{ order.payment_status }}
+                            </span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Shipping Address -->
+                <div class="bg-card-bg rounded-lg shadow-lg p-6">
+                    <h2 class="text-xl font-bold text-primary-text mb-4 flex items-center">
+                        <i class="fas fa-map-marker-alt mr-2 text-accent"></i>
+                        Shipping Address
+                    </h2>
+                    
+                    <div class="text-secondary-text leading-relaxed space-y-1">
+                        <p class="font-semibold text-primary-text">{{ order.first_name }} {{ order.last_name }}</p>
+                        <p>{{ order.street_address }}</p>
+                        {% if order.appartment %}
+                        <p>{{ order.appartment }}</p>
+                        {% endif %}
+                        <p>{{ order.city }}, {{ order.state }}</p>
+                        <p>{{ order.country }}</p>
+                    </div>
+
+                    <div class="mt-4 pt-4 border-t border-gray-200 space-y-2">
+                        <p class="text-sm">
+                            <i class="fas fa-phone w-5 text-muted-text"></i>
+                            <span class="text-secondary-text">{{ order.phone }}</span>
+                        </p>
+                        <p class="text-sm">
+                            <i class="fas fa-envelope w-5 text-muted-text"></i>
+                            <span class="text-secondary-text">{{ order.email }}</span>
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="bg-card-bg py-12 mt-16">
+        <div class="container mx-auto px-4">
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                <!-- About Section -->
+                <div>
+                    <h3 class="text-xl font-bold text-primary-text mb-4">About BookStore</h3>
+                    <p class="text-secondary-text leading-relaxed">
+                        Your trusted online destination for discovering and purchasing books across all genres. We bring stories to your doorstep.
+                    </p>
+                </div>
+
+                <!-- Contact Info -->
+                <div>
+                    <h3 class="text-xl font-bold text-primary-text mb-4">Contact Us</h3>
+                    <p class="text-secondary-text mb-2">
+                        <i class="fas fa-envelope mr-2"></i>info@bookstore.com
+                    </p>
+                    <p class="text-secondary-text">
+                        <i class="fas fa-phone mr-2"></i>+92 300 1234567
+                    </p>
+                </div>
+
+                <!-- Social Links -->
+                <div>
+                    <h3 class="text-xl font-bold text-primary-text mb-4">Follow Us</h3>
+                    <div class="flex space-x-4">
+                        <a href="https://instagram.com" target="_blank" class="text-primary-text hover:text-accent transition text-2xl">
+                            <i class="fab fa-instagram"></i>
+                        </a>
+                        <a href="https://wa.me/923001234567" target="_blank" class="text-primary-text hover:text-accent transition text-2xl">
+                            <i class="fab fa-whatsapp"></i>
+                        </a>
+                    </div>
+                </div>
+            </div>
+
+            <div class="border-t border-primary-text border-opacity-20 mt-8 pt-8 text-center">
+                <p class="text-muted-text">&copy; 2024 BookStore. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Mobile menu toggle
+        const mobileMenuBtn = document.getElementById('mobile-menu-btn');
+        const mobileMenu = document.getElementById('mobile-menu');
+
+        mobileMenuBtn.addEventListener('click', () => {
+            mobileMenu.classList.toggle('hidden');
+        });
+    </script>
+
+</body>
+</html>

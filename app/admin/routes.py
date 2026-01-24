@@ -4,6 +4,7 @@ from flask_login import login_required
 from app.extension import db
 from . import admin_bp
 from .decorators import admin_required
+from datetime import datetime
 
 
 @admin_bp.route("/dashboard")
@@ -37,6 +38,7 @@ def dashboard():
 
     return render_template(
         "admin/dashboard.html",
+        now=datetime.now(),
         total_books=total_books,
         total_oders=total_oders,
         total_users=total_users,

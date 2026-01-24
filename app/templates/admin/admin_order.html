@@ -1,287 +1,403 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>All Orders - Admin Panel</title>
-    <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-
-        body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background-color: #f5f5f5;
-            display: flex;
-        }
-
-        /* Sidebar */
-        .sidebar {
-            width: 250px;
-            background-color: #2c3e50;
-            height: 100vh;
-            position: fixed;
-            left: 0;
-            top: 0;
-            overflow-y: auto;
-        }
-
-        .sidebar-header {
-            padding: 1.5rem;
-            background-color: #1a252f;
-            color: white;
-            text-align: center;
-        }
-
-        .sidebar-header h2 {
-            font-size: 1.3rem;
-        }
-
-        .sidebar-menu {
-            list-style: none;
-            padding: 1rem 0;
-        }
-
-        .sidebar-menu li a {
-            display: block;
-            padding: 1rem 1.5rem;
-            color: #ecf0f1;
-            text-decoration: none;
-            transition: background-color 0.3s;
-        }
-
-        .sidebar-menu li a:hover,
-        .sidebar-menu li a.active {
-            background-color: #34495e;
-        }
-
-        /* Main Content */
-        .main-content {
-            margin-left: 250px;
-            flex: 1;
-            padding: 2rem;
-        }
-
-        /* Top Bar */
-        .top-bar {
-            background: white;
-            padding: 1rem 1.5rem;
-            border-radius: 10px;
-            margin-bottom: 2rem;
-            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-
-        .top-bar h1 {
-            color: #2c3e50;
-            font-size: 1.8rem;
-        }
-
-        .btn-logout {
-            background-color: #e74c3c;
-            color: white;
-            padding: 0.5rem 1rem;
-            text-decoration: none;
-            border-radius: 5px;
-            transition: background-color 0.3s;
-        }
-
-        .btn-logout:hover {
-            background-color: #c0392b;
-        }
-
-        /* Flash Messages */
-        .flash-messages {
-            margin-bottom: 1.5rem;
-        }
-
-        .alert {
-            padding: 1rem;
-            border-radius: 5px;
-            margin-bottom: 1rem;
-        }
-
-        .alert-success {
-            background-color: #d4edda;
-            color: #155724;
-            border: 1px solid #c3e6cb;
-        }
-
-        .alert-danger {
-            background-color: #f8d7da;
-            color: #721c24;
-            border: 1px solid #f5c6cb;
-        }
-
-        /* Table Container */
-        .table-container {
-            background: white;
-            border-radius: 10px;
-            padding: 1.5rem;
-            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
-            overflow-x: auto;
-        }
-
-        .table {
-            width: 100%;
-            border-collapse: collapse;
-        }
-
-        .table th {
-            background-color: #2c3e50;
-            color: white;
-            padding: 1rem;
-            text-align: left;
-            font-size: 0.9rem;
-        }
-
-        .table td {
-            padding: 1rem;
-            border-bottom: 1px solid #ecf0f1;
-        }
-
-        .table tr:hover {
-            background-color: #f8f9fa;
-        }
-
-        .status-badge {
-            padding: 0.4rem 0.8rem;
-            border-radius: 20px;
-            font-size: 0.85rem;
-            font-weight: bold;
-            display: inline-block;
-        }
-
-        .status-pending { background-color: #fff3cd; color: #856404; }
-        .status-processing { background-color: #cce5ff; color: #004085; }
-        .status-shipped { background-color: #d1ecf1; color: #0c5460; }
-        .status-delivered { background-color: #d4edda; color: #155724; }
-        .status-cancelled { background-color: #f8d7da; color: #721c24; }
-
-        .btn-view {
-            background-color: #3498db;
-            color: white;
-            padding: 0.4rem 1rem;
-            text-decoration: none;
-            border-radius: 5px;
-            display: inline-block;
-            transition: background-color 0.3s;
-        }
-
-        .btn-view:hover {
-            background-color: #2980b9;
-        }
-
-        .no-orders {
-            text-align: center;
-            padding: 3rem;
-            color: #7f8c8d;
-        }
-
-        /* Responsive */
-        @media (max-width: 768px) {
-            .sidebar {
-                transform: translateX(-100%);
-            }
-
-            .main-content {
-                margin-left: 0;
-            }
-
-            .table {
-                font-size: 0.85rem;
-            }
-
-            .table th,
-            .table td {
-                padding: 0.5rem;
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        'main-bg': '#FCF8F8',
+                        'card-bg': '#FBEFEF',
+                        'highlight-bg': '#F9DFDF',
+                        'accent': '#F5AFAF',
+                        'primary-text': '#3A2E2E',
+                        'secondary-text': '#4A3A3A',
+                        'muted-text': '#7A6A6A'
+                    }
+                }
             }
         }
-    </style>
+    </script>
 </head>
-<body>
-    <!-- Sidebar -->
-    <aside class="sidebar">
-        <div class="sidebar-header">
-            <h2>📚 Admin Panel</h2>
-        </div>
-        <ul class="sidebar-menu">
-            <li><a href="{{ url_for('admin.dashboard') }}">📊 Dashboard</a></li>
-            <li><a href="{{ url_for('admin.add_book') }}">➕ Add Book</a></li>
-            <li><a href="{{ url_for('admin.manage_books') }}">📚 Manage Books</a></li>
-            <li><a href="{{ url_for('orders.admin_all_orders') }}" class="active">📦 All Orders</a></li>
-            <li><a href="{{ url_for('books.list_books') }}">🏠 View Store</a></li>
-        </ul>
-    </aside>
 
-    <!-- Main Content -->
-    <main class="main-content">
-        <!-- Top Bar -->
-        <div class="top-bar">
-            <h1>All Orders</h1>
-            <a href="{{ url_for('auth.logout') }}" class="btn-logout">Logout</a>
-        </div>
+<body class="bg-main-bg text-primary-text">
 
-        <!-- Flash Messages -->
-        {% with messages = get_flashed_messages(with_categories=true) %}
-            {% if messages %}
-                <div class="flash-messages">
-                    {% for category, message in messages %}
-                        <div class="alert alert-{{ category }}">
-                            {{ message }}
-                        </div>
-                    {% endfor %}
+    <div class="flex h-screen overflow-hidden">
+        <!-- Sidebar -->
+        <aside id="sidebar"
+            class="w-64 bg-card-bg shadow-xl fixed lg:static inset-y-0 left-0 z-50 transform -translate-x-full lg:translate-x-0 transition-transform duration-300">
+            <div class="flex flex-col h-full">
+                <!-- Logo -->
+                <div class="bg-accent p-6 flex items-center justify-between">
+                    <a href="/" class="text-2xl font-bold text-primary-text flex items-center">
+                        <i class="fas fa-book-open mr-2"></i>
+                        BookStore
+                    </a>
+                    <button id="close-sidebar" class="lg:hidden text-primary-text">
+                        <i class="fas fa-times text-xl"></i>
+                    </button>
                 </div>
-            {% endif %}
-        {% endwith %}
 
-        <!-- Orders Table -->
-        <div class="table-container">
-            {% if orders %}
-            <table class="table">
-                <thead>
-                    <tr>
-                        <th>Order ID</th>
-                        <th>User ID</th>
-                        <th>Total Amount</th>
-                        <th>Payment Method</th>
-                        <th>Status</th>
-                        <th>Action</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    {% for order in orders %}
-                    <tr>
-                        <td><strong>#{{ order.id }}</strong></td>
-                        <td>{{ order.user_id }}</td>
-                        <td>${{ "%.2f"|format(order.total_amount) }}</td>
-                        <td>{{ order.payment_method }}</td>
-                        <td>
-                            <span class="status-badge status-{{ order.status.lower() }}">
-                                {{ order.status }}
-                            </span>
-                        </td>
-                        <td>
-                            <a href="{{ url_for('orders.admin_order_details', order_id=order.id) }}" 
-                               class="btn-view">
-                                👁️ View Details
+                <!-- Admin Info -->
+                <div class="p-6 border-b border-gray-200">
+                    <div class="flex items-center space-x-3">
+                        <div class="bg-accent rounded-full w-12 h-12 flex items-center justify-center">
+                            <i class="fas fa-user-shield text-xl text-primary-text"></i>
+                        </div>
+                        <div>
+                            <p class="font-bold text-primary-text">Admin Panel</p>
+                            <p class="text-sm text-muted-text">Administrator</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Navigation -->
+                <nav class="flex-1 overflow-y-auto p-4">
+                    <ul class="space-y-2">
+                        <li>
+                            <a href="/admin/dashboard"
+                                class="flex items-center space-x-3 p-3 rounded-lg text-secondary-text hover:bg-highlight-bg hover:text-primary-text transition">
+                                <i class="fas fa-chart-line w-5"></i>
+                                <span>Dashboard</span>
                             </a>
-                        </td>
-                    </tr>
-                    {% endfor %}
-                </tbody>
-            </table>
-            {% else %}
-            <div class="no-orders">
-                <h2>No orders yet</h2>
-                <p>Orders will appear here once customers start purchasing.</p>
+                        </li>
+                        <li>
+                            <a href="/admin/add-book"
+                                class="flex items-center space-x-3 p-3 rounded-lg text-secondary-text hover:bg-highlight-bg hover:text-primary-text transition">
+                                <i class="fas fa-plus-circle w-5"></i>
+                                <span>Add Book</span>
+                            </a>
+                        </li>
+                        <li>
+                            <a href="/admin/manage-book"
+                                class="flex items-center space-x-3 p-3 rounded-lg text-secondary-text hover:bg-highlight-bg hover:text-primary-text transition">
+                                <i class="fas fa-books w-5"></i>
+                                <span>Manage Books</span>
+                            </a>
+                        </li>
+                        <li>
+                            <a href="/admin/orders"
+                                class="flex items-center space-x-3 p-3 rounded-lg bg-accent text-primary-text font-semibold transition">
+                                <i class="fas fa-shopping-bag w-5"></i>
+                                <span>All Orders</span>
+                            </a>
+                        </li>
+                        <li>
+                            <a href="/"
+                                class="flex items-center space-x-3 p-3 rounded-lg text-secondary-text hover:bg-highlight-bg hover:text-primary-text transition">
+                                <i class="fas fa-store w-5"></i>
+                                <span>View Store</span>
+                            </a>
+                        </li>
+                        <li>
+                            <a href="/logout"
+                                class="flex items-center space-x-3 p-3 rounded-lg text-red-600 hover:bg-red-50 transition">
+                                <i class="fas fa-sign-out-alt w-5"></i>
+                                <span>Logout</span>
+                            </a>
+                        </li>
+                    </ul>
+                </nav>
+            </div>
+        </aside>
+
+        <!-- Sidebar Overlay (Mobile) -->
+        <div id="sidebar-overlay" class="fixed inset-0 bg-primary-text bg-opacity-50 z-40 hidden lg:hidden"></div>
+
+        <!-- Main Content -->
+        <main class="flex-1 overflow-y-auto">
+            <!-- Top Bar -->
+            <header class="bg-white shadow-sm sticky top-0 z-30">
+                <div class="flex items-center justify-between p-4">
+                    <div class="flex items-center space-x-4">
+                        <button id="open-sidebar" class="lg:hidden text-primary-text">
+                            <i class="fas fa-bars text-xl"></i>
+                        </button>
+                        <h1 class="text-2xl font-bold text-primary-text">All Orders</h1>
+                    </div>
+                    <div class="flex items-center space-x-4">
+                        <span class="text-sm text-muted-text">Total: {{ orders|length }}</span>
+                    </div>
+                </div>
+            </header>
+
+            <!-- Flash Messages -->
+            {% with messages = get_flashed_messages(with_categories=true) %}
+            {% if messages %}
+            <div class="p-4">
+                {% for category, message in messages %}
+                <div
+                    class="mb-4 p-4 rounded-lg {% if category == 'success' %}bg-green-100 text-green-800{% elif category == 'danger' %}bg-red-100 text-red-800{% else %}bg-yellow-100 text-yellow-800{% endif %}">
+                    <i
+                        class="fas {% if category == 'success' %}fa-check-circle{% elif category == 'danger' %}fa-exclamation-circle{% else %}fa-info-circle{% endif %} mr-2"></i>
+                    {{ message }}
+                </div>
+                {% endfor %}
             </div>
             {% endif %}
-        </div>
-    </main>
+            {% endwith %}
+
+            <!-- Orders Content -->
+            <div class="p-6">
+                {% if orders %}
+                <!-- Filter Tabs -->
+                <div class="mb-6 flex flex-wrap gap-2">
+                    <button onclick="filterOrders('all')"
+                        class="filter-btn active px-4 py-2 bg-accent text-primary-text rounded-lg font-semibold transition">
+                        All ({{ orders|length }})
+                    </button>
+                    <button onclick="filterOrders('Pending')"
+                        class="filter-btn px-4 py-2 bg-card-bg text-secondary-text rounded-lg font-semibold hover:bg-highlight-bg transition">
+                        Pending ({{ orders|selectattr('status', 'eq', 'Pending')|list|length }})
+                    </button>
+                    <button onclick="filterOrders('Processing')"
+                        class="filter-btn px-4 py-2 bg-card-bg text-secondary-text rounded-lg font-semibold hover:bg-highlight-bg transition">
+                        Processing ({{ orders|selectattr('status', 'eq', 'Processing')|list|length }})
+                    </button>
+                    <button onclick="filterOrders('Shipped')"
+                        class="filter-btn px-4 py-2 bg-card-bg text-secondary-text rounded-lg font-semibold hover:bg-highlight-bg transition">
+                        Shipped ({{ orders|selectattr('status', 'eq', 'Shipped')|list|length }})
+                    </button>
+                    <button onclick="filterOrders('Delivered')"
+                        class="filter-btn px-4 py-2 bg-card-bg text-secondary-text rounded-lg font-semibold hover:bg-highlight-bg transition">
+                        Delivered ({{ orders|selectattr('status', 'eq', 'Delivered')|list|length }})
+                    </button>
+                    <button onclick="filterOrders('Cancelled')"
+                        class="filter-btn px-4 py-2 bg-card-bg text-secondary-text rounded-lg font-semibold hover:bg-highlight-bg transition">
+                        Cancelled ({{ orders|selectattr('status', 'eq', 'Cancelled')|list|length }})
+                    </button>
+                </div>
+
+                <!-- Orders List -->
+                <div class="space-y-4">
+                    {% for order in orders %}
+                    <div class="order-card bg-card-bg rounded-lg shadow-lg overflow-hidden hover:shadow-xl transition"
+                        data-status="{{ order.status }}">
+                        <!-- Order Header -->
+                        <div class="bg-highlight-bg px-6 py-4 border-b border-gray-200">
+                            <div class="flex flex-wrap items-center justify-between gap-4">
+                                <div class="flex flex-wrap items-center gap-6">
+                                    <div>
+                                        <p class="text-xs text-muted-text uppercase">Order #</p>
+                                        <p class="font-bold text-primary-text text-lg">{{ order.id }}</p>
+                                    </div>
+                                    <div>
+                                        <p class="text-xs text-muted-text uppercase">Customer</p>
+                                        <p class="font-semibold text-secondary-text">{{ order.user.full_name }}</p>
+                                    </div>
+                                    <div>
+                                        <p class="text-xs text-muted-text uppercase">Date</p>
+                                        <p class="font-semibold text-secondary-text">{{ order.created_at.strftime('%b
+                                            %d, %Y') if order.created_at else 'N/A' }}</p>
+                                    </div>
+                                    <div>
+                                        <p class="text-xs text-muted-text uppercase">Total</p>
+                                        <p class="font-bold text-primary-text text-lg">Rs {{ order.total_amount }}</p>
+                                    </div>
+                                </div>
+
+                                <!-- Status Badge -->
+                                <span class="px-4 py-2 rounded-full text-sm font-semibold
+                                    {% if order.status == 'Pending' %}bg-yellow-100 text-yellow-800
+                                    {% elif order.status == 'Processing' %}bg-blue-100 text-blue-800
+                                    {% elif order.status == 'Shipped' %}bg-purple-100 text-purple-800
+                                    {% elif order.status == 'Delivered' %}bg-green-100 text-green-800
+                                    {% elif order.status == 'Cancelled' %}bg-red-100 text-red-800
+                                    {% else %}bg-gray-100 text-gray-800{% endif %}">
+                                    <i class="fas 
+                                        {% if order.status == 'Pending' %}fa-clock
+                                        {% elif order.status == 'Processing' %}fa-cog fa-spin
+                                        {% elif order.status == 'Shipped' %}fa-shipping-fast
+                                        {% elif order.status == 'Delivered' %}fa-check-circle
+                                        {% elif order.status == 'Cancelled' %}fa-times-circle
+                                        {% else %}fa-info-circle{% endif %} mr-1"></i>
+                                    {{ order.status }}
+                                </span>
+                            </div>
+                        </div>
+
+                        <!-- Order Body -->
+                        <div class="p-6">
+                            <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                                <!-- Customer Info -->
+                                <div>
+                                    <h3 class="font-bold text-primary-text mb-2 text-sm uppercase text-muted-text">
+                                        Customer Details</h3>
+                                    <p class="text-secondary-text text-sm mb-1">
+                                        <i class="fas fa-user w-4 text-muted-text"></i> {{ order.first_name }} {{
+                                        order.last_name }}
+                                    </p>
+                                    <p class="text-secondary-text text-sm mb-1">
+                                        <i class="fas fa-phone w-4 text-muted-text"></i> {{ order.phone }}
+                                    </p>
+                                    <p class="text-secondary-text text-sm">
+                                        <i class="fas fa-envelope w-4 text-muted-text"></i> {{ order.email }}
+                                    </p>
+                                </div>
+
+                                <!-- Shipping Address -->
+                                <div>
+                                    <h3 class="font-bold text-primary-text mb-2 text-sm uppercase text-muted-text">
+                                        Shipping Address</h3>
+                                    <p class="text-secondary-text text-sm leading-relaxed">
+                                        {{ order.street_address }}<br>
+                                        {% if order.appartment %}{{ order.appartment }}<br>{% endif %}
+                                        {{ order.city }}, {{ order.state }}<br>
+                                        {{ order.country }}
+                                    </p>
+                                </div>
+
+                                <!-- Payment Info -->
+                                <div>
+                                    <h3 class="font-bold text-primary-text mb-2 text-sm uppercase text-muted-text">
+                                        Payment Info</h3>
+                                    <p class="text-secondary-text text-sm mb-1">
+                                        <i class="fas fa-money-bill-wave w-4 text-muted-text"></i> {{
+                                        order.payment_method }}
+                                    </p>
+                                    <p class="text-sm">
+                                        <span class="px-2 py-1 rounded text-xs font-semibold
+                                            {% if order.payment_status == 'Pending' %}bg-yellow-100 text-yellow-800
+                                            {% elif order.payment_status == 'Approved' %}bg-green-100 text-green-800
+                                            {% elif order.payment_status == 'Cancelled' %}bg-red-100 text-red-800
+                                            {% else %}bg-gray-100 text-gray-800{% endif %}">
+                                            {{ order.payment_status }}
+                                        </span>
+                                    </p>
+                                </div>
+                            </div>
+
+                            <!-- Actions -->
+                            <div class="mt-6 flex flex-wrap gap-3">
+                                <a href="/admin/order/{{ order.id }}"
+                                    class="inline-flex items-center bg-accent text-primary-text px-4 py-2 rounded-lg font-semibold hover:bg-opacity-80 transition text-sm">
+                                    <i class="fas fa-eye mr-2"></i>View Details
+                                </a>
+
+                                <!-- Status Update Dropdown -->
+                                <div class="relative inline-block">
+                                    <button onclick="toggleStatusDropdown({{ order.id }})"
+                                        class="inline-flex items-center bg-blue-500 text-white px-4 py-2 rounded-lg font-semibold hover:bg-blue-600 transition text-sm">
+                                        <i class="fas fa-edit mr-2"></i>Update Status
+                                        <i class="fas fa-chevron-down ml-2"></i>
+                                    </button>
+                                    <div id="status-dropdown-{{ order.id }}"
+                                        class="hidden absolute left-0 mt-2 w-48 bg-white rounded-lg shadow-xl z-10 border border-gray-200">
+                                        <a href="/admin/order/{{ order.id }}/status/Pending"
+                                            class="block px-4 py-2 text-sm text-yellow-800 hover:bg-yellow-50 rounded-t-lg">
+                                            <i class="fas fa-clock mr-2"></i>Pending
+                                        </a>
+                                        <a href="/admin/order/{{ order.id }}/status/Processing"
+                                            class="block px-4 py-2 text-sm text-blue-800 hover:bg-blue-50">
+                                            <i class="fas fa-cog mr-2"></i>Processing
+                                        </a>
+                                        <a href="/admin/order/{{ order.id }}/status/Shipped"
+                                            class="block px-4 py-2 text-sm text-purple-800 hover:bg-purple-50">
+                                            <i class="fas fa-shipping-fast mr-2"></i>Shipped
+                                        </a>
+                                        <a href="/admin/order/{{ order.id }}/status/Delivered"
+                                            class="block px-4 py-2 text-sm text-green-800 hover:bg-green-50">
+                                            <i class="fas fa-check-circle mr-2"></i>Delivered
+                                        </a>
+                                        <a href="/admin/order/{{ order.id }}/status/Cancelled"
+                                            class="block px-4 py-2 text-sm text-red-800 hover:bg-red-50 rounded-b-lg">
+                                            <i class="fas fa-times-circle mr-2"></i>Cancelled
+                                        </a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    {% endfor %}
+                </div>
+
+                {% else %}
+                <!-- No Orders State -->
+                <div class="bg-card-bg rounded-lg shadow-lg p-16 text-center">
+                    <i class="fas fa-shopping-bag text-6xl text-muted-text mb-6"></i>
+                    <h2 class="text-2xl font-bold text-primary-text mb-4">No Orders Yet</h2>
+                    <p class="text-secondary-text">Orders will appear here once customers start purchasing books.</p>
+                </div>
+                {% endif %}
+            </div>
+        </main>
+    </div>
+
+    <script>
+        // Sidebar toggle (Mobile)
+        const sidebar = document.getElementById('sidebar');
+        const sidebarOverlay = document.getElementById('sidebar-overlay');
+        const openSidebar = document.getElementById('open-sidebar');
+        const closeSidebar = document.getElementById('close-sidebar');
+
+        openSidebar.addEventListener('click', () => {
+            sidebar.classList.remove('-translate-x-full');
+            sidebarOverlay.classList.remove('hidden');
+        });
+
+        closeSidebar.addEventListener('click', () => {
+            sidebar.classList.add('-translate-x-full');
+            sidebarOverlay.classList.add('hidden');
+        });
+
+        sidebarOverlay.addEventListener('click', () => {
+            sidebar.classList.add('-translate-x-full');
+            sidebarOverlay.classList.add('hidden');
+        });
+
+        // Filter orders
+        function filterOrders(status) {
+            const cards = document.querySelectorAll('.order-card');
+            const filterBtns = document.querySelectorAll('.filter-btn');
+
+            // Update active button
+            filterBtns.forEach(btn => {
+                btn.classList.remove('active', 'bg-accent', 'text-primary-text');
+                btn.classList.add('bg-card-bg', 'text-secondary-text');
+            });
+            event.target.classList.add('active', 'bg-accent', 'text-primary-text');
+            event.target.classList.remove('bg-card-bg', 'text-secondary-text');
+
+            // Filter cards
+            cards.forEach(card => {
+                if (status === 'all' || card.dataset.status === status) {
+                    card.style.display = 'block';
+                } else {
+                    card.style.display = 'none';
+                }
+            });
+        }
+
+        // Toggle status dropdown
+        function toggleStatusDropdown(orderId) {
+            const dropdown = document.getElementById(`status-dropdown-${orderId}`);
+
+            // Close all other dropdowns
+            document.querySelectorAll('[id^="status-dropdown-"]').forEach(d => {
+                if (d.id !== `status-dropdown-${orderId}`) {
+                    d.classList.add('hidden');
+                }
+            });
+
+            dropdown.classList.toggle('hidden');
+        }
+
+        // Close dropdowns when clicking outside
+        document.addEventListener('click', function (event) {
+            if (!event.target.closest('[onclick^="toggleStatusDropdown"]') && !event.target.closest('[id^="status-dropdown-"]')) {
+                document.querySelectorAll('[id^="status-dropdown-"]').forEach(d => {
+                    d.classList.add('hidden');
+                });
+            }
+        });
+    </script>
+
 </body>
+
 </html>
