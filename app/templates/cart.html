@@ -281,7 +281,7 @@
                         <i class="fas fa-envelope mr-2"></i>info@bookstore.com
                     </p>
                     <p class="text-secondary-text">
-                        <i class="fas fa-phone mr-2"></i>+92 300 1234567
+                        <i class="fas fa-phone mr-2"></i>+92 306 3052278
                     </p>
                 </div>
 
@@ -318,18 +318,39 @@
 
         // Update quantity (placeholder - you'll need to implement backend route)
         function updateQuantity(bookId, change) {
-            const qtyElement = document.getElementById(`qty-${bookId}`);
-            let currentQty = parseInt(qtyElement.textContent);
-            let newQty = currentQty + change;
+            fetch("/update-quantity", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify({
+                    book_id: bookId,
+                    change: change
+                })
+            })
+                .then(response => response.json())
+                .then(data => {
+                    if (!data.success) {
+                        alert("Unable to update cart");
+                        return;
+                    }
 
-            if (newQty < 1) return; // Don't go below 1
+                    // If item removed (quantity <= 0), reload page
+                    if (data.quantity === 0) {
+                        location.reload();
+                        return;
+                    }
 
-            // Update the display
-            qtyElement.textContent = newQty;
+                    // Update quantity on UI
+                    document.getElementById(`qty-${bookId}`).textContent = data.quantity;
 
-            // TODO: Make AJAX call to update cart in session
-            // For now, reload the page with updated quantity
-            window.location.href = `/update-cart/${bookId}/${newQty}`;
+                    // Reload to update totals (simple + safe)
+                    location.reload();
+                })
+                .catch(error => {
+                    console.error(error);
+                    alert("Something went wrong");
+                });
         }
     </script>
 

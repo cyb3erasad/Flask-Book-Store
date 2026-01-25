@@ -206,6 +206,28 @@ def place_order():
         return redirect(url_for("cart.checkout"))
 
 
+@cart_bp.route("/update-quantity", methods=["POST"])
+def update_quantity():
+    data = request.get_json()
+
+    book_id = str(data.get("book_id"))
+    change = int(data.get("change"))
+
+    cart = session.get("cart", {})
+    if book_id not in cart:
+        return {"success": False}, 400
+    
+    cart[book_id] += change
+
+    if cart[book_id] <=0:
+        cart.pop(book_id)
+
+    session["cart"] = cart
+    session.modified = True
+    return{
+        "success": True,
+        "quantity": cart.get(book_id, 0)
+    }   
 
 
 
