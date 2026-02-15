@@ -24,6 +24,8 @@ class Books(db.Model):
     price = db.Column(db.Float, nullable=False)
     stock = db.Column(db.Integer, default=0)
     image = db.Column(db.String(300), nullable=False)
+    description = db.Column(db.Text, nullable=False)
+    binding = db.Column(db.String(50), default='Paperback')
 
     order_items = db.relationship('Order_Item', backref='book', lazy=True)
 

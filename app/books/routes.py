@@ -1,8 +1,7 @@
-from flask import Blueprint, render_template, request, redirect, url_for
+from flask import Blueprint, render_template, request, redirect, url_for, session
 from app.models import Books, Order_Item
 from app.extension import db
 from . import books_bp
-
 
 @books_bp.route("/")
 def list_books():
@@ -33,3 +32,12 @@ def search_books():
     ).all()
 
     return render_template("home.html", search_query=query, books=books, top_selling=[])
+
+@books_bp.route("/book/<int:book_id>")
+def book_details(book_id):
+    book = Books.query.get_or_404(book_id)
+
+    cart = session.get("cart", {})
+    cart_amount = sum(cart.values())
+
+    return render_template("book_detail.html", book=book, cart_amount=cart_amount)
