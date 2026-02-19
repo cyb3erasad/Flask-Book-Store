@@ -1,9 +1,10 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Checkout - Online Book Store</title>
+    <title>Checkout | BookStore</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <script>
@@ -18,332 +19,301 @@
                         'primary-text': '#3A2E2E',
                         'secondary-text': '#4A3A3A',
                         'muted-text': '#7A6A6A'
+                    },
+                    borderRadius: {
+                        'xl': '1rem',
+                        '2xl': '1.5rem',
                     }
                 }
             }
         }
     </script>
+    <style>
+        /* Smooth scrolling for the order summary list */
+        .custom-scrollbar::-webkit-scrollbar {
+            width: 6px;
+        }
+
+        .custom-scrollbar::-webkit-scrollbar-track {
+            background: transparent;
+        }
+
+        .custom-scrollbar::-webkit-scrollbar-thumb {
+            background: #F5AFAF;
+            border-radius: 10px;
+        }
+
+        input:focus {
+            transform: translateY(-1px);
+            transition: all 0.2s;
+        }
+    </style>
 </head>
-<body class="bg-main-bg text-primary-text">
-    
-    <!-- Navbar -->
-    <nav class="bg-accent sticky top-0 z-50 shadow-md">
-        <div class="container mx-auto px-4 py-4">
+
+<body class="bg-main-bg text-primary-text min-h-screen flex flex-col">
+
+    <nav class="bg-accent/90 backdrop-blur-md sticky top-0 z-50 shadow-sm">
+        <div class="container mx-auto px-6 py-4">
             <div class="flex items-center justify-between">
-                <!-- Logo -->
-                <div class="flex items-center">
-                    <a href="/" class="text-2xl font-bold text-primary-text flex items-center">
-                        <i class="fas fa-book-open mr-2"></i>
-                        BookStore
-                    </a>
+                <a href="/"
+                    class="text-2xl font-black text-primary-text flex items-center tracking-tighter hover:opacity-80 transition">
+                    <i class="fas fa-book-open mr-2 text-xl"></i>
+                    BookStore
+                </a>
+
+                <div class="hidden md:flex items-center space-x-4 text-xs uppercase tracking-widest font-bold">
+                    <span class="text-primary-text/60">01. Cart</span>
+                    <i class="fas fa-chevron-right text-[10px] text-muted-text"></i>
+                    <span class="text-primary-text border-b-2 border-primary-text">02. Checkout</span>
+                    <i class="fas fa-chevron-right text-[10px] text-muted-text"></i>
+                    <span class="text-muted-text">03. Review</span>
                 </div>
 
-                <!-- Checkout Steps -->
-                <div class="hidden md:flex items-center space-x-2 text-sm">
-                    <span class="text-primary-text font-medium">Cart</span>
-                    <i class="fas fa-chevron-right text-primary-text"></i>
-                    <span class="text-primary-text font-bold">Checkout</span>
-                    <i class="fas fa-chevron-right text-muted-text"></i>
-                    <span class="text-muted-text">Order Complete</span>
-                </div>
-
-                <!-- Cart Icon -->
-                <a href="/cart" class="text-primary-text hover:text-secondary-text transition">
-                    <i class="fas fa-shopping-cart text-xl"></i>
+                <a href="/cart" class="relative p-2 text-primary-text hover:bg-white/20 rounded-full transition">
+                    <i class="fas fa-shopping-basket text-xl"></i>
                 </a>
             </div>
         </div>
     </nav>
 
-    <!-- Flash Messages -->
     {% with messages = get_flashed_messages(with_categories=true) %}
-        {% if messages %}
-            <div class="container mx-auto px-4 mt-4">
-                {% for category, message in messages %}
-                    <div class="mb-4 p-4 rounded-lg {% if category == 'success' %}bg-green-100 text-green-800{% elif category == 'danger' %}bg-red-100 text-red-800{% else %}bg-yellow-100 text-yellow-800{% endif %}">
-                        <i class="fas {% if category == 'success' %}fa-check-circle{% elif category == 'danger' %}fa-exclamation-circle{% else %}fa-info-circle{% endif %} mr-2"></i>
-                        {{ message }}
-                    </div>
-                {% endfor %}
-            </div>
-        {% endif %}
+    {% if messages %}
+    <div class="container mx-auto px-6 mt-6">
+        {% for category, message in messages %}
+        <div
+            class="flex items-center p-4 rounded-xl border {% if category == 'success' %}bg-green-50 border-green-200 text-green-800{% elif category == 'danger' %}bg-red-50 border-red-200 text-red-800{% else %}bg-blue-50 border-blue-200 text-blue-800{% endif %}">
+            <i
+                class="fas {% if category == 'success' %}fa-check-circle{% elif category == 'danger' %}fa-circle-exclamation{% else %}fa-circle-info{% endif %} mr-3"></i>
+            <span class="font-medium">{{ message }}</span>
+        </div>
+        {% endfor %}
+    </div>
+    {% endif %}
     {% endwith %}
 
-    <!-- Checkout Section -->
-    <section class="container mx-auto px-4 py-12">
-        <h1 class="text-4xl font-bold text-primary-text mb-8">Checkout</h1>
+    <main class="container mx-auto px-6 py-10 flex-grow">
+        <header class="mb-10 text-center md:text-left">
+            <h1 class="text-4xl font-black text-primary-text italic">Complete Your Purchase</h1>
+            <p class="text-muted-text mt-2">Almost there! Just fill in your delivery details below.</p>
+        </header>
 
-        <form action="/place-order" method="POST" id="checkout-form">
-            <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
-                <!-- Billing Details -->
-                <div class="lg:col-span-2">
-                    <div class="bg-card-bg rounded-lg shadow-lg p-6 md:p-8">
-                        <h2 class="text-2xl font-bold text-primary-text mb-6">Billing Details</h2>
+        <form action="/place-order" method="POST" id="checkout-form" class="grid grid-cols-1 lg:grid-cols-12 gap-10">
 
-                        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                            <!-- First Name -->
-                            <div>
-                                <label class="block text-sm font-semibold text-primary-text mb-2">
-                                    First Name <span class="text-red-500">*</span>
-                                </label>
-                                <input 
-                                    type="text" 
-                                    name="first_name" 
-                                    required
-                                    class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-accent bg-main-bg text-primary-text"
-                                    placeholder="John"
-                                >
-                            </div>
+            <div class="lg:col-span-8 space-y-8">
+                <div class="bg-white rounded-2xl shadow-sm border border-highlight-bg p-8">
+                    <h2 class="text-xl font-bold mb-8 flex items-center">
+                        <span
+                            class="w-8 h-8 bg-accent text-white rounded-full flex items-center justify-center text-sm mr-3">1</span>
+                        Shipping Information
+                    </h2>
 
-                            <!-- Last Name -->
-                            <div>
-                                <label class="block text-sm font-semibold text-primary-text mb-2">
-                                    Last Name <span class="text-red-500">*</span>
-                                </label>
-                                <input 
-                                    type="text" 
-                                    name="last_name" 
-                                    required
-                                    class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-accent bg-main-bg text-primary-text"
-                                    placeholder="Doe"
-                                >
-                            </div>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-x-6 gap-y-6">
+                        <div class="group">
+                            <label
+                                class="block text-xs font-bold uppercase tracking-wider text-muted-text mb-2 ml-1">First
+                                Name *</label>
+                            <input type="text" name="first_name" required placeholder="Jane"
+                                class="w-full px-4 py-3.5 rounded-xl border border-gray-200 focus:border-accent focus:ring-4 focus:ring-accent/10 outline-none transition-all">
                         </div>
 
-                        <!-- Country -->
-                        <div class="mt-6">
-                            <label class="block text-sm font-semibold text-primary-text mb-2">
-                                Country / Region <span class="text-red-500">*</span>
-                            </label>
-                            <input 
-                                type="text" 
-                                name="country" 
-                                required
-                                class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-accent bg-main-bg text-primary-text"
-                                placeholder="Pakistan"
-                            >
+                        <div class="group">
+                            <label
+                                class="block text-xs font-bold uppercase tracking-wider text-muted-text mb-2 ml-1">Last
+                                Name *</label>
+                            <input type="text" name="last_name" required placeholder="Austen"
+                                class="w-full px-4 py-3.5 rounded-xl border border-gray-200 focus:border-accent focus:ring-4 focus:ring-accent/10 outline-none transition-all">
                         </div>
 
-                        <!-- Street Address -->
-                        <div class="mt-6">
-                            <label class="block text-sm font-semibold text-primary-text mb-2">
-                                Street Address <span class="text-red-500">*</span>
-                            </label>
-                            <input 
-                                type="text" 
-                                name="street_address" 
-                                required
-                                class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-accent bg-main-bg text-primary-text mb-3"
-                                placeholder="House number and street name"
-                            >
+                        <div class="md:col-span-2">
+                            <label
+                                class="block text-xs font-bold uppercase tracking-wider text-muted-text mb-2 ml-1">Country
+                                / Region *</label>
+                            <input type="text" name="country" required placeholder="Pakistan"
+                                class="w-full px-4 py-3.5 rounded-xl border border-gray-200 focus:border-accent focus:ring-4 focus:ring-accent/10 outline-none transition-all">
                         </div>
 
-                        <!-- Apartment (Optional) -->
-                        <div class="mt-3">
-                            <input 
-                                type="text" 
-                                name="appartment" 
-                                class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-accent bg-main-bg text-primary-text"
-                                placeholder="Apartment, suite, unit, etc. (optional)"
-                            >
+                        <div class="md:col-span-2">
+                            <label
+                                class="block text-xs font-bold uppercase tracking-wider text-muted-text mb-2 ml-1">Street
+                                Address *</label>
+                            <input type="text" name="street_address" required placeholder="House number and street name"
+                                class="w-full px-4 py-3.5 rounded-xl border border-gray-200 focus:border-accent focus:ring-4 focus:ring-accent/10 outline-none transition-all mb-4">
+                            <input type="text" name="appartment" placeholder="Apartment, suite, unit, etc. (optional)"
+                                class="w-full px-4 py-3.5 rounded-xl border border-gray-200 focus:border-accent focus:ring-4 focus:ring-accent/10 outline-none transition-all">
                         </div>
 
-                        <!-- City -->
-                        <div class="mt-6">
-                            <label class="block text-sm font-semibold text-primary-text mb-2">
-                                Town / City <span class="text-red-500">*</span>
-                            </label>
-                            <input 
-                                type="text" 
-                                name="city" 
-                                required
-                                class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-accent bg-main-bg text-primary-text"
-                                placeholder="Karachi"
-                            >
+                        <div>
+                            <label
+                                class="block text-xs font-bold uppercase tracking-wider text-muted-text mb-2 ml-1">Town
+                                / City *</label>
+                            <input type="text" name="city" required placeholder="Karachi"
+                                class="w-full px-4 py-3.5 rounded-xl border border-gray-200 focus:border-accent focus:ring-4 focus:ring-accent/10 outline-none transition-all">
                         </div>
 
-                        <!-- State -->
-                        <div class="mt-6">
-                            <label class="block text-sm font-semibold text-primary-text mb-2">
-                                State / County <span class="text-red-500">*</span>
-                            </label>
-                            <input 
-                                type="text" 
-                                name="state" 
-                                required
-                                class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-accent bg-main-bg text-primary-text"
-                                placeholder="Sindh"
-                            >
+                        <div>
+                            <label
+                                class="block text-xs font-bold uppercase tracking-wider text-muted-text mb-2 ml-1">State
+                                / Province *</label>
+                            <input type="text" name="state" required placeholder="Sindh"
+                                class="w-full px-4 py-3.5 rounded-xl border border-gray-200 focus:border-accent focus:ring-4 focus:ring-accent/10 outline-none transition-all">
                         </div>
 
-                        <!-- Phone -->
-                        <div class="mt-6">
-                            <label class="block text-sm font-semibold text-primary-text mb-2">
-                                Phone <span class="text-red-500">*</span>
-                            </label>
-                            <input 
-                                type="tel" 
-                                name="phone" 
-                                required
-                                class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-accent bg-main-bg text-primary-text"
-                                placeholder="+92 300 1234567"
-                            >
+                        <div>
+                            <label
+                                class="block text-xs font-bold uppercase tracking-wider text-muted-text mb-2 ml-1">Phone
+                                Number *</label>
+                            <input type="tel" name="phone" required placeholder="+92 3XX XXXXXXX"
+                                class="w-full px-4 py-3.5 rounded-xl border border-gray-200 focus:border-accent focus:ring-4 focus:ring-accent/10 outline-none transition-all">
                         </div>
 
-                        <!-- Email -->
-                        <div class="mt-6">
-                            <label class="block text-sm font-semibold text-primary-text mb-2">
-                                Email Address <span class="text-red-500">*</span>
-                            </label>
-                            <input 
-                                type="email" 
-                                name="email" 
-                                required
-                                value="{% if user %}{{ user.email }}{% endif %}"
-                                class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-accent bg-main-bg text-primary-text"
-                                placeholder="john.doe@example.com"
-                            >
+                        <div>
+                            <label
+                                class="block text-xs font-bold uppercase tracking-wider text-muted-text mb-2 ml-1">Email
+                                Address *</label>
+                            <input type="email" name="email" required value="{% if user %}{{ user.email }}{% endif %}"
+                                placeholder="jane@example.com"
+                                class="w-full px-4 py-3.5 rounded-xl border border-gray-200 focus:border-accent focus:ring-4 focus:ring-accent/10 outline-none transition-all">
                         </div>
                     </div>
                 </div>
+            </div>
 
-                <!-- Order Summary -->
-                <div class="lg:col-span-1">
-                    <div class="bg-card-bg rounded-lg shadow-lg p-6 sticky top-24">
-                        <h2 class="text-2xl font-bold text-primary-text mb-6">Your Order</h2>
+            <div class="lg:col-span-4">
+                <div class="bg-card-bg rounded-2xl p-6 md:p-8 sticky top-28 shadow-sm border border-highlight-bg">
+                    <h2 class="text-xl font-bold text-primary-text mb-6">Order Summary</h2>
 
-                        <!-- Order Items -->
-                        <div class="space-y-4 mb-6 max-h-64 overflow-y-auto">
-                            {% for item in order_items %}
-                            <div class="flex items-start space-x-3 pb-4 border-b border-gray-200">
-                                <div class="w-16 h-20 bg-gradient-to-br from-accent to-highlight-bg rounded flex items-center justify-center flex-shrink-0">
-                                    {% if item.book.image %}
-                                        <img src="{{ url_for('static', filename=item.book.image)}}" alt="{{ item.book.title }}" class="h-full object-contain">
-                                    {% else %}
-                                        <i class="fas fa-book text-2xl text-primary-text opacity-30"></i>
-                                    {% endif %}
-                                </div>
-                                <div class="flex-1">
-                                    <h4 class="font-semibold text-sm text-primary-text mb-1">{{ item.book.title }}</h4>
-                                    <p class="text-xs text-muted-text mb-2">Qty: {{ item.quantity }}</p>
-                                    <p class="font-bold text-primary-text">Rs {{ item.item_total }}</p>
-                                </div>
+                    <div class="custom-scrollbar space-y-4 mb-8 max-h-[300px] overflow-y-auto pr-2">
+                        {% for item in order_items %}
+                        <div class="flex items-center gap-4 group">
+                            <div
+                                class="w-14 h-20 bg-white rounded-lg shadow-sm border border-highlight-bg flex-shrink-0 overflow-hidden">
+                                {% if item.book.image %}
+                                <img src="{{ url_for('static', filename=item.book.image)}}" alt="{{ item.book.title }}"
+                                    class="w-full h-full object-cover">
+                                {% else %}
+                                <div
+                                    class="w-full h-full flex items-center justify-center bg-highlight-bg/30 italic text-[10px] text-muted-text">
+                                    No Image</div>
+                                {% endif %}
                             </div>
-                            {% endfor %}
-                        </div>
-
-                        <!-- Order Totals -->
-                        <div class="space-y-3 mb-6">
-                            <div class="flex justify-between text-secondary-text">
-                                <span>Subtotal</span>
-                                <span class="font-semibold">Rs {{ subtotal }}</span>
-                            </div>
-                            <div class="flex justify-between text-secondary-text">
-                                <span>Shipping</span>
-                                <span class="font-semibold">Rs {{ shipping_fee }}</span>
+                            <div class="flex-1 min-w-0">
+                                <h4 class="font-bold text-sm text-primary-text truncate">{{ item.book.title }}</h4>
+                                <p class="text-xs text-muted-text">Quantity: {{ item.quantity }}</p>
+                                <p class="font-bold text-accent text-sm mt-1">Rs {{ "{:,.0f}".format(item.item_total) }}
+                                </p>
                             </div>
                         </div>
-
-                        <div class="border-t border-gray-300 pt-4 mb-6">
-                            <div class="flex justify-between items-center">
-                                <span class="text-xl font-bold text-primary-text">Total</span>
-                                <span class="text-2xl font-bold text-primary-text">Rs {{ total }}</span>
-                            </div>
-                        </div>
-
-                        <!-- Payment Method -->
-                        <div class="bg-highlight-bg rounded-lg p-4 mb-6">
-                            <div class="flex items-center space-x-3">
-                                <i class="fas fa-money-bill-wave text-2xl text-primary-text"></i>
-                                <div>
-                                    <p class="font-semibold text-primary-text">Cash on Delivery</p>
-                                    <p class="text-sm text-muted-text">Pay when you receive</p>
-                                </div>
-                            </div>
-                        </div>
-
-                        <!-- Place Order Button -->
-                        <button 
-                            type="submit" 
-                            class="w-full bg-accent text-primary-text py-4 rounded-lg font-bold hover:bg-opacity-80 transition shadow-md text-lg"
-                        >
-                            <i class="fas fa-check-circle mr-2"></i>
-                            Place Order (COD)
-                        </button>
-
-                        <p class="text-xs text-muted-text text-center mt-4">
-                            Your personal data will be used to process your order and support your experience.
-                        </p>
+                        {% endfor %}
                     </div>
+
+                    <div class="space-y-3 border-t border-highlight-bg pt-6 mb-6">
+                        <div class="flex justify-between text-sm">
+                            <span class="text-muted-text">Subtotal</span>
+                            <span class="font-bold text-primary-text">Rs {{ "{:,.0f}".format(subtotal) }}</span>
+                        </div>
+                        <div class="flex justify-between text-sm">
+                            <span class="text-muted-text">Shipping Fee</span>
+                            <span class="font-bold text-primary-text text-green-600">Rs {{
+                                "{:,.0f}".format(shipping_fee) }}</span>
+                        </div>
+                        <div class="flex justify-between items-center pt-2">
+                            <span class="text-lg font-black text-primary-text italic">Total</span>
+                            <span class="text-2xl font-black text-primary-text tracking-tighter">Rs {{
+                                "{:,.0f}".format(total) }}</span>
+                        </div>
+                    </div>
+
+                    <div class="bg-white/60 rounded-xl p-4 border border-highlight-bg mb-8">
+                        <div class="flex items-center gap-4">
+                            <div
+                                class="w-10 h-10 bg-accent/20 rounded-full flex items-center justify-center text-accent">
+                                <i class="fas fa-truck-fast"></i>
+                            </div>
+                            <div>
+                                <p class="text-xs font-bold uppercase tracking-tighter">Payment Method</p>
+                                <p class="text-sm font-medium">Cash on Delivery (COD)</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <button type="submit"
+                        class="w-full bg-primary-text text-white py-4 rounded-xl font-bold hover:bg-black transition-all shadow-xl shadow-accent/20 active:scale-[0.98] flex items-center justify-center gap-2">
+                        <i class="fas fa-lock text-sm opacity-50"></i>
+                        Confirm Order
+                    </button>
+
+                    <p
+                        class="text-[10px] text-muted-text text-center mt-6 leading-relaxed px-4 uppercase tracking-widest font-bold">
+                        Secure Checkout &bullet; Privacy Protected
+                    </p>
                 </div>
             </div>
         </form>
-    </section>
+    </main>
 
-    <!-- Footer -->
-    <footer class="bg-card-bg py-12 mt-16">
-        <div class="container mx-auto px-4">
-            <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
-                <!-- About Section -->
-                <div>
-                    <h3 class="text-xl font-bold text-primary-text mb-4">About BookStore</h3>
-                    <p class="text-secondary-text leading-relaxed">
-                        Your trusted online destination for discovering and purchasing books across all genres. We bring stories to your doorstep.
+    <footer class="bg-card-bg/50 border-t border-highlight-bg py-16 mt-20">
+        <div class="container mx-auto px-6">
+            <div class="grid grid-cols-1 md:grid-cols-4 gap-12">
+                <div class="md:col-span-2">
+                    <h3 class="text-2xl font-black italic mb-4">BookStore.</h3>
+                    <p class="text-secondary-text max-w-sm leading-relaxed">
+                        Curating stories that move the heart and sharpen the mind. Your literary journey starts here,
+                        delivered straight to your door.
                     </p>
                 </div>
-
-                <!-- Contact Info -->
                 <div>
-                    <h3 class="text-xl font-bold text-primary-text mb-4">Contact Us</h3>
-                    <p class="text-secondary-text mb-2">
-                        <i class="fas fa-envelope mr-2"></i>info@bookstore.com
-                    </p>
-                    <p class="text-secondary-text">
-                        <i class="fas fa-phone mr-2"></i>+92 300 1234567
-                    </p>
+                    <h4 class="font-bold uppercase text-xs tracking-[0.2em] mb-6 text-muted-text">Quick Contact</h4>
+                    <ul class="space-y-4 text-sm font-medium">
+                        <li><a href="mailto:hello@bookstore.com"
+                                class="hover:text-accent transition">hello@bookstore.com</a></li>
+                        <li>
+                            <p class="text-primary-text">+92 300 1234567</p>
+                        </li>
+                    </ul>
                 </div>
-
-                <!-- Social Links -->
                 <div>
-                    <h3 class="text-xl font-bold text-primary-text mb-4">Follow Us</h3>
-                    <div class="flex space-x-4">
-                        <a href="https://instagram.com" target="_blank" class="text-primary-text hover:text-accent transition text-2xl">
-                            <i class="fab fa-instagram"></i>
-                        </a>
-                        <a href="https://wa.me/923001234567" target="_blank" class="text-primary-text hover:text-accent transition text-2xl">
-                            <i class="fab fa-whatsapp"></i>
-                        </a>
+                    <h4 class="font-bold uppercase text-xs tracking-[0.2em] mb-6 text-muted-text">Social Presence</h4>
+                    <div class="flex space-x-6">
+                        <a href="#" class="text-xl text-primary-text hover:text-accent transition"><i
+                                class="fab fa-instagram"></i></a>
+                        <a href="#" class="text-xl text-primary-text hover:text-accent transition"><i
+                                class="fab fa-whatsapp"></i></a>
+                        <a href="#" class="text-xl text-primary-text hover:text-accent transition"><i
+                                class="fab fa-pinterest"></i></a>
                     </div>
                 </div>
             </div>
-
-            <div class="border-t border-primary-text border-opacity-20 mt-8 pt-8 text-center">
-                <p class="text-muted-text">&copy; 2024 BookStore. All rights reserved.</p>
+            <div class="border-t border-highlight-bg mt-12 pt-8 text-center">
+                <p class="text-xs font-bold tracking-widest uppercase text-muted-text">&copy; 2026 BookStore &mdash;
+                    Design for Readers</p>
             </div>
         </div>
     </footer>
 
     <script>
-        // Form validation
-        document.getElementById('checkout-form').addEventListener('submit', function(e) {
+        // Form Validation UI
+        document.getElementById('checkout-form').addEventListener('submit', function (e) {
             const requiredFields = this.querySelectorAll('[required]');
             let isValid = true;
 
             requiredFields.forEach(field => {
                 if (!field.value.trim()) {
                     isValid = false;
-                    field.classList.add('border-red-500');
+                    field.classList.remove('border-gray-200');
+                    field.classList.add('border-red-400', 'bg-red-50');
                 } else {
-                    field.classList.remove('border-red-500');
+                    field.classList.remove('border-red-400', 'bg-red-50');
+                    field.classList.add('border-gray-200');
                 }
             });
 
             if (!isValid) {
                 e.preventDefault();
-                alert('Please fill in all required fields');
+                // Visual shake or simple notification
+                window.scrollTo({ top: 0, behavior: 'smooth' });
             }
         });
     </script>
-
 </body>
+
 </html>

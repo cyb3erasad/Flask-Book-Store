@@ -1,9 +1,10 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Order #{{ order.id }} - Online Book Store</title>
+    <title>Order #{{ order.id }} | BookStore</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <script>
@@ -23,145 +24,148 @@
             }
         }
     </script>
+    <style>
+        .glass-nav {
+            backdrop-filter: blur(12px);
+            background-color: rgba(245, 175, 175, 0.9);
+        }
+    </style>
 </head>
-<body class="bg-main-bg text-primary-text">
-    
-    <!-- Navbar -->
-    <nav class="bg-accent sticky top-0 z-50 shadow-md">
-        <div class="container mx-auto px-4 py-4">
-            <div class="flex items-center justify-between">
-                <!-- Logo -->
-                <div class="flex items-center">
-                    <a href="/" class="text-2xl font-bold text-primary-text flex items-center">
-                        <i class="fas fa-book-open mr-2"></i>
-                        BookStore
-                    </a>
-                </div>
 
-                <!-- Search Bar (Desktop) -->
-                <div class="hidden md:flex flex-1 max-w-md mx-8">
-                    <form action="/search" method="GET" class="w-full">
-                        <div class="relative">
-                            <input 
-                                type="text" 
-                                name="q" 
-                                placeholder="Search by title or author..." 
-                                class="w-full px-4 py-2 pr-10 rounded-lg bg-main-bg text-primary-text placeholder-muted-text focus:outline-none focus:ring-2 focus:ring-primary-text"
-                            >
-                            <button type="submit" class="absolute right-3 top-1/2 transform -translate-y-1/2 text-muted-text hover:text-primary-text">
-                                <i class="fas fa-search"></i>
-                            </button>
-                        </div>
+<body class="bg-main-bg text-primary-text min-h-screen flex flex-col">
+
+    <nav class="glass-nav sticky top-0 z-50 shadow-sm border-b border-white/20">
+        <div class="container mx-auto px-6 py-4">
+            <div class="flex items-center justify-between gap-4">
+                <a href="/"
+                    class="text-2xl font-black text-primary-text flex items-center tracking-tighter shrink-0 hover:opacity-80 transition">
+                    <i class="fas fa-book-open mr-2 text-xl"></i>
+                    BookStore
+                </a>
+
+                <div class="hidden md:block flex-1 max-w-lg mx-auto">
+                    <form action="/search" method="GET" class="relative group">
+                        <input type="text" name="q" placeholder="Find your next read..."
+                            class="w-full pl-10 pr-4 py-2.5 rounded-full bg-white/40 border border-white/30 text-primary-text placeholder-primary-text/50 focus:outline-none focus:bg-white/80 focus:ring-2 focus:ring-primary-text/20 transition-all text-sm font-medium">
+                        <button type="submit"
+                            class="absolute left-3.5 top-1/2 -translate-y-1/2 text-primary-text/50 group-focus-within:text-primary-text transition">
+                            <i class="fas fa-search"></i>
+                        </button>
                     </form>
                 </div>
 
-                <!-- Right Side Nav -->
-                <div class="flex items-center space-x-6">
-                    <!-- Cart Icon -->
-                    <a href="/cart" class="relative text-primary-text hover:text-secondary-text transition">
-                        <i class="fas fa-shopping-cart text-xl"></i>
-                        <span class="absolute -top-2 -right-2 bg-primary-text text-accent text-xs rounded-full w-5 h-5 flex items-center justify-center">0</span>
+                <div class="flex items-center gap-6 shrink-0">
+                    <a href="/cart" class="relative group">
+                        <div class="p-2 rounded-full hover:bg-white/20 transition">
+                            <i class="fas fa-shopping-bag text-lg text-primary-text"></i>
+                        </div>
+                        <span
+                            class="absolute top-0 right-0 bg-primary-text text-accent text-[10px] font-bold rounded-full w-4 h-4 flex items-center justify-center border border-accent">0</span>
                     </a>
 
-                    <!-- Auth Links -->
-                    <a href="/my-orders" class="hidden md:block text-primary-text hover:text-secondary-text font-medium transition">My Orders</a>
-                    <a href="/auth/logout" class="hidden md:block text-primary-text hover:text-secondary-text font-medium transition">Logout</a>
+                    <div class="hidden md:flex items-center gap-6">
+                        <a href="/my-orders"
+                            class="text-xs font-black uppercase tracking-widest text-primary-text border-b-2 border-primary-text pb-0.5">Orders</a>
+                        <a href="/auth/logout"
+                            class="text-xs font-black uppercase tracking-widest text-primary-text hover:text-white transition">Logout</a>
+                    </div>
 
-                    <!-- Mobile Menu Button -->
-                    <button id="mobile-menu-btn" class="md:hidden text-primary-text">
+                    <button id="mobile-menu-btn" class="md:hidden p-2 text-primary-text">
                         <i class="fas fa-bars text-xl"></i>
                     </button>
                 </div>
             </div>
 
-            <!-- Mobile Menu -->
-            <div id="mobile-menu" class="hidden md:hidden mt-4 pb-4 border-t border-primary-text border-opacity-20 pt-4">
-                <a href="/my-orders" class="block py-2 text-primary-text hover:text-secondary-text font-medium transition">My Orders</a>
-                <a href="/auth/logout" class="block py-2 text-primary-text hover:text-secondary-text font-medium transition">Logout</a>
+            <div id="mobile-menu" class="hidden md:hidden mt-4 pt-4 border-t border-primary-text/10">
+                <a href="/my-orders" class="block py-2 font-bold text-primary-text">My Orders</a>
+                <a href="/auth/logout" class="block py-2 font-bold text-primary-text opacity-70">Logout</a>
             </div>
         </div>
     </nav>
 
-    <!-- Order Details Section -->
-    <section class="container mx-auto px-4 py-12">
-        <!-- Breadcrumb -->
-        <div class="mb-6">
-            <a href="/my-orders" class="text-accent hover:text-primary-text transition font-medium">
-                <i class="fas fa-arrow-left mr-2"></i>Back to My Orders
-            </a>
-        </div>
+    <main class="container mx-auto px-6 py-12 flex-grow">
 
-        <!-- Order Header -->
-        <div class="bg-highlight-bg rounded-t-lg px-6 py-6 shadow-lg">
-            <div class="flex flex-wrap items-center justify-between gap-4">
+        <div class="mb-8">
+            <a href="/my-orders"
+                class="inline-flex items-center text-xs font-bold text-muted-text hover:text-accent transition uppercase tracking-wider mb-4">
+                <i class="fas fa-arrow-left mr-2"></i> Back to History
+            </a>
+
+            <div class="flex flex-col md:flex-row md:items-end justify-between gap-4">
                 <div>
-                    <h1 class="text-3xl font-bold text-primary-text mb-2">Order #{{ order.id }}</h1>
-                    <p class="text-secondary-text">
-                        <i class="fas fa-calendar mr-2"></i>
-                        Placed on {{ order.created_at.strftime('%B %d, %Y at %I:%M %p') }}
+                    <div class="flex items-center gap-4 mb-2">
+                        <h1 class="text-4xl font-black text-primary-text tracking-tight">Order #{{ order.id }}</h1>
+                        <span class="inline-flex items-center px-3 py-1 rounded-full text-xs font-bold uppercase tracking-wide border
+                            {% if order.status == 'Pending' %}bg-yellow-50 text-yellow-700 border-yellow-200
+                            {% elif order.status == 'Processing' %}bg-blue-50 text-blue-700 border-blue-200
+                            {% elif order.status == 'Shipped' %}bg-purple-50 text-purple-700 border-purple-200
+                            {% elif order.status == 'Delivered' %}bg-green-50 text-green-700 border-green-200
+                            {% elif order.status == 'Cancelled' %}bg-red-50 text-red-700 border-red-200
+                            {% else %}bg-gray-50 text-gray-700 border-gray-200{% endif %}">
+                            <i class="fas 
+                                {% if order.status == 'Pending' %}fa-hourglass-start
+                                {% elif order.status == 'Processing' %}fa-cog fa-spin
+                                {% elif order.status == 'Shipped' %}fa-truck-fast
+                                {% elif order.status == 'Delivered' %}fa-check-double
+                                {% elif order.status == 'Cancelled' %}fa-ban
+                                {% else %}fa-circle{% endif %} mr-2 text-[10px]"></i>
+                            {{ order.status }}
+                        </span>
+                    </div>
+                    <p class="text-secondary-text font-medium">
+                        Placed on <span class="font-bold">{{ order.created_at.strftime('%B %d, %Y') }}</span> at {{
+                        order.created_at.strftime('%I:%M %p') }}
                     </p>
                 </div>
-                
-                <span class="px-6 py-3 rounded-full text-lg font-bold
-                    {% if order.status == 'Pending' %}bg-yellow-100 text-yellow-800
-                    {% elif order.status == 'Processing' %}bg-blue-100 text-blue-800
-                    {% elif order.status == 'Shipped' %}bg-purple-100 text-purple-800
-                    {% elif order.status == 'Delivered' %}bg-green-100 text-green-800
-                    {% elif order.status == 'Cancelled' %}bg-red-100 text-red-800
-                    {% else %}bg-gray-100 text-gray-800{% endif %}">
-                    <i class="fas 
-                        {% if order.status == 'Pending' %}fa-clock
-                        {% elif order.status == 'Processing' %}fa-cog fa-spin
-                        {% elif order.status == 'Shipped' %}fa-shipping-fast
-                        {% elif order.status == 'Delivered' %}fa-check-circle
-                        {% elif order.status == 'Cancelled' %}fa-times-circle
-                        {% else %}fa-info-circle{% endif %} mr-2"></i>
-                    {{ order.status }}
-                </span>
+
+                <button onclick="window.print()"
+                    class="hidden md:inline-flex items-center text-xs font-black uppercase tracking-widest text-muted-text hover:text-primary-text transition">
+                    <i class="fas fa-print mr-2"></i> Print Invoice
+                </button>
             </div>
         </div>
 
-        <div class="grid grid-cols-1 lg:grid-cols-3 gap-6 mt-6">
-            <!-- Order Items -->
-            <div class="lg:col-span-2">
-                <div class="bg-card-bg rounded-lg shadow-lg overflow-hidden">
-                    <div class="bg-highlight-bg px-6 py-4 border-b border-gray-200">
-                        <h2 class="text-xl font-bold text-primary-text">Order Items</h2>
+        <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+
+            <div class="lg:col-span-2 space-y-6">
+                <div class="bg-card-bg rounded-2xl border border-highlight-bg overflow-hidden shadow-sm">
+                    <div class="px-6 py-4 border-b border-highlight-bg bg-white/40">
+                        <h2 class="text-xs font-black uppercase tracking-widest text-primary-text">Collection Items ({{
+                            items|length }})</h2>
                     </div>
 
-                    <div class="divide-y divide-gray-200">
+                    <div class="divide-y divide-highlight-bg">
                         {% for item in items %}
-                        <div class="p-6 hover:bg-main-bg transition">
-                            <div class="flex items-start space-x-4">
-                                <!-- Book Image -->
-                                <div class="w-24 h-32 bg-gradient-to-br from-accent to-highlight-bg rounded flex items-center justify-center flex-shrink-0">
-                                    {% if item.book.image %}
-                                        <img src="{{ url_for('static', filename=item.book.image) }}" alt="{{ item.book.title }}" class="h-full object-contain">
-                                    {% else %}
-                                        <i class="fas fa-book text-4xl text-primary-text opacity-30"></i>
-                                    {% endif %}
-                                </div>
+                        <div class="p-6 flex flex-col sm:flex-row gap-6 hover:bg-white/40 transition group">
+                            <div
+                                class="w-20 h-28 bg-white rounded shadow-sm flex items-center justify-center flex-shrink-0 border border-highlight-bg overflow-hidden">
+                                {% if item.book.image %}
+                                <img src="{{ url_for('static', filename=item.book.image) }}" alt="{{ item.book.title }}"
+                                    class="w-full h-full object-cover">
+                                {% else %}
+                                <i class="fas fa-book text-3xl text-accent/50"></i>
+                                {% endif %}
+                            </div>
 
-                                <!-- Book Details -->
-                                <div class="flex-1">
-                                    <h3 class="text-lg font-bold text-primary-text mb-1">{{ item.book.title }}</h3>
-                                    <p class="text-sm text-muted-text mb-3">by {{ item.book.author }}</p>
-                                    
-                                    <div class="flex flex-wrap items-center gap-4 text-sm">
-                                        <div class="flex items-center">
-                                            <span class="text-muted-text mr-2">Price:</span>
-                                            <span class="font-semibold text-primary-text">Rs {{ item.price }}</span>
-                                        </div>
-                                        <div class="flex items-center">
-                                            <span class="text-muted-text mr-2">Quantity:</span>
-                                            <span class="font-semibold text-primary-text">{{ item.quantity }}</span>
-                                        </div>
-                                        <div class="flex items-center">
-                                            <span class="text-muted-text mr-2">Subtotal:</span>
-                                            <span class="font-bold text-primary-text text-lg">Rs {{ item.price * item.quantity }}</span>
-                                        </div>
+                            <div class="flex-1 flex flex-col justify-center">
+                                <h3 class="text-lg font-bold text-primary-text mb-1 group-hover:text-accent transition">
+                                    {{ item.book.title }}</h3>
+                                <p class="text-sm text-muted-text italic mb-3">by {{ item.book.author }}</p>
+
+                                <div class="flex items-center gap-6 text-sm">
+                                    <div class="px-2 py-1 bg-white/60 rounded border border-highlight-bg">
+                                        <span class="text-muted-text text-xs uppercase font-bold mr-1">Qty:</span>
+                                        <span class="font-bold text-primary-text">{{ item.quantity }}</span>
+                                    </div>
+                                    <div class="text-secondary-text">
+                                        <span class="text-xs text-muted-text">@</span> Rs {{ item.price }}
                                     </div>
                                 </div>
+                            </div>
+
+                            <div class="flex items-center sm:justify-end">
+                                <span class="font-bold text-lg text-primary-text">Rs {{ item.price * item.quantity
+                                    }}</span>
                             </div>
                         </div>
                         {% endfor %}
@@ -169,133 +173,133 @@
                 </div>
             </div>
 
-            <!-- Order Summary & Info -->
             <div class="lg:col-span-1 space-y-6">
-                <!-- Order Summary -->
-                <div class="bg-card-bg rounded-lg shadow-lg p-6">
-                    <h2 class="text-xl font-bold text-primary-text mb-4">Order Summary</h2>
-                    
-                    <div class="space-y-3 mb-4">
-                        <div class="flex justify-between text-secondary-text">
+
+                <div
+                    class="bg-white rounded-2xl border border-highlight-bg p-6 shadow-lg shadow-accent/5 relative overflow-hidden">
+                    <div class="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-accent to-highlight-bg"></div>
+
+                    <h2 class="text-xs font-black uppercase tracking-widest text-primary-text mb-6">Payment Summary</h2>
+
+                    <div class="space-y-3 mb-6">
+                        <div class="flex justify-between text-sm text-secondary-text">
                             <span>Subtotal</span>
-                            <span class="font-semibold">Rs {{ order.sub_total }}</span>
+                            <span class="font-medium">Rs {{ order.sub_total }}</span>
                         </div>
-                        <div class="flex justify-between text-secondary-text">
-                            <span>Shipping Fee</span>
-                            <span class="font-semibold">Rs {{ order.shipping_fee }}</span>
+                        <div class="flex justify-between text-sm text-secondary-text">
+                            <span>Shipping</span>
+                            <span class="font-medium">Rs {{ order.shipping_fee }}</span>
                         </div>
                     </div>
 
-                    <div class="border-t border-gray-300 pt-4">
-                        <div class="flex justify-between items-center">
-                            <span class="text-lg font-bold text-primary-text">Total</span>
-                            <span class="text-2xl font-bold text-primary-text">Rs {{ order.total_amount }}</span>
+                    <div class="border-t-2 border-dashed border-highlight-bg pt-4 mb-6">
+                        <div class="flex justify-between items-end">
+                            <span class="text-sm font-bold text-primary-text">Total</span>
+                            <span class="text-2xl font-black text-primary-text tracking-tight">Rs {{ order.total_amount
+                                }}</span>
                         </div>
                     </div>
-                </div>
 
-                <!-- Payment Information -->
-                <div class="bg-card-bg rounded-lg shadow-lg p-6">
-                    <h2 class="text-xl font-bold text-primary-text mb-4">Payment Information</h2>
-                    
-                    <div class="space-y-3">
-                        <div class="flex items-center space-x-3 bg-highlight-bg p-3 rounded-lg">
-                            <i class="fas fa-money-bill-wave text-2xl text-primary-text"></i>
+                    <div class="bg-card-bg rounded-xl p-4 border border-highlight-bg">
+                        <div class="flex items-center gap-3 mb-2">
+                            <div
+                                class="w-8 h-8 rounded-full bg-white flex items-center justify-center text-accent shadow-sm">
+                                <i class="fas fa-credit-card"></i>
+                            </div>
                             <div>
-                                <p class="font-semibold text-primary-text">{{ order.payment_method }}</p>
-                                <p class="text-sm text-muted-text">Cash on Delivery</p>
+                                <p class="text-xs font-bold text-primary-text uppercase">{{ order.payment_method }}</p>
+                                <p class="text-[10px] text-muted-text uppercase tracking-wider">{{ order.payment_status
+                                    }}</p>
                             </div>
                         </div>
-                        
-                        <div class="text-sm">
-                            <span class="text-muted-text">Payment Status:</span>
-                            <span class="ml-2 px-3 py-1 rounded-full text-xs font-semibold
-                                {% if order.payment_status == 'Pending' %}bg-yellow-100 text-yellow-800
-                                {% elif order.payment_status == 'Paid' %}bg-green-100 text-green-800
-                                {% else %}bg-gray-100 text-gray-800{% endif %}">
-                                {{ order.payment_status }}
-                            </span>
+                    </div>
+                </div>
+
+                <div class="bg-card-bg rounded-2xl border border-highlight-bg p-6">
+                    <h2 class="text-xs font-black uppercase tracking-widest text-primary-text mb-6">Delivery Details
+                    </h2>
+
+                    <div class="space-y-6">
+                        <div class="flex gap-4">
+                            <i class="fas fa-location-dot mt-1 text-accent"></i>
+                            <div class="text-sm text-secondary-text leading-relaxed">
+                                <p class="font-bold text-primary-text mb-1">{{ order.first_name }} {{ order.last_name }}
+                                </p>
+                                <p>{{ order.street_address }}</p>
+                                {% if order.appartment %}<p>{{ order.appartment }}</p>{% endif %}
+                                <p>{{ order.city }}, {{ order.state }}</p>
+                                <p>{{ order.country }}</p>
+                            </div>
+                        </div>
+
+                        <div class="border-t border-highlight-bg pt-4 flex flex-col gap-3">
+                            <div class="flex items-center gap-4 text-sm text-secondary-text">
+                                <i class="fas fa-phone w-4 text-center text-accent"></i>
+                                <span>{{ order.phone }}</span>
+                            </div>
+                            <div class="flex items-center gap-4 text-sm text-secondary-text">
+                                <i class="fas fa-envelope w-4 text-center text-accent"></i>
+                                <span class="truncate">{{ order.email }}</span>
+                            </div>
                         </div>
                     </div>
                 </div>
 
-                <!-- Shipping Address -->
-                <div class="bg-card-bg rounded-lg shadow-lg p-6">
-                    <h2 class="text-xl font-bold text-primary-text mb-4 flex items-center">
-                        <i class="fas fa-map-marker-alt mr-2 text-accent"></i>
-                        Shipping Address
-                    </h2>
-                    
-                    <div class="text-secondary-text leading-relaxed space-y-1">
-                        <p class="font-semibold text-primary-text">{{ order.first_name }} {{ order.last_name }}</p>
-                        <p>{{ order.street_address }}</p>
-                        {% if order.appartment %}
-                        <p>{{ order.appartment }}</p>
-                        {% endif %}
-                        <p>{{ order.city }}, {{ order.state }}</p>
-                        <p>{{ order.country }}</p>
-                    </div>
-
-                    <div class="mt-4 pt-4 border-t border-gray-200 space-y-2">
-                        <p class="text-sm">
-                            <i class="fas fa-phone w-5 text-muted-text"></i>
-                            <span class="text-secondary-text">{{ order.phone }}</span>
-                        </p>
-                        <p class="text-sm">
-                            <i class="fas fa-envelope w-5 text-muted-text"></i>
-                            <span class="text-secondary-text">{{ order.email }}</span>
-                        </p>
-                    </div>
+                <div class="bg-accent/10 rounded-xl p-4 border border-accent/20 text-center">
+                    <p class="text-xs text-secondary-text mb-2">Need help with this order?</p>
+                    <a href="#"
+                        class="text-xs font-bold text-primary-text hover:text-accent underline decoration-accent transition">Contact
+                        Support</a>
                 </div>
             </div>
         </div>
-    </section>
+    </main>
 
-    <!-- Footer -->
-    <footer class="bg-card-bg py-12 mt-16">
-        <div class="container mx-auto px-4">
-            <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
-                <!-- About Section -->
-                <div>
-                    <h3 class="text-xl font-bold text-primary-text mb-4">About BookStore</h3>
-                    <p class="text-secondary-text leading-relaxed">
-                        Your trusted online destination for discovering and purchasing books across all genres. We bring stories to your doorstep.
+    <footer class="bg-card-bg/50 border-t border-highlight-bg pt-12 pb-8 mt-10">
+        <div class="container mx-auto px-6">
+            <div class="grid grid-cols-1 md:grid-cols-4 gap-8 mb-8">
+                <div class="md:col-span-2">
+                    <a href="/" class="text-lg font-black text-primary-text flex items-center tracking-tighter mb-4">
+                        <i class="fas fa-book-open mr-2"></i> BookStore
+                    </a>
+                    <p class="text-sm text-muted-text leading-relaxed max-w-sm">
+                        Curating stories that transport, educate, and inspire. Your trusted destination for literary
+                        excellence.
                     </p>
                 </div>
 
-                <!-- Contact Info -->
                 <div>
-                    <h3 class="text-xl font-bold text-primary-text mb-4">Contact Us</h3>
-                    <p class="text-secondary-text mb-2">
-                        <i class="fas fa-envelope mr-2"></i>info@bookstore.com
-                    </p>
-                    <p class="text-secondary-text">
-                        <i class="fas fa-phone mr-2"></i>+92 300 1234567
-                    </p>
+                    <h4 class="text-xs font-black uppercase tracking-widest text-primary-text mb-4">Contact</h4>
+                    <ul class="space-y-2 text-sm text-secondary-text">
+                        <li><i class="fas fa-envelope w-5 text-accent"></i> info@bookstore.com</li>
+                        <li><i class="fas fa-phone w-5 text-accent"></i> +92 300 1234567</li>
+                    </ul>
                 </div>
 
-                <!-- Social Links -->
                 <div>
-                    <h3 class="text-xl font-bold text-primary-text mb-4">Follow Us</h3>
+                    <h4 class="text-xs font-black uppercase tracking-widest text-primary-text mb-4">Follow</h4>
                     <div class="flex space-x-4">
-                        <a href="https://instagram.com" target="_blank" class="text-primary-text hover:text-accent transition text-2xl">
+                        <a href="#"
+                            class="w-8 h-8 rounded-full bg-white flex items-center justify-center text-primary-text hover:bg-accent hover:text-white transition shadow-sm">
                             <i class="fab fa-instagram"></i>
                         </a>
-                        <a href="https://wa.me/923001234567" target="_blank" class="text-primary-text hover:text-accent transition text-2xl">
+                        <a href="#"
+                            class="w-8 h-8 rounded-full bg-white flex items-center justify-center text-primary-text hover:bg-accent hover:text-white transition shadow-sm">
                             <i class="fab fa-whatsapp"></i>
                         </a>
                     </div>
                 </div>
             </div>
 
-            <div class="border-t border-primary-text border-opacity-20 mt-8 pt-8 text-center">
-                <p class="text-muted-text">&copy; 2024 BookStore. All rights reserved.</p>
+            <div class="border-t border-primary-text/5 pt-8 text-center">
+                <p class="text-[10px] font-bold uppercase tracking-[0.2em] text-muted-text/60">
+                    &copy; 2024 BookStore &bull; All Rights Reserved
+                </p>
             </div>
         </div>
     </footer>
 
     <script>
-        // Mobile menu toggle
         const mobileMenuBtn = document.getElementById('mobile-menu-btn');
         const mobileMenu = document.getElementById('mobile-menu');
 
@@ -303,6 +307,6 @@
             mobileMenu.classList.toggle('hidden');
         });
     </script>
-
 </body>
+
 </html>

@@ -1,327 +1,413 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
-
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Home - Online Book Store</title>
     <script src="https://cdn.tailwindcss.com"></script>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+    />
+    <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet" />
+
     <script>
-        tailwind.config = {
-            theme: {
-                extend: {
-                    colors: {
-                        'main-bg': '#FCF8F8',
-                        'card-bg': '#FBEFEF',
-                        'highlight-bg': '#F9DFDF',
-                        'accent': '#F5AFAF',
-                        'primary-text': '#3A2E2E',
-                        'secondary-text': '#4A3A3A',
-                        'muted-text': '#7A6A6A'
-                    }
-                }
-            }
-        }
+      tailwind.config = {
+        theme: {
+          extend: {
+            colors: {
+              "main-bg": "#FCF8F8",
+              "secondary-bg": "#FBEFEF",
+              "card-bg": "#F9DFDF",
+              accent: "#F5AFAF",
+              "primary-text": "#2E2E2E",
+              "muted-text": "#6B6B6B",
+            },
+            fontFamily: {
+              sans: ["Inter", "sans-serif"],
+            },
+          },
+        },
+      };
     </script>
-</head>
+    <style>
+      /* Smooth Scroll */
+      html {
+        scroll-behavior: smooth;
+      }
 
-<body class="bg-main-bg text-primary-text">
+      /* Custom Hover Glow */
+      .hover-glow:hover {
+        box-shadow: 0 0 20px #f5afaf;
+      }
+    </style>
+  </head>
 
-    <!-- Navbar -->
-    <nav class="bg-accent sticky top-0 z-50 shadow-md">
-        <div class="container mx-auto px-4 py-4">
-            <div class="flex items-center justify-between">
-                <!-- Logo -->
-                <div class="flex items-center">
-                    <a href="/" class="text-2xl font-bold text-primary-text flex items-center">
-                        <i class="fas fa-book-open mr-2"></i>
-                        BookStore
-                    </a>
-                </div>
+  <body class="bg-main-bg text-primary-text font-sans overflow-x-hidden">
+    <nav
+      class="sticky top-0 z-50 bg-main-bg/90 backdrop-blur-md shadow-sm transition-all duration-300"
+    >
+      <div class="container mx-auto px-6 py-4">
+        <div class="flex items-center justify-between">
+          <a
+            href="/"
+            class="text-2xl font-bold text-primary-text flex items-center gap-2"
+          >
+            <i class="fas fa-book-open text-accent"></i>
+            BLOOM BOOKSHOP
+          </a>
 
-                <!-- Search Bar (Desktop) -->
-                <div class="hidden md:flex flex-1 max-w-md mx-8">
-                    <form action="/search" method="GET" class="w-full">
-                        <div class="relative">
-                            <input type="text" name="q" placeholder="Search by title or author..."
-                                value="{{ search_query if search_query else '' }}"
-                                class="w-full px-4 py-2 pr-10 rounded-lg bg-main-bg text-primary-text placeholder-muted-text focus:outline-none focus:ring-2 focus:ring-primary-text">
-                            <button type="submit"
-                                class="absolute right-3 top-1/2 transform -translate-y-1/2 text-muted-text hover:text-primary-text">
-                                <i class="fas fa-search"></i>
-                            </button>
-                        </div>
-                    </form>
-                </div>
+          <div class="hidden md:flex flex-1 max-w-lg mx-8">
+            <form action="/search" method="GET" class="w-full relative group">
+              <input
+                type="text"
+                name="q"
+                placeholder="Search by title or author..."
+                value="{{ search_query if search_query else '' }}"
+                class="w-full px-5 py-2.5 rounded-full bg-secondary-bg text-primary-text placeholder-muted-text focus:outline-none focus:ring-2 focus:ring-accent shadow-sm transition-all"
+              />
+              <button
+                type="submit"
+                class="absolute right-4 top-1/2 transform -translate-y-1/2 text-muted-text group-hover:text-primary-text transition"
+              >
+                <i class="fas fa-search"></i>
+              </button>
+            </form>
+          </div>
 
-                <!-- Right Side Nav -->
-                <div class="flex items-center space-x-6">
-                    <!-- Cart Icon -->
-                    <!-- Cart Icon -->
-                    <a href="/cart" class="relative text-primary-text hover:text-secondary-text transition">
-                        <i class="fas fa-shopping-cart text-xl"></i>
-                        <span
-                            class="absolute -top-2 -right-2 bg-primary-text text-accent text-xs rounded-full w-5 h-5 flex items-center justify-center">
-                            {{ cart_count }}
-                        </span>
-                    </a>
+          <div class="flex items-center space-x-6">
+            <a href="/cart" class="relative group">
+              <i
+                class="fas fa-shopping-cart text-xl text-primary-text group-hover:text-accent transition"
+              ></i>
+              <span
+                class="absolute -top-2 -right-2 bg-accent text-white text-xs font-bold rounded-full w-5 h-5 flex items-center justify-center shadow-md"
+              >
+                {{ cart_count }}
+              </span>
+            </a>
 
-                    <!-- Auth Links -->
-                    {% if current_user.is_authenticated %}
-                    <a href="/my-orders"
-                        class="hidden md:block text-primary-text hover:text-secondary-text font-medium transition">My
-                        Orders</a>
-                    <a href="/auth/logout"
-                        class="hidden md:block text-primary-text hover:text-secondary-text font-medium transition">Logout</a>
-                    {% else %}
-                    <a href="/auth/login"
-                        class="hidden md:block text-primary-text hover:text-secondary-text font-medium transition">Login</a>
-                    <a href="/auth/register"
-                        class="hidden md:block text-primary-text hover:text-secondary-text font-medium transition">Signup</a>
-                    {% endif %}
+            {% if current_user.is_authenticated %}
+            <a
+              href="/my-orders"
+              class="hidden md:block font-medium hover:text-accent transition"
+              >My Orders</a
+            >
+            <a
+              href="/auth/logout"
+              class="hidden md:block px-5 py-2 rounded-full border border-primary-text hover:bg-primary-text hover:text-white transition"
+              >Logout</a
+            >
+            {% else %}
+            <a
+              href="/auth/login"
+              class="hidden md:block font-medium hover:text-accent transition"
+              >Login</a
+            >
+            <a
+              href="/auth/register"
+              class="hidden md:block px-5 py-2 rounded-full bg-accent text-white hover:brightness-90 transition shadow-md hover:shadow-lg"
+              >Signup</a
+            >
+            {% endif %}
 
-                    <!-- Mobile Menu Button -->
-                    <button id="mobile-menu-btn" class="md:hidden text-primary-text">
-                        <i class="fas fa-bars text-xl"></i>
-                    </button>
-                </div>
-            </div>
-
-            <!-- Mobile Search -->
-            <div class="md:hidden mt-4">
-                <form action="/search" method="GET" class="w-full">
-                    <div class="relative">
-                        <input type="text" name="q" placeholder="Search by title or author..."
-                            value="{{ search_query if search_query else '' }}"
-                            class="w-full px-4 py-2 pr-10 rounded-lg bg-main-bg text-primary-text placeholder-muted-text focus:outline-none focus:ring-2 focus:ring-primary-text">
-                        <button type="submit"
-                            class="absolute right-3 top-1/2 transform -translate-y-1/2 text-muted-text hover:text-primary-text">
-                            <i class="fas fa-search"></i>
-                        </button>
-                    </div>
-                </form>
-            </div>
-
-            <!-- Mobile Menu -->
-            <div id="mobile-menu"
-                class="hidden md:hidden mt-4 pb-4 border-t border-primary-text border-opacity-20 pt-4">
-                {% if current_user.is_authenticated %}
-                <a href="/my-orders"
-                    class="block py-2 text-primary-text hover:text-secondary-text font-medium transition">My Orders</a>
-                <a href="/logout"
-                    class="block py-2 text-primary-text hover:text-secondary-text font-medium transition">Logout</a>
-                {% else %}
-                <a href="/auth/login"
-                    class="block py-2 text-primary-text hover:text-secondary-text font-medium transition">Login</a>
-                <a href="/auth/register"
-                    class="block py-2 text-primary-text hover:text-secondary-text font-medium transition">Signup</a>
-                {% endif %}
-            </div>
+            <button id="mobile-menu-btn" class="md:hidden text-2xl">
+              <i class="fas fa-bars"></i>
+            </button>
+          </div>
         </div>
+
+        <div
+          id="mobile-menu"
+          class="hidden md:hidden mt-4 pb-4 border-t border-muted-text/20 pt-4 animate-fade-in"
+        >
+          <form action="/search" method="GET" class="mb-4">
+            <input
+              type="text"
+              name="q"
+              placeholder="Search..."
+              class="w-full px-4 py-2 rounded-lg bg-secondary-bg"
+            />
+          </form>
+          {% if current_user.is_authenticated %}
+          <a href="/my-orders" class="block py-2 font-medium">My Orders</a>
+          <a href="/logout" class="block py-2 font-medium text-red-500"
+            >Logout</a
+          >
+          {% else %}
+          <a href="/auth/login" class="block py-2 font-medium">Login</a>
+          <a href="/auth/register" class="block py-2 font-medium text-accent"
+            >Signup</a
+          >
+          {% endif %}
+        </div>
+      </div>
     </nav>
 
-    <!-- Hero Banner (Only show when not searching) -->
     {% if not search_query %}
-    <section class="relative h-96 bg-gradient-to-r from-highlight-bg to-accent overflow-hidden">
-        <div class="absolute inset-0 opacity-20">
-            <img src="https://images.unsplash.com/photo-1507842217343-583bb7270b66?w=1600&h=600&fit=crop" alt="Books"
-                class="w-full h-full object-cover">
+    <section
+      class="relative h-[500px] flex items-center overflow-hidden"
+      data-aos="fade-in"
+    >
+      <div class="absolute inset-0 z-0">
+        <img
+          src="https://images.unsplash.com/photo-1507842217343-583bb7270b66?w=1600&h=600&fit=crop"
+          class="w-full h-full object-cover opacity-90"
+        />
+        <div
+          class="absolute inset-0 bg-gradient-to-r from-secondary-bg via-secondary-bg/80 to-transparent"
+        ></div>
+      </div>
+
+      <div class="container mx-auto px-6 relative z-10">
+        <div class="max-w-2xl" data-aos="fade-up" data-aos-delay="200">
+          <h1
+            class="text-5xl md:text-6xl font-bold text-primary-text mb-6 leading-tight"
+          >
+            Discover Your Next <br />
+            <span class="text-accent">Favorite Book</span>
+          </h1>
+          <p class="text-xl text-muted-text mb-8 font-light">
+            Explore our curated collection of bestsellers, classics, and hidden
+            gems.
+          </p>
+          <a
+            href="#all-books"
+            class="inline-block bg-primary-text text-white px-8 py-3.5 rounded-full font-semibold hover:bg-accent transition-all duration-300 shadow-lg hover:shadow-xl transform hover:-translate-y-1"
+          >
+            Shop Now
+          </a>
         </div>
-        <div class="relative container mx-auto px-4 h-full flex items-center">
-            <div class="max-w-2xl">
-                <h1 class="text-5xl md:text-6xl font-bold text-primary-text mb-4">Discover Your Next Great Read</h1>
-                <p class="text-xl text-secondary-text mb-6">Explore thousands of books across all genres</p>
-                <a href="#all-books"
-                    class="inline-block bg-primary-text text-accent px-8 py-3 rounded-lg font-semibold hover:bg-secondary-text transition shadow-lg">
-                    Browse Books
-                </a>
-            </div>
+      </div>
+    </section>
+    {% endif %} {% if search_query %}
+    <section class="container mx-auto px-6 py-12">
+      <h2 class="text-3xl font-bold mb-2">Results for "{{ search_query }}"</h2>
+      <p class="text-muted-text">Found {{ books|length }} items</p>
+    </section>
+    {% endif %} {% if not search_query and top_selling %}
+    <section class="py-20 bg-secondary-bg">
+      <div class="container mx-auto px-6">
+        <div class="text-center mb-16" data-aos="fade-up">
+          <h2 class="text-4xl font-bold text-primary-text mb-3">
+            Top Selling Books
+          </h2>
+          <div class="w-20 h-1 bg-accent mx-auto rounded-full"></div>
         </div>
-    </section>
-    {% endif %}
 
-    <!-- Search Results Header -->
-    {% if search_query %}
-    <section class="container mx-auto px-4 py-8">
-        <h2 class="text-3xl font-bold text-primary-text mb-2">Search Results for "{{ search_query }}"</h2>
-        <p class="text-muted-text">Found {{ books|length }} book(s)</p>
-    </section>
-    {% endif %}
-
-    <!-- Top Selling Books Section (Only show when not searching) -->
-    {% if not search_query and top_selling %}
-    <section class="bg-highlight-bg py-16">
-        <div class="container mx-auto px-4">
-            <div class="text-center mb-12">
-                <h2 class="text-4xl font-bold text-primary-text mb-2">Top Selling Books</h2>
-                <p class="text-secondary-text">Most popular books among our readers</p>
-            </div>
-
-            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-                {% for book, total_sold in top_selling %}
+        <div
+          class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-3 gap-8"
+        >
+          {% for book, total_sold in top_selling %}
+          <div
+            class="bg-main-bg rounded-2xl p-4 shadow-sm hover-glow transition-all duration-300 transform hover:scale-[1.03] group flex flex-col h-full"
+            data-aos="fade-up"
+            data-aos-delay="{{ loop.index * 100 }}"
+          >
+            <a href="/book/{{ book.id }}" class="block">
+              <div
+                class="h-64 bg-card-bg rounded-xl mb-4 overflow-hidden relative flex items-center justify-center"
+              >
+                {% if book.image %}
+                <img
+                  src="{{ url_for('static', filename=book.image) }}"
+                  alt="{{ book.title }}"
+                  class="h-full object-contain transition-transform duration-500 group-hover:scale-110"
+                />
+                {% else %}
+                <i class="fas fa-book text-6xl text-accent/50"></i>
+                {% endif %} {% if book.stock <= 0 %}
                 <div
-                    class="bg-card-bg rounded-lg shadow-lg overflow-hidden hover:shadow-xl transition transform hover:-translate-y-1">
-                    <div
-                        class="h-64 bg-gradient-to-br from-accent to-highlight-bg flex items-center justify-center p-4">
-                        {% if book.image %}
-                        <img src="{{ url_for('static', filename=book.image) }}" alt="{{ book.title }}"
-                            class="max-h-full max-w-full object-contain">
-                        {% else %}
-                        <i class="fas fa-book text-6xl text-primary-text opacity-30"></i>
-                        {% endif %}
-                    </div>
-                    <div class="p-5">
-                        <h3 class="text-lg font-bold text-primary-text mb-1 truncate">{{ book.title }}</h3>
-                        <p class="text-sm text-muted-text mb-3">by {{ book.author }}</p>
-                        <div class="flex items-center justify-between mb-4">
-                            <span class="text-2xl font-bold text-primary-text">Rs {{ book.price }}</span>
-                            {% if book.stock > 0 %}
-                            <span class="text-sm text-green-600 font-medium">In Stock ({{ book.stock }})</span>
-                            {% else %}
-                            <span class="text-sm text-red-600 font-medium">Out of Stock</span>
-                            {% endif %}
-                        </div>
-                        {% if book.stock > 0 %}
-                        <a href="{{ url_for('cart.add_to_cart', book_id=book.id) }}"
-                            class="block w-full bg-accent text-primary-text py-2 rounded-lg font-semibold hover:bg-opacity-80 transition text-center">
-                            <i class="fas fa-cart-plus mr-2"></i>Add to Cart
-                        </a>
-                        {% else %}
-                        <button
-                            class="w-full bg-gray-300 text-gray-500 py-2 rounded-lg font-semibold cursor-not-allowed"
-                            disabled>
-                            Out of Stock
-                        </button>
-                        {% endif %}
-                    </div>
+                  class="absolute top-3 right-3 bg-red-100 text-red-600 px-3 py-1 rounded-full text-xs font-bold"
+                >
+                  Out of Stock
                 </div>
-                {% endfor %}
-            </div>
-        </div>
-    </section>
-    {% endif %}
-
-    <!-- All Books Section -->
-    <section id="all-books" class="bg-main-bg py-16">
-        <div class="container mx-auto px-4">
-            <div class="text-center mb-12">
-                <h2 class="text-4xl font-bold text-primary-text mb-2">
-                    {% if search_query %}Search Results{% else %}All Books{% endif %}
-                </h2>
-                {% if not search_query %}
-                <p class="text-secondary-text">Browse our complete collection</p>
                 {% endif %}
-            </div>
+              </div>
+            </a>
 
-            {% if books %}
-            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-                {% for book in books %}
-                <div
-                    class="bg-card-bg rounded-lg shadow-lg overflow-hidden hover:shadow-xl transition transform hover:-translate-y-1">
-                    <div
-                        class="h-56 bg-gradient-to-br from-accent to-highlight-bg flex items-center justify-center p-4">
-                        {% if book.image %}
-                        <img src="{{ url_for('static', filename=book.image) }}" alt="{{ book.title }}"
-                            class="max-h-full max-w-full object-contain">
-                        {% else %}
-                        <i class="fas fa-book text-5xl text-primary-text opacity-30"></i>
-                        {% endif %}
-                    </div>
-                    <div class="p-4">
-                        <h3 class="text-base font-bold text-primary-text mb-1 truncate" title="{{ book.title }}">{{
-                            book.title }}</h3>
-                        <p class="text-sm text-muted-text mb-3">by {{ book.author }}</p>
-                        <div class="flex items-center justify-between mb-3">
-                            <span class="text-xl font-bold text-primary-text">Rs {{ book.price }}</span>
-                            {% if book.stock > 0 %}
-                            <span class="text-xs text-green-600 font-medium">In Stock</span>
-                            {% else %}
-                            <span class="text-xs text-red-600 font-medium">Out of Stock</span>
-                            {% endif %}
-                        </div>
-                        {% if book.stock > 0 %}
-                        <a href="{{ url_for('cart.add_to_cart', book_id=book.id) }}"
-                            class="block w-full bg-accent text-primary-text py-2 rounded-lg font-semibold hover:bg-opacity-80 transition text-sm text-center">
-                            <i class="fas fa-cart-plus mr-1"></i>Add to Cart
-                        </a>
-                        {% else %}
-                        <button
-                            class="w-full bg-gray-300 text-gray-500 py-2 rounded-lg font-semibold cursor-not-allowed text-sm"
-                            disabled>
-                            Out of Stock
-                        </button>
-                        {% endif %}
-                    </div>
-                </div>
-                {% endfor %}
+            <div class="flex-1 flex flex-col">
+              <a
+                href="/book/{{ book.id }}"
+                class="hover:text-accent transition-colors"
+              >
+                <h3
+                  class="text-xl font-bold text-primary-text mb-1 line-clamp-1"
+                >
+                  {{ book.title }}
+                </h3>
+              </a>
+              <p class="text-muted-text text-sm mb-3">by {{ book.author }}</p>
+
+              <div class="mt-auto flex items-center justify-between">
+                <span class="text-2xl font-bold text-primary-text"
+                  >Rs {{ book.price }}</span
+                >
+                {% if book.stock > 0 %}
+                <a
+                  href="{{ url_for('cart.add_to_cart', book_id=book.id) }}"
+                  class="bg-accent text-white w-10 h-10 rounded-full flex items-center justify-center hover:bg-primary-text transition-colors shadow-md relative z-10"
+                >
+                  <i class="fas fa-cart-plus"></i>
+                </a>
+                {% else %}
+                <button
+                  disabled
+                  class="bg-gray-200 text-gray-400 w-10 h-10 rounded-full flex items-center justify-center cursor-not-allowed"
+                >
+                  <i class="fas fa-ban"></i>
+                </button>
+                {% endif %}
+              </div>
             </div>
-            {% else %}
-            <div class="text-center py-16">
-                <i class="fas fa-search text-6xl text-muted-text mb-4"></i>
-                <p class="text-xl text-secondary-text">No books found matching "{{ search_query }}"</p>
-                <a href="/" class="inline-block mt-4 text-accent hover:underline">Browse all books</a>
-            </div>
-            {% endif %}
+          </div>
+          {% endfor %}
         </div>
+      </div>
+    </section>
+    {% endif %}
+
+    <section id="all-books" class="py-20 bg-main-bg">
+      <div class="container mx-auto px-6">
+        <div class="text-center mb-16" data-aos="fade-up">
+          <h2 class="text-4xl font-bold text-primary-text mb-3">
+            {% if search_query %}All Matches{% else %}Our Collection{% endif %}
+          </h2>
+          <div class="w-20 h-1 bg-accent mx-auto rounded-full"></div>
+        </div>
+
+        {% if books %}
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+          {% for book in books %}
+          <div
+            class="bg-white border border-secondary-bg rounded-xl p-4 shadow-sm hover:shadow-xl hover:border-accent/30 transition-all duration-300 transform hover:-translate-y-2 relative"
+            data-aos="fade-up"
+            data-aos-anchor-placement="top-bottom"
+          >
+            <a href="/book/{{ book.id }}" class="block">
+              <div
+                class="h-48 bg-secondary-bg rounded-lg mb-4 flex items-center justify-center overflow-hidden"
+              >
+                {% if book.image %}
+                <img
+                  src="{{ url_for('static', filename=book.image) }}"
+                  class="h-full object-contain"
+                />
+                {% else %}
+                <i class="fas fa-book text-4xl text-muted-text/30"></i>
+                {% endif %}
+              </div>
+            </a>
+
+            <a
+              href="/book/{{ book.id }}"
+              class="hover:text-accent transition-colors block"
+            >
+              <h3 class="font-bold text-lg mb-1 truncate">{{ book.title }}</h3>
+            </a>
+            <p class="text-xs text-muted-text mb-3">{{ book.author }}</p>
+
+            <div class="flex justify-between items-center">
+              <span class="font-bold text-lg">Rs {{ book.price }}</span>
+              {% if book.stock > 0 %}
+              <a
+                href="{{ url_for('cart.add_to_cart', book_id=book.id) }}"
+                class="text-accent hover:text-primary-text transition-colors relative z-10"
+              >
+                <span class="text-sm font-semibold">Add</span>
+                <i class="fas fa-arrow-right ml-1"></i>
+              </a>
+              {% endif %}
+            </div>
+          </div>
+          {% endfor %}
+        </div>
+        {% else %}
+        <div
+          class="text-center py-20 bg-secondary-bg rounded-2xl border border-dashed border-accent"
+        >
+          <i class="fas fa-search text-6xl text-accent/50 mb-4"></i>
+          <p class="text-xl text-muted-text">
+            No books found matching your search.
+          </p>
+          <a
+            href="/"
+            class="text-primary-text font-bold mt-4 inline-block border-b-2 border-accent"
+            >Clear Search</a
+          >
+        </div>
+        {% endif %}
+      </div>
     </section>
 
-    <!-- Footer -->
-    <footer class="bg-card-bg py-12 mt-16">
-        <div class="container mx-auto px-4">
-            <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
-                <!-- About Section -->
-                <div>
-                    <h3 class="text-xl font-bold text-primary-text mb-4">About BookStore</h3>
-                    <p class="text-secondary-text leading-relaxed">
-                        Your trusted online destination for discovering and purchasing books across all genres. We bring
-                        stories to your doorstep.
-                    </p>
-                </div>
+    <footer class="bg-primary-text text-white py-12">
+      <div class="container mx-auto px-6">
+        <div class="grid grid-cols-1 md:grid-cols-4 gap-8">
+          <div class="md:col-span-2">
+            <h3 class="text-2xl font-bold mb-4 flex items-center gap-2">
+              <i class="fas fa-book-open text-accent"></i> BookStore
+            </h3>
+            <p class="text-gray-400 leading-relaxed max-w-sm">
+              Elegant stories, delivered to your doorstep. We believe in the
+              magic of reading and curated collections.
+            </p>
+          </div>
 
-                <!-- Contact Info -->
-                <div>
-                    <h3 class="text-xl font-bold text-primary-text mb-4">Contact Us</h3>
-                    <p class="text-secondary-text mb-2">
-                        <i class="fas fa-envelope mr-2"></i>info@bookstore.com
-                    </p>
-                    <p class="text-secondary-text">
-                        <i class="fas fa-phone mr-2"></i>+92 306 3052278
-                    </p>
-                </div>
+          <div>
+            <h4 class="font-bold text-lg mb-4 text-accent">Quick Links</h4>
+            <ul class="space-y-2 text-gray-400">
+              <li><a href="/" class="hover:text-white transition">Home</a></li>
+              <li>
+                <a href="#all-books" class="hover:text-white transition"
+                  >Shop</a
+                >
+              </li>
+              <li>
+                <a href="/cart" class="hover:text-white transition">Cart</a>
+              </li>
+            </ul>
+          </div>
 
-                <!-- Social Links -->
-                <div>
-                    <h3 class="text-xl font-bold text-primary-text mb-4">Follow Us</h3>
-                    <div class="flex space-x-4">
-                        <a href="https://instagram.com" target="_blank"
-                            class="text-primary-text hover:text-accent transition text-2xl">
-                            <i class="fab fa-instagram"></i>
-                        </a>
-                        <a href="https://wa.me/923001234567" target="_blank"
-                            class="text-primary-text hover:text-accent transition text-2xl">
-                            <i class="fab fa-whatsapp"></i>
-                        </a>
-                    </div>
-                </div>
+          <div>
+            <h4 class="font-bold text-lg mb-4 text-accent">Connect</h4>
+            <div class="flex space-x-4">
+              <a
+                href="#"
+                class="w-10 h-10 rounded-full bg-gray-800 flex items-center justify-center hover:bg-accent hover:text-primary-text transition"
+              >
+                <i class="fab fa-instagram"></i>
+              </a>
+              <a
+                href="#"
+                class="w-10 h-10 rounded-full bg-gray-800 flex items-center justify-center hover:bg-green-500 hover:text-white transition"
+              >
+                <i class="fab fa-whatsapp"></i>
+              </a>
             </div>
-
-            <div class="border-t border-primary-text border-opacity-20 mt-8 pt-8 text-center">
-                <p class="text-muted-text">&copy; 2026 BookStore. All rights reserved.</p>
-            </div>
+          </div>
         </div>
+        <div
+          class="border-t border-gray-800 mt-12 pt-8 text-center text-gray-500 text-sm"
+        >
+          &copy; 2026 BookStore. All rights reserved.
+        </div>
+      </div>
     </footer>
 
+    <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
     <script>
-        // Mobile menu toggle
-        const mobileMenuBtn = document.getElementById('mobile-menu-btn');
-        const mobileMenu = document.getElementById('mobile-menu');
+      AOS.init({
+        duration: 800,
+        once: true,
+        offset: 100,
+      });
 
-        mobileMenuBtn.addEventListener('click', () => {
-            mobileMenu.classList.toggle('hidden');
+      // Mobile menu toggle
+      document
+        .getElementById("mobile-menu-btn")
+        .addEventListener("click", () => {
+          document.getElementById("mobile-menu").classList.toggle("hidden");
         });
     </script>
-
-</body>
-
+  </body>
 </html>
