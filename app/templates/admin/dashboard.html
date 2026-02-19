@@ -5,8 +5,11 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Admin Dashboard - BookStore</title>
+
     <script src="https://cdn.tailwindcss.com"></script>
+
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
     <script>
         tailwind.config = {
             theme: {
@@ -26,193 +29,198 @@
     </script>
 </head>
 
-<body class="bg-main-bg text-primary-text">
+<body class="bg-main-bg text-primary-text font-sans antialiased">
 
     <div class="flex h-screen overflow-hidden">
-        <!-- Sidebar -->
-        <aside id="sidebar"
-            class="w-64 bg-card-bg shadow-xl fixed lg:static inset-y-0 left-0 z-50 transform -translate-x-full lg:translate-x-0 transition-transform duration-300">
-            <div class="flex flex-col h-full">
-                <!-- Logo -->
-                <div class="bg-accent p-6 flex items-center justify-between">
-                    <a href="/" class="text-2xl font-bold text-primary-text flex items-center">
-                        <i class="fas fa-book-open mr-2"></i>
-                        BookStore
-                    </a>
-                    <button id="close-sidebar" class="lg:hidden text-primary-text">
-                        <i class="fas fa-times text-xl"></i>
-                    </button>
-                </div>
 
-                <!-- Admin Info -->
-                <div class="p-6 border-b border-gray-200">
-                    <div class="flex items-center space-x-3">
-                        <div class="bg-accent rounded-full w-12 h-12 flex items-center justify-center">
-                            <i class="fas fa-user-shield text-xl text-primary-text"></i>
-                        </div>
-                        <div>
-                            <p class="font-bold text-primary-text">Admin Panel</p>
-                            <p class="text-sm text-muted-text">Administrator</p>
-                        </div>
+        <aside id="sidebar"
+            class="w-64 bg-card-bg shadow-xl fixed lg:static inset-y-0 left-0 z-50 transform -translate-x-full lg:translate-x-0 transition-transform duration-300 flex flex-col h-full border-r border-highlight-bg">
+
+            <div class="bg-accent p-6 flex items-center justify-between shadow-sm">
+                <a href="/" class="text-2xl font-bold text-primary-text flex items-center hover:opacity-80 transition">
+                    <i class="fas fa-book-open mr-2"></i>
+                    <span>BookStore</span>
+                </a>
+                <button id="close-sidebar" class="lg:hidden text-primary-text hover:text-white transition">
+                    <i class="fas fa-times text-xl"></i>
+                </button>
+            </div>
+
+            <div class="p-6 border-b border-gray-200/50">
+                <div class="flex items-center space-x-3">
+                    <div class="bg-white/50 rounded-full w-12 h-12 flex items-center justify-center shadow-sm">
+                        <i class="fas fa-user-shield text-xl text-primary-text"></i>
+                    </div>
+                    <div>
+                        <p class="font-bold text-primary-text leading-tight">Admin Panel</p>
+                        <p class="text-xs text-muted-text font-medium uppercase tracking-wider">Administrator</p>
                     </div>
                 </div>
-
-                <!-- Navigation -->
-                <nav class="flex-1 overflow-y-auto p-4">
-                    <ul class="space-y-2">
-                        <li>
-                            <a href="/admin/dashboard"
-                                class="flex items-center space-x-3 p-3 rounded-lg bg-accent text-primary-text font-semibold transition">
-                                <i class="fas fa-chart-line w-5"></i>
-                                <span>Dashboard</span>
-                            </a>
-                        </li>
-                        <li>
-                            <a href="/admin/add-book"
-                                class="flex items-center space-x-3 p-3 rounded-lg text-secondary-text hover:bg-highlight-bg hover:text-primary-text transition">
-                                <i class="fas fa-plus-circle w-5"></i>
-                                <span>Add Book</span>
-                            </a>
-                        </li>
-                        <li>
-                            <a href="/admin/manage-book"
-                                class="flex items-center space-x-3 p-3 rounded-lg text-secondary-text hover:bg-highlight-bg hover:text-primary-text transition">
-                                <i class="fas fa-books w-5"></i>
-                                <span>Manage Books</span>
-                            </a>
-                        </li>
-                        <li>
-                            <a href="/admin/orders"
-                                class="flex items-center space-x-3 p-3 rounded-lg text-secondary-text hover:bg-highlight-bg hover:text-primary-text transition">
-                                <i class="fas fa-shopping-bag w-5"></i>
-                                <span>All Orders</span>
-                            </a>
-                        </li>
-                        <li>
-                            <a href="/"
-                                class="flex items-center space-x-3 p-3 rounded-lg text-secondary-text hover:bg-highlight-bg hover:text-primary-text transition">
-                                <i class="fas fa-store w-5"></i>
-                                <span>View Store</span>
-                            </a>
-                        </li>
-                        <li>
-                            <a href="/auth/logout"
-                                class="flex items-center space-x-3 p-3 rounded-lg text-red-600 hover:bg-red-50 transition">
-                                <i class="fas fa-sign-out-alt w-5"></i>
-                                <span>Logout</span>
-                            </a>
-                        </li>
-                    </ul>
-                </nav>
             </div>
+
+            <nav class="flex-1 overflow-y-auto p-4 custom-scrollbar">
+                <ul class="space-y-2">
+                    <li>
+                        <a href="/admin/dashboard"
+                            class="flex items-center space-x-3 p-3 rounded-lg bg-accent text-primary-text font-semibold shadow-sm transition-all duration-200">
+                            <i class="fas fa-chart-line w-6 text-center"></i>
+                            <span>Dashboard</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="/admin/add-book"
+                            class="flex items-center space-x-3 p-3 rounded-lg text-secondary-text hover:bg-highlight-bg hover:text-primary-text transition-all duration-200 group">
+                            <i
+                                class="fas fa-plus-circle w-6 text-center group-hover:scale-110 transition-transform"></i>
+                            <span>Add Book</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="/admin/manage-book"
+                            class="flex items-center space-x-3 p-3 rounded-lg text-secondary-text hover:bg-highlight-bg hover:text-primary-text transition-all duration-200 group">
+                            <i class="fas fa-books w-6 text-center group-hover:scale-110 transition-transform"></i>
+                            <span>Manage Books</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="/admin/orders"
+                            class="flex items-center space-x-3 p-3 rounded-lg text-secondary-text hover:bg-highlight-bg hover:text-primary-text transition-all duration-200 group">
+                            <i
+                                class="fas fa-shopping-bag w-6 text-center group-hover:scale-110 transition-transform"></i>
+                            <span>All Orders</span>
+                        </a>
+                    </li>
+
+                    <hr class="border-gray-200/50 my-2">
+
+                    <li>
+                        <a href="/"
+                            class="flex items-center space-x-3 p-3 rounded-lg text-secondary-text hover:bg-highlight-bg hover:text-primary-text transition-all duration-200 group">
+                            <i class="fas fa-store w-6 text-center group-hover:scale-110 transition-transform"></i>
+                            <span>View Store</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="/auth/logout"
+                            class="flex items-center space-x-3 p-3 rounded-lg text-red-600 hover:bg-red-50 hover:text-red-700 transition-all duration-200 group">
+                            <i
+                                class="fas fa-sign-out-alt w-6 text-center group-hover:scale-110 transition-transform"></i>
+                            <span>Logout</span>
+                        </a>
+                    </li>
+                </ul>
+            </nav>
         </aside>
 
-        <!-- Sidebar Overlay (Mobile) -->
-        <div id="sidebar-overlay" class="fixed inset-0 bg-primary-text bg-opacity-50 z-40 hidden lg:hidden"></div>
+        <div id="sidebar-overlay"
+            class="fixed inset-0 bg-primary-text bg-opacity-50 z-40 hidden lg:hidden backdrop-blur-sm transition-opacity">
+        </div>
 
-        <!-- Main Content -->
-        <main class="flex-1 overflow-y-auto">
-            <!-- Top Bar -->
-            <header class="bg-white shadow-sm sticky top-0 z-30">
-                <div class="flex items-center justify-between p-4">
+        <main class="flex-1 overflow-y-auto bg-main-bg relative">
+
+            <header class="bg-white shadow-sm sticky top-0 z-30 px-6 py-4">
+                <div class="flex items-center justify-between">
                     <div class="flex items-center space-x-4">
-                        <button id="open-sidebar" class="lg:hidden text-primary-text">
+                        <button id="open-sidebar" class="lg:hidden text-primary-text hover:text-accent transition">
                             <i class="fas fa-bars text-xl"></i>
                         </button>
-                        <h1 class="text-2xl font-bold text-primary-text">Dashboard</h1>
+                        <h1 class="text-2xl font-bold text-primary-text">Dashboard Overview</h1>
                     </div>
-                    <div class="text-sm text-muted-text">
-                        <i class="fas fa-calendar-day mr-2"></i>
+                    <div
+                        class="flex items-center text-sm text-muted-text bg-main-bg px-4 py-2 rounded-full border border-gray-100 shadow-sm">
+                        <i class="fas fa-calendar-day mr-2 text-accent"></i>
                         {{ now.strftime('%B %d, %Y') }}
                     </div>
                 </div>
             </header>
 
-            <!-- Dashboard Content -->
-            <div class="p-6">
-                <!-- Metric Cards -->
+            <div class="p-6 max-w-7xl mx-auto">
+
                 <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
-                    <!-- Total Books -->
+
                     <div
-                        class="bg-gradient-to-br from-blue-100 to-blue-200 rounded-lg shadow-lg p-6 hover:shadow-xl transition">
+                        class="bg-gradient-to-br from-blue-50 to-blue-100 rounded-xl shadow-sm border border-blue-200 p-6 hover:shadow-md transition-shadow">
                         <div class="flex items-center justify-between">
                             <div>
-                                <p class="text-sm font-semibold text-blue-800 uppercase mb-1">Total Books</p>
-                                <p class="text-3xl font-bold text-blue-900">{{ total_books }}</p>
+                                <p class="text-xs font-bold text-blue-600 uppercase tracking-wide mb-1">Total Books</p>
+                                <p class="text-3xl font-extrabold text-blue-900">{{ total_books }}</p>
                             </div>
-                            <div class="bg-blue-500 rounded-full w-14 h-14 flex items-center justify-center">
-                                <i class="fas fa-book text-2xl text-white"></i>
+                            <div
+                                class="bg-blue-500 rounded-lg w-12 h-12 flex items-center justify-center shadow-lg shadow-blue-500/30">
+                                <i class="fas fa-book text-xl text-white"></i>
                             </div>
                         </div>
                         <a href="/admin/manage-book"
-                            class="text-xs text-blue-700 hover:text-blue-900 mt-3 inline-block font-semibold">
-                            View All <i class="fas fa-arrow-right ml-1"></i>
+                            class="text-xs text-blue-700 hover:text-blue-900 mt-4 inline-flex items-center font-semibold transition-colors">
+                            Manage Inventory <i class="fas fa-arrow-right ml-1"></i>
                         </a>
                     </div>
 
-                    <!-- Total Users -->
                     <div
-                        class="bg-gradient-to-br from-green-100 to-green-200 rounded-lg shadow-lg p-6 hover:shadow-xl transition">
+                        class="bg-gradient-to-br from-green-50 to-green-100 rounded-xl shadow-sm border border-green-200 p-6 hover:shadow-md transition-shadow">
                         <div class="flex items-center justify-between">
                             <div>
-                                <p class="text-sm font-semibold text-green-800 uppercase mb-1">Total Users</p>
-                                <p class="text-3xl font-bold text-green-900">{{ total_users }}</p>
+                                <p class="text-xs font-bold text-green-600 uppercase tracking-wide mb-1">Total Users</p>
+                                <p class="text-3xl font-extrabold text-green-900">{{ total_users }}</p>
                             </div>
-                            <div class="bg-green-500 rounded-full w-14 h-14 flex items-center justify-center">
-                                <i class="fas fa-users text-2xl text-white"></i>
+                            <div
+                                class="bg-green-500 rounded-lg w-12 h-12 flex items-center justify-center shadow-lg shadow-green-500/30">
+                                <i class="fas fa-users text-xl text-white"></i>
                             </div>
                         </div>
-                        <p class="text-xs text-green-700 mt-3 font-semibold">
-                            <i class="fas fa-user-plus mr-1"></i>Registered customers
+                        <p class="text-xs text-green-700 mt-4 font-medium flex items-center">
+                            <i class="fas fa-check-circle mr-1"></i> Active Customers
                         </p>
                     </div>
 
-                    <!-- Total Orders -->
                     <div
-                        class="bg-gradient-to-br from-purple-100 to-purple-200 rounded-lg shadow-lg p-6 hover:shadow-xl transition">
+                        class="bg-gradient-to-br from-purple-50 to-purple-100 rounded-xl shadow-sm border border-purple-200 p-6 hover:shadow-md transition-shadow">
                         <div class="flex items-center justify-between">
                             <div>
-                                <p class="text-sm font-semibold text-purple-800 uppercase mb-1">Total Orders</p>
-                                <p class="text-3xl font-bold text-purple-900">{{ total_oders }}</p>
+                                <p class="text-xs font-bold text-purple-600 uppercase tracking-wide mb-1">Total Orders
+                                </p>
+                                <p class="text-3xl font-extrabold text-purple-900">{{ total_oders }}</p>
                             </div>
-                            <div class="bg-purple-500 rounded-full w-14 h-14 flex items-center justify-center">
-                                <i class="fas fa-shopping-cart text-2xl text-white"></i>
+                            <div
+                                class="bg-purple-500 rounded-lg w-12 h-12 flex items-center justify-center shadow-lg shadow-purple-500/30">
+                                <i class="fas fa-shopping-cart text-xl text-white"></i>
                             </div>
                         </div>
                         <a href="/admin/orders"
-                            class="text-xs text-purple-700 hover:text-purple-900 mt-3 inline-block font-semibold">
-                            View All <i class="fas fa-arrow-right ml-1"></i>
+                            class="text-xs text-purple-700 hover:text-purple-900 mt-4 inline-flex items-center font-semibold transition-colors">
+                            View All Orders <i class="fas fa-arrow-right ml-1"></i>
                         </a>
                     </div>
 
-                    <!-- Total Revenue -->
                     <div
-                        class="bg-gradient-to-br from-yellow-100 to-yellow-200 rounded-lg shadow-lg p-6 hover:shadow-xl transition">
+                        class="bg-gradient-to-br from-yellow-50 to-yellow-100 rounded-xl shadow-sm border border-yellow-200 p-6 hover:shadow-md transition-shadow">
                         <div class="flex items-center justify-between">
                             <div>
-                                <p class="text-sm font-semibold text-yellow-800 uppercase mb-1">Total Revenue</p>
-                                <p class="text-3xl font-bold text-yellow-900">Rs {{ "%.2f"|format(total_revenue) }}</p>
+                                <p class="text-xs font-bold text-yellow-700 uppercase tracking-wide mb-1">Total Revenue
+                                </p>
+                                <p class="text-3xl font-extrabold text-yellow-900 truncate">Rs {{
+                                    "%.2f"|format(total_revenue) }}</p>
                             </div>
-                            <div class="bg-yellow-500 rounded-full w-14 h-14 flex items-center justify-center">
-                                <i class="fas fa-dollar-sign text-2xl text-white"></i>
+                            <div
+                                class="bg-yellow-500 rounded-lg w-12 h-12 flex items-center justify-center shadow-lg shadow-yellow-500/30">
+                                <i class="fas fa-dollar-sign text-xl text-white"></i>
                             </div>
                         </div>
-                        <p class="text-xs text-yellow-700 mt-3 font-semibold">
-                            <i class="fas fa-check-circle mr-1"></i>From completed orders
+                        <p class="text-xs text-yellow-800 mt-4 font-medium flex items-center">
+                            <i class="fas fa-chart-pie mr-1"></i> Lifetime Earnings
                         </p>
                     </div>
                 </div>
 
-                <!-- Two Column Layout -->
                 <div class="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-8">
-                    <!-- Recent Orders -->
+
                     <div class="lg:col-span-2">
-                        <div class="bg-card-bg rounded-lg shadow-lg overflow-hidden">
+                        <div class="bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden h-full">
                             <div
-                                class="bg-highlight-bg px-6 py-4 border-b border-gray-200 flex items-center justify-between">
-                                <h2 class="text-xl font-bold text-primary-text">Recent Orders</h2>
+                                class="bg-highlight-bg/50 px-6 py-4 border-b border-gray-100 flex items-center justify-between">
+                                <h2 class="text-lg font-bold text-primary-text">Recent Orders</h2>
                                 <a href="/admin/orders"
-                                    class="text-sm text-accent hover:text-primary-text font-semibold">
+                                    class="text-sm text-accent hover:text-primary-text font-semibold transition-colors">
                                     View All <i class="fas fa-arrow-right ml-1"></i>
                                 </a>
                             </div>
@@ -220,28 +228,28 @@
                             {% if recent_orders %}
                             <div class="overflow-x-auto">
                                 <table class="w-full">
-                                    <thead class="bg-main-bg">
+                                    <thead class="bg-main-bg border-b border-gray-100">
                                         <tr>
                                             <th
-                                                class="px-6 py-3 text-left text-xs font-semibold text-primary-text uppercase">
+                                                class="px-6 py-3 text-left text-xs font-semibold text-muted-text uppercase tracking-wider">
                                                 Order ID</th>
                                             <th
-                                                class="px-6 py-3 text-left text-xs font-semibold text-primary-text uppercase">
+                                                class="px-6 py-3 text-left text-xs font-semibold text-muted-text uppercase tracking-wider">
                                                 Customer</th>
                                             <th
-                                                class="px-6 py-3 text-left text-xs font-semibold text-primary-text uppercase">
+                                                class="px-6 py-3 text-left text-xs font-semibold text-muted-text uppercase tracking-wider">
                                                 Total</th>
                                             <th
-                                                class="px-6 py-3 text-left text-xs font-semibold text-primary-text uppercase">
+                                                class="px-6 py-3 text-left text-xs font-semibold text-muted-text uppercase tracking-wider">
                                                 Status</th>
                                             <th
-                                                class="px-6 py-3 text-center text-xs font-semibold text-primary-text uppercase">
+                                                class="px-6 py-3 text-center text-xs font-semibold text-muted-text uppercase tracking-wider">
                                                 Action</th>
                                         </tr>
                                     </thead>
-                                    <tbody class="divide-y divide-gray-200">
+                                    <tbody class="divide-y divide-gray-100">
                                         {% for order in recent_orders %}
-                                        <tr class="hover:bg-main-bg transition">
+                                        <tr class="hover:bg-gray-50 transition-colors">
                                             <td class="px-6 py-4 text-sm font-bold text-primary-text">#{{ order.id }}
                                             </td>
                                             <td class="px-6 py-4 text-sm text-secondary-text">{{ order.user.full_name }}
@@ -249,19 +257,20 @@
                                             <td class="px-6 py-4 text-sm font-semibold text-primary-text">Rs {{
                                                 order.total_amount }}</td>
                                             <td class="px-6 py-4">
-                                                <span class="px-2 py-1 rounded-full text-xs font-semibold
-                                                    {% if order.status == 'Pending' %}bg-yellow-100 text-yellow-800
-                                                    {% elif order.status == 'Processing' %}bg-blue-100 text-blue-800
-                                                    {% elif order.status == 'Shipped' %}bg-purple-100 text-purple-800
-                                                    {% elif order.status == 'Delivered' %}bg-green-100 text-green-800
-                                                    {% elif order.status == 'Cancelled' %}bg-red-100 text-red-800
-                                                    {% else %}bg-gray-100 text-gray-800{% endif %}">
+                                                <span class="px-2.5 py-1 rounded-full text-xs font-medium border
+                                                    {% if order.status == 'Pending' %}bg-yellow-50 text-yellow-700 border-yellow-200
+                                                    {% elif order.status == 'Processing' %}bg-blue-50 text-blue-700 border-blue-200
+                                                    {% elif order.status == 'Shipped' %}bg-purple-50 text-purple-700 border-purple-200
+                                                    {% elif order.status == 'Delivered' %}bg-green-50 text-green-700 border-green-200
+                                                    {% elif order.status == 'Cancelled' %}bg-red-50 text-red-700 border-red-200
+                                                    {% else %}bg-gray-100 text-gray-700 border-gray-200{% endif %}">
                                                     {{ order.status }}
                                                 </span>
                                             </td>
                                             <td class="px-6 py-4 text-center">
                                                 <a href="/admin/order/{{ order.id }}"
-                                                    class="text-accent hover:text-primary-text font-semibold text-sm">
+                                                    class="text-gray-400 hover:text-accent transition-colors"
+                                                    title="View Details">
                                                     <i class="fas fa-eye"></i>
                                                 </a>
                                             </td>
@@ -271,84 +280,106 @@
                                 </table>
                             </div>
                             {% else %}
-                            <div class="p-12 text-center">
-                                <i class="fas fa-shopping-bag text-4xl text-muted-text mb-3"></i>
-                                <p class="text-secondary-text">No orders yet</p>
+                            <div class="p-12 text-center flex flex-col items-center justify-center">
+                                <div class="w-16 h-16 bg-gray-100 rounded-full flex items-center justify-center mb-4">
+                                    <i class="fas fa-shopping-bag text-2xl text-muted-text"></i>
+                                </div>
+                                <p class="text-secondary-text font-medium">No orders found</p>
+                                <p class="text-sm text-muted-text mt-1">New orders will appear here.</p>
                             </div>
                             {% endif %}
                         </div>
                     </div>
 
-                    <!-- Low Stock Alert -->
                     <div class="lg:col-span-1">
-                        <div class="bg-card-bg rounded-lg shadow-lg overflow-hidden">
-                            <div class="bg-red-100 px-6 py-4 border-b border-red-200 flex items-center justify-between">
-                                <h2 class="text-xl font-bold text-red-800 flex items-center">
-                                    <i class="fas fa-exclamation-triangle mr-2"></i>
-                                    Low Stock Alert
+                        <div
+                            class="bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden h-full flex flex-col">
+                            <div class="bg-red-50 px-6 py-4 border-b border-red-100 flex items-center justify-between">
+                                <h2 class="text-lg font-bold text-red-800 flex items-center">
+                                    <i class="fas fa-exclamation-triangle mr-2"></i> Low Stock
                                 </h2>
+                                <span
+                                    class="bg-red-200 text-red-800 text-xs font-bold px-2 py-0.5 rounded-full">Alert</span>
                             </div>
 
-                            {% if low_stock_books %}
-                            <div class="divide-y divide-gray-200 max-h-96 overflow-y-auto">
-                                {% for book in low_stock_books %}
-                                <div class="p-4 hover:bg-main-bg transition">
-                                    <div class="flex items-center justify-between">
-                                        <div class="flex-1">
-                                            <h4 class="font-semibold text-primary-text text-sm mb-1">{{ book.title }}
-                                            </h4>
-                                            <p class="text-xs text-muted-text">by {{ book.author }}</p>
+                            <div class="flex-1 overflow-y-auto max-h-[400px]">
+                                {% if low_stock_books %}
+                                <div class="divide-y divide-gray-100">
+                                    {% for book in low_stock_books %}
+                                    <div class="p-4 hover:bg-red-50/30 transition-colors group">
+                                        <div class="flex items-center justify-between">
+                                            <div class="flex-1 min-w-0 pr-3">
+                                                <h4 class="font-semibold text-primary-text text-sm mb-0.5 truncate">{{
+                                                    book.title }}</h4>
+                                                <p class="text-xs text-muted-text">by {{ book.author }}</p>
+                                            </div>
+                                            <div class="shrink-0">
+                                                <span
+                                                    class="px-3 py-1 text-xs font-bold rounded-full border
+                                                    {% if book.stock == 0 %}bg-red-100 text-red-700 border-red-200
+                                                    {% else %}bg-orange-100 text-orange-700 border-orange-200{% endif %}">
+                                                    {% if book.stock == 0 %}Out of Stock{% else %}{{ book.stock }}
+                                                    Remaining{% endif %}
+                                                </span>
+                                            </div>
                                         </div>
-                                        <div class="ml-3">
-                                            <span
-                                                class="px-3 py-1 {% if book.stock == 0 %}bg-red-500 text-white{% else %}bg-orange-100 text-orange-800{% endif %} rounded-full text-xs font-bold">
-                                                {% if book.stock == 0 %}
-                                                Out
-                                                {% else %}
-                                                {{ book.stock }} left
-                                                {% endif %}
-                                            </span>
-                                        </div>
+                                        <a href="/admin/edit-book/{{ book.id }}"
+                                            class="text-xs text-accent hover:text-primary-text mt-2 inline-block opacity-0 group-hover:opacity-100 transition-opacity">
+                                            Restock Now <i class="fas fa-arrow-right ml-1"></i>
+                                        </a>
                                     </div>
+                                    {% endfor %}
                                 </div>
-                                {% endfor %}
+                                {% else %}
+                                <div class="h-full flex flex-col items-center justify-center p-8 text-center">
+                                    <div
+                                        class="w-12 h-12 bg-green-100 rounded-full flex items-center justify-center mb-3">
+                                        <i class="fas fa-check text-xl text-green-600"></i>
+                                    </div>
+                                    <p class="text-secondary-text font-medium">Inventory is Healthy</p>
+                                    <p class="text-xs text-muted-text">No items are low on stock.</p>
+                                </div>
+                                {% endif %}
                             </div>
-                            {% else %}
-                            <div class="p-8 text-center">
-                                <i class="fas fa-check-circle text-4xl text-green-500 mb-3"></i>
-                                <p class="text-secondary-text text-sm">All books well stocked</p>
-                            </div>
-                            {% endif %}
                         </div>
                     </div>
                 </div>
 
-                <!-- Top Selling Books -->
-                <div class="bg-card-bg rounded-lg shadow-lg overflow-hidden">
-                    <div class="bg-highlight-bg px-6 py-4 border-b border-gray-200">
-                        <h2 class="text-xl font-bold text-primary-text">Top Selling Books</h2>
+                <div class="bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden">
+                    <div class="bg-highlight-bg/50 px-6 py-4 border-b border-gray-100">
+                        <h2 class="text-lg font-bold text-primary-text flex items-center">
+                            <i class="fas fa-crown text-yellow-500 mr-2"></i> Top Selling Books
+                        </h2>
                     </div>
 
                     {% if top_selling %}
-                    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-6 p-6">
+                    <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-6 p-6">
                         {% for book, total_sold in top_selling %}
-                        <div class="bg-main-bg rounded-lg p-4 hover:shadow-lg transition">
+                        <div
+                            class="bg-main-bg rounded-xl p-4 border border-gray-100 hover:shadow-lg hover:-translate-y-1 transition-all duration-300">
                             <div
-                                class="w-full h-40 bg-gradient-to-br from-accent to-highlight-bg rounded-lg flex items-center justify-center mb-4">
+                                class="w-full h-40 bg-gradient-to-br from-white to-gray-50 rounded-lg flex items-center justify-center mb-4 overflow-hidden shadow-inner relative">
                                 {% if book.image %}
                                 <img src="{{ url_for('static', filename=book.image) }}" alt="{{ book.title }}"
-                                    class="h-full object-contain">
+                                    class="h-full object-contain hover:scale-110 transition-transform duration-500">
                                 {% else %}
-                                <i class="fas fa-book text-4xl text-primary-text opacity-30"></i>
+                                <i class="fas fa-book text-4xl text-gray-200"></i>
                                 {% endif %}
+                                <div
+                                    class="absolute top-2 left-2 bg-yellow-400 text-white text-xs font-bold w-6 h-6 flex items-center justify-center rounded-full shadow-sm">
+                                    {{ loop.index }}
+                                </div>
                             </div>
+
                             <h3 class="font-bold text-primary-text text-sm mb-1 truncate" title="{{ book.title }}">{{
                                 book.title }}</h3>
-                            <p class="text-xs text-muted-text mb-2">by {{ book.author }}</p>
-                            <div class="flex items-center justify-between">
+                            <p class="text-xs text-muted-text mb-3 truncate">{{ book.author }}</p>
+
+                            <div class="flex items-center justify-between mt-auto">
                                 <span class="text-sm font-bold text-primary-text">Rs {{ book.price }}</span>
-                                <span class="px-2 py-1 bg-green-100 text-green-800 rounded text-xs font-semibold">
-                                    {{ total_sold }} sold
+                                <span
+                                    class="px-2 py-1 bg-green-50 text-green-700 border border-green-100 rounded text-xs font-semibold flex items-center">
+                                    <i class="fas fa-fire text-orange-500 mr-1 text-[10px]"></i> {{ total_sold }} sold
                                 </span>
                             </div>
                         </div>
@@ -356,38 +387,38 @@
                     </div>
                     {% else %}
                     <div class="p-12 text-center">
-                        <i class="fas fa-chart-line text-4xl text-muted-text mb-3"></i>
-                        <p class="text-secondary-text">No sales data yet</p>
+                        <i class="fas fa-chart-bar text-4xl text-gray-200 mb-3"></i>
+                        <p class="text-secondary-text">No sales data recorded yet.</p>
                     </div>
                     {% endif %}
                 </div>
+
             </div>
         </main>
     </div>
 
     <script>
-        // Sidebar toggle (Mobile)
+        // Sidebar Toggle Logic for Mobile
         const sidebar = document.getElementById('sidebar');
         const sidebarOverlay = document.getElementById('sidebar-overlay');
         const openSidebar = document.getElementById('open-sidebar');
         const closeSidebar = document.getElementById('close-sidebar');
 
-        openSidebar.addEventListener('click', () => {
-            sidebar.classList.remove('-translate-x-full');
-            sidebarOverlay.classList.remove('hidden');
-        });
+        function toggleSidebar() {
+            const isClosed = sidebar.classList.contains('-translate-x-full');
+            if (isClosed) {
+                sidebar.classList.remove('-translate-x-full');
+                sidebarOverlay.classList.remove('hidden');
+            } else {
+                sidebar.classList.add('-translate-x-full');
+                sidebarOverlay.classList.add('hidden');
+            }
+        }
 
-        closeSidebar.addEventListener('click', () => {
-            sidebar.classList.add('-translate-x-full');
-            sidebarOverlay.classList.add('hidden');
-        });
-
-        sidebarOverlay.addEventListener('click', () => {
-            sidebar.classList.add('-translate-x-full');
-            sidebarOverlay.classList.add('hidden');
-        });
+        openSidebar.addEventListener('click', toggleSidebar);
+        closeSidebar.addEventListener('click', toggleSidebar);
+        sidebarOverlay.addEventListener('click', toggleSidebar);
     </script>
-
 </body>
 
 </html>
