@@ -22,6 +22,8 @@ def add_book():
         author = request.form.get("author")
         price = request.form.get("price")
         stock = request.form.get("stock")
+        binding = request.form.get("binding", "Paperback")
+        description = request.form.get("description", " ")
         image = request.files.get("image")
 
         if not title or not author or not price or not stock or not image:
@@ -39,6 +41,8 @@ def add_book():
             author=author,
             price=float(price),
             stock=int(stock),
+            binding=binding,
+            description=description,
             image=image_path
         ) 
         db.session.add(new_book)
