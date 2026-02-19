@@ -4,7 +4,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Login - Online Book Store</title>
+  <title>Login | BookStore</title>
   <script src="https://cdn.tailwindcss.com"></script>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
   <script>
@@ -24,179 +24,177 @@
       }
     }
   </script>
+  <style>
+    .auth-card {
+      backdrop-filter: blur(10px);
+      border: 1px solid rgba(245, 175, 175, 0.3);
+    }
+
+    input:focus+span i {
+      color: #F5AFAF;
+      transition: all 0.3s ease;
+    }
+  </style>
 </head>
 
-<body class="bg-main-bg text-primary-text">
+<body class="bg-main-bg text-primary-text min-h-screen flex flex-col">
 
-  <!-- Simple Navbar -->
-  <nav class="bg-accent shadow-md">
-    <div class="container mx-auto px-4 py-4">
+  <nav class="bg-accent/90 backdrop-blur-md sticky top-0 z-50 shadow-sm">
+    <div class="container mx-auto px-6 py-4">
       <div class="flex items-center justify-between">
-        <!-- Logo -->
-        <a href="/" class="text-2xl font-bold text-primary-text flex items-center">
-          <i class="fas fa-book-open mr-2"></i>
+        <a href="/"
+          class="text-2xl font-black text-primary-text flex items-center tracking-tighter hover:opacity-80 transition">
+          <i class="fas fa-book-open mr-2 text-xl"></i>
           BookStore
         </a>
-
-        <!-- Auth Links -->
-        <div class="flex items-center space-x-4">
-          <span class="text-secondary-text text-sm">Don't have an account?</span>
-          <a href="/auth/register" class="text-primary-text hover:text-secondary-text font-medium transition">Sign Up</a>
+        <div class="flex items-center space-x-2">
+          <span class="hidden sm:inline text-secondary-text text-xs uppercase tracking-widest font-bold">New
+            here?</span>
+          <a href="/auth/register"
+            class="bg-white/30 px-4 py-2 rounded-full text-xs uppercase tracking-widest font-black hover:bg-white/50 transition border border-white/20">
+            Join Now
+          </a>
         </div>
       </div>
     </div>
   </nav>
 
-  <!-- Flash Messages -->
   {% with messages = get_flashed_messages(with_categories=true) %}
   {% if messages %}
-  <div class="container mx-auto px-4 mt-4">
+  <div class="container mx-auto px-6 mt-6">
     {% for category, message in messages %}
     <div
-      class="mb-4 p-4 rounded-lg {% if category == 'success' %}bg-green-100 text-green-800{% elif category == 'danger' %}bg-red-100 text-red-800{% elif category == 'info' %}bg-blue-100 text-blue-800{% else %}bg-yellow-100 text-yellow-800{% endif %}">
-      <i
-        class="fas {% if category == 'success' %}fa-check-circle{% elif category == 'danger' %}fa-exclamation-circle{% elif category == 'info' %}fa-info-circle{% else %}fa-info-circle{% endif %} mr-2"></i>
-      {{ message }}
+      class="flex items-center p-4 rounded-xl border animate-fade-in {% if category == 'success' %}bg-green-50 border-green-200 text-green-800{% elif category == 'danger' %}bg-red-50 border-red-200 text-red-800{% else %}bg-blue-50 border-blue-200 text-blue-800{% endif %}">
+      <i class="fas {% if category == 'success' %}fa-check-circle{% else %}fa-circle-exclamation{% endif %} mr-3"></i>
+      <span class="text-sm font-bold">{{ message }}</span>
     </div>
     {% endfor %}
   </div>
   {% endif %}
   {% endwith %}
 
-  <!-- Login Form Section -->
-  <section class="container mx-auto px-4 py-12 min-h-screen flex items-center justify-center">
+  <main class="flex-grow flex items-center justify-center px-6 py-12">
     <div class="w-full max-w-md">
-      <!-- Card -->
-      <div class="bg-card-bg rounded-lg shadow-xl p-8">
-        <!-- Header -->
-        <div class="text-center mb-8">
-          <div class="inline-block bg-accent rounded-full p-4 mb-4">
-            <i class="fas fa-sign-in-alt text-3xl text-primary-text"></i>
+      <div class="auth-card bg-card-bg rounded-2xl shadow-2xl p-8 md:p-10">
+        <div class="text-center mb-10">
+          <div
+            class="inline-flex items-center justify-center w-16 h-16 bg-accent text-white rounded-full mb-4 shadow-lg shadow-accent/30">
+            <i class="fas fa-key text-2xl"></i>
           </div>
-          <h1 class="text-3xl font-bold text-primary-text mb-2">Welcome Back</h1>
-          <p class="text-secondary-text">Login to your BookStore account</p>
+          <h1 class="text-3xl font-black text-primary-text italic tracking-tight">Welcome Back</h1>
+          <p class="text-muted-text mt-2 font-medium">Continue your literary journey</p>
         </div>
 
-        <!-- Login Form -->
-        <form action="/auth/login" method="POST" id="login-form">
-          <!-- Email -->
-          <div class="mb-5">
-            <label for="email" class="block text-sm font-semibold text-primary-text mb-2">
-              Email Address <span class="text-red-500">*</span>
-            </label>
-            <div class="relative">
-              <span class="absolute left-3 top-1/2 transform -translate-y-1/2 text-muted-text">
+        <form action="/auth/login" method="POST" id="login-form" class="space-y-6">
+          <div>
+            <label class="block text-[10px] font-black uppercase tracking-[0.2em] text-muted-text mb-2 ml-1">Email
+              Address</label>
+            <div class="relative group">
+              <input type="email" id="email" name="email" required autofocus
+                class="w-full pl-11 pr-4 py-4 rounded-xl border border-highlight-bg focus:border-accent focus:ring-4 focus:ring-accent/10 outline-none transition-all bg-white/50"
+                placeholder="name@example.com">
+              <span class="absolute left-4 top-1/2 -translate-y-1/2 text-muted-text/50 transition-colors">
                 <i class="fas fa-envelope"></i>
               </span>
-              <input type="email" id="email" name="email" required
-                class="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-accent bg-main-bg text-primary-text"
-                placeholder="john.doe@example.com" autofocus>
             </div>
           </div>
 
-          <!-- Password -->
-          <div class="mb-6">
-            <label for="password" class="block text-sm font-semibold text-primary-text mb-2">
-              Password <span class="text-red-500">*</span>
-            </label>
-            <div class="relative">
-              <span class="absolute left-3 top-1/2 transform -translate-y-1/2 text-muted-text">
+          <div>
+            <div class="flex justify-between items-center mb-2 ml-1">
+              <label class="text-[10px] font-black uppercase tracking-[0.2em] text-muted-text">Password</label>
+              <a href="#"
+                class="text-[10px] font-bold uppercase text-accent hover:text-primary-text transition">Forgot?</a>
+            </div>
+            <div class="relative group">
+              <input type="password" id="password" name="password" required
+                class="w-full pl-11 pr-12 py-4 rounded-xl border border-highlight-bg focus:border-accent focus:ring-4 focus:ring-accent/10 outline-none transition-all bg-white/50"
+                placeholder="••••••••">
+              <span class="absolute left-4 top-1/2 -translate-y-1/2 text-muted-text/50 transition-colors">
                 <i class="fas fa-lock"></i>
               </span>
-              <input type="password" id="password" name="password" required
-                class="w-full pl-10 pr-12 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-accent bg-main-bg text-primary-text"
-                placeholder="••••••••">
               <button type="button" onclick="togglePassword()"
-                class="absolute right-3 top-1/2 transform -translate-y-1/2 text-muted-text hover:text-primary-text transition">
+                class="absolute right-4 top-1/2 -translate-y-1/2 text-muted-text hover:text-accent transition">
                 <i class="fas fa-eye" id="toggle-icon"></i>
               </button>
             </div>
           </div>
 
-          <!-- Submit Button -->
           <button type="submit"
-            class="w-full bg-accent text-primary-text py-3 rounded-lg font-bold hover:bg-opacity-80 transition shadow-md text-lg mb-4">
-            <i class="fas fa-sign-in-alt mr-2"></i>
-            Login
+            class="w-full bg-primary-text text-white py-4 rounded-xl font-bold hover:bg-black transition-all shadow-xl shadow-accent/20 active:scale-[0.98] flex items-center justify-center gap-2">
+            <span>Sign In</span>
+            <i class="fas fa-arrow-right text-xs opacity-50"></i>
           </button>
 
-          <!-- Divider -->
-          <div class="relative my-6">
-            <div class="absolute inset-0 flex items-center">
-              <div class="w-full border-t border-gray-300"></div>
-            </div>
-            <div class="relative flex justify-center text-sm">
-              <span class="px-4 bg-card-bg text-muted-text">or</span>
-            </div>
+          <div class="relative flex items-center py-4">
+            <div class="flex-grow border-t border-highlight-bg"></div>
+            <span class="flex-shrink mx-4 text-[10px] font-black uppercase tracking-widest text-muted-text/40">OR</span>
+            <div class="flex-grow border-t border-highlight-bg"></div>
           </div>
 
-          <!-- Signup Link -->
-          <div class="text-center">
-            <p class="text-secondary-text">
-              Don't have an account?
-              <a href="/auth/register" class="text-accent hover:text-primary-text font-semibold transition">
-                Sign up here
-              </a>
-            </p>
+          <div class="grid grid-cols-2 gap-4">
+            <button type="button"
+              class="flex items-center justify-center py-3 px-4 border border-highlight-bg rounded-xl hover:bg-white transition text-xs font-bold gap-2">
+              <i class="fab fa-google text-red-400"></i> Google
+            </button>
+            <button type="button"
+              class="flex items-center justify-center py-3 px-4 border border-highlight-bg rounded-xl hover:bg-white transition text-xs font-bold gap-2">
+              <i class="fab fa-facebook text-blue-500"></i> Facebook
+            </button>
           </div>
         </form>
       </div>
 
-      <!-- Back to Home -->
-      <div class="text-center mt-6">
-        <a href="/" class="text-muted-text hover:text-accent transition inline-flex items-center">
-          <i class="fas fa-arrow-left mr-2"></i>
-          Back to Home
+      <div class="mt-8 flex flex-col items-center gap-4">
+        <a href="/"
+          class="text-xs font-bold uppercase tracking-widest text-muted-text hover:text-accent transition flex items-center gap-2">
+          <i class="fas fa-long-arrow-alt-left"></i>
+          Back to Library
         </a>
       </div>
     </div>
-  </section>
+  </main>
 
-  <!-- Footer -->
-  <footer class="bg-card-bg py-8">
-    <div class="container mx-auto px-4 text-center">
-      <p class="text-muted-text">&copy; 2024 BookStore. All rights reserved.</p>
+  <footer class="py-8 border-t border-highlight-bg bg-card-bg/30">
+    <div class="container mx-auto px-6 text-center">
+      <p class="text-[10px] font-bold uppercase tracking-[0.3em] text-muted-text/60">
+        &copy; 2026 BookStore &bull; Curating Knowledge
+      </p>
     </div>
   </footer>
 
   <script>
-    // Toggle password visibility
     function togglePassword() {
-      const passwordInput = document.getElementById('password');
-      const toggleIcon = document.getElementById('toggle-icon');
-
-      if (passwordInput.type === 'password') {
-        passwordInput.type = 'text';
-        toggleIcon.classList.remove('fa-eye');
-        toggleIcon.classList.add('fa-eye-slash');
+      const pwd = document.getElementById('password');
+      const icon = document.getElementById('toggle-icon');
+      if (pwd.type === 'password') {
+        pwd.type = 'text';
+        icon.classList.replace('fa-eye', 'fa-eye-slash');
       } else {
-        passwordInput.type = 'password';
-        toggleIcon.classList.remove('fa-eye-slash');
-        toggleIcon.classList.add('fa-eye');
+        pwd.type = 'password';
+        icon.classList.replace('fa-eye-slash', 'fa-eye');
       }
     }
 
-    // Form validation
     document.getElementById('login-form').addEventListener('submit', function (e) {
-      const email = document.getElementById('email').value.trim();
-      const password = document.getElementById('password').value;
+      const email = document.getElementById('email');
+      const pwd = document.getElementById('password');
+      let valid = true;
 
-      if (!email || !password) {
-        e.preventDefault();
-        alert('Please fill in all required fields');
-        return false;
-      }
+      [email, pwd].forEach(el => {
+        if (!el.value.trim()) {
+          el.classList.add('border-red-300', 'bg-red-50');
+          valid = false;
+        } else {
+          el.classList.remove('border-red-300', 'bg-red-50');
+        }
+      });
 
-      // Basic email validation
-      const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-      if (!emailRegex.test(email)) {
+      if (!valid) {
         e.preventDefault();
-        alert('Please enter a valid email address');
-        return false;
+        alert('Please check your credentials.');
       }
     });
   </script>
-
 </body>
 
 </html>

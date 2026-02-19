@@ -4,7 +4,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Sign Up - Online Book Store</title>
+  <title>Create Account | BookStore</title>
   <script src="https://cdn.tailwindcss.com"></script>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
   <script>
@@ -24,178 +24,164 @@
       }
     }
   </script>
+  <style>
+    .auth-card {
+      backdrop-filter: blur(10px);
+      border: 1px solid rgba(245, 175, 175, 0.3);
+    }
+
+    .form-input:focus+.input-icon i {
+      color: #F5AFAF;
+      transform: scale(1.1);
+    }
+
+    .input-icon i {
+      transition: all 0.3s ease;
+    }
+  </style>
 </head>
 
-<body class="bg-main-bg text-primary-text">
+<body class="bg-main-bg text-primary-text min-h-screen flex flex-col">
 
-  <!-- Simple Navbar -->
-  <nav class="bg-accent shadow-md">
-    <div class="container mx-auto px-4 py-4">
+  <nav class="bg-accent/90 backdrop-blur-md sticky top-0 z-50 shadow-sm">
+    <div class="container mx-auto px-6 py-4">
       <div class="flex items-center justify-between">
-        <!-- Logo -->
-        <a href="/" class="text-2xl font-bold text-primary-text flex items-center">
-          <i class="fas fa-book-open mr-2"></i>
+        <a href="/"
+          class="text-2xl font-black text-primary-text flex items-center tracking-tighter hover:opacity-80 transition">
+          <i class="fas fa-book-open mr-2 text-xl"></i>
           BookStore
         </a>
-
-        <!-- Auth Links -->
-        <div class="flex items-center space-x-4">
-          <span class="text-secondary-text text-sm">Already have an account?</span>
-          <a href="/auth/login" class="text-primary-text hover:text-secondary-text font-medium transition">Login</a>
+        <div class="flex items-center space-x-2">
+          <span class="hidden sm:inline text-secondary-text text-xs uppercase tracking-widest font-bold">Already a
+            member?</span>
+          <a href="/auth/login"
+            class="bg-primary-text text-white px-5 py-2 rounded-full text-xs uppercase tracking-widest font-black hover:bg-black transition border border-transparent">
+            Login
+          </a>
         </div>
       </div>
     </div>
   </nav>
 
-  <!-- Flash Messages -->
   {% with messages = get_flashed_messages(with_categories=true) %}
   {% if messages %}
-  <div class="container mx-auto px-4 mt-4">
+  <div class="container mx-auto px-6 mt-6">
     {% for category, message in messages %}
     <div
-      class="mb-4 p-4 rounded-lg {% if category == 'success' %}bg-green-100 text-green-800{% elif category == 'danger' %}bg-red-100 text-red-800{% else %}bg-yellow-100 text-yellow-800{% endif %}">
-      <i
-        class="fas {% if category == 'success' %}fa-check-circle{% elif category == 'danger' %}fa-exclamation-circle{% else %}fa-info-circle{% endif %} mr-2"></i>
-      {{ message }}
+      class="flex items-center p-4 rounded-xl border {% if category == 'success' %}bg-green-50 border-green-200 text-green-800{% elif category == 'danger' %}bg-red-50 border-red-200 text-red-800{% else %}bg-blue-50 border-blue-200 text-blue-800{% endif %} shadow-sm">
+      <i class="fas {% if category == 'success' %}fa-check-circle{% else %}fa-circle-exclamation{% endif %} mr-3"></i>
+      <span class="text-sm font-bold">{{ message }}</span>
     </div>
     {% endfor %}
   </div>
   {% endif %}
   {% endwith %}
 
-  <!-- Registration Form Section -->
-  <section class="container mx-auto px-4 py-12 min-h-screen flex items-center justify-center">
-    <div class="w-full max-w-md">
-      <!-- Card -->
-      <div class="bg-card-bg rounded-lg shadow-xl p-8">
-        <!-- Header -->
-        <div class="text-center mb-8">
-          <div class="inline-block bg-accent rounded-full p-4 mb-4">
-            <i class="fas fa-user-plus text-3xl text-primary-text"></i>
-          </div>
-          <h1 class="text-3xl font-bold text-primary-text mb-2">Create Account</h1>
-          <p class="text-secondary-text">Join BookStore to start shopping</p>
+  <main class="flex-grow flex items-center justify-center px-6 py-12">
+    <div class="w-full max-w-lg">
+      <div class="auth-card bg-card-bg rounded-2xl shadow-2xl p-8 md:p-12 relative overflow-hidden">
+        <div class="absolute -top-10 -right-10 w-32 h-32 bg-accent/10 rounded-full blur-3xl"></div>
+
+        <div class="text-center mb-10">
+          <h1 class="text-4xl font-black text-primary-text italic tracking-tight">Join the Library</h1>
+          <p class="text-muted-text mt-2 font-medium">Create an account to start your collection</p>
         </div>
 
-        <!-- Registration Form -->
-        <form action="/auth/register" method="POST" id="register-form">
-          <!-- Full Name -->
-          <div class="mb-5">
-            <label for="full_name" class="block text-sm font-semibold text-primary-text mb-2">
-              Full Name <span class="text-red-500">*</span>
-            </label>
+        <form action="/auth/register" method="POST" id="register-form" class="space-y-5">
+          <div>
+            <label class="block text-[10px] font-black uppercase tracking-[0.2em] text-muted-text mb-2 ml-1">Full
+              Name</label>
             <div class="relative">
-              <span class="absolute left-3 top-1/2 transform -translate-y-1/2 text-muted-text">
-                <i class="fas fa-user"></i>
-              </span>
               <input type="text" id="full_name" name="full_name" required
-                class="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-accent bg-main-bg text-primary-text"
-                placeholder="John Doe">
+                class="form-input w-full pl-11 pr-4 py-4 rounded-xl border border-highlight-bg focus:border-accent focus:ring-4 focus:ring-accent/10 outline-none transition-all bg-white/60"
+                placeholder="Elizabeth Bennet">
+              <span class="input-icon absolute left-4 top-1/2 -translate-y-1/2 text-muted-text/50">
+                <i class="fas fa-user-feather"></i>
+              </span>
             </div>
           </div>
 
-          <!-- Email -->
-          <div class="mb-5">
-            <label for="email" class="block text-sm font-semibold text-primary-text mb-2">
-              Email Address <span class="text-red-500">*</span>
-            </label>
+          <div>
+            <label class="block text-[10px] font-black uppercase tracking-[0.2em] text-muted-text mb-2 ml-1">Email
+              Address</label>
             <div class="relative">
-              <span class="absolute left-3 top-1/2 transform -translate-y-1/2 text-muted-text">
+              <input type="email" id="email" name="email" required
+                class="form-input w-full pl-11 pr-4 py-4 rounded-xl border border-highlight-bg focus:border-accent focus:ring-4 focus:ring-accent/10 outline-none transition-all bg-white/60"
+                placeholder="reader@example.com">
+              <span class="input-icon absolute left-4 top-1/2 -translate-y-1/2 text-muted-text/50">
                 <i class="fas fa-envelope"></i>
               </span>
-              <input type="email" id="email" name="email" required
-                class="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-accent bg-main-bg text-primary-text"
-                placeholder="john.doe@example.com">
             </div>
           </div>
 
-          <!-- Password -->
-          <div class="mb-6">
-            <label for="password" class="block text-sm font-semibold text-primary-text mb-2">
-              Password <span class="text-red-500">*</span>
-            </label>
+          <div>
+            <label class="block text-[10px] font-black uppercase tracking-[0.2em] text-muted-text mb-2 ml-1">Create
+              Password</label>
             <div class="relative">
-              <span class="absolute left-3 top-1/2 transform -translate-y-1/2 text-muted-text">
-                <i class="fas fa-lock"></i>
-              </span>
               <input type="password" id="password" name="password" required minlength="6"
-                class="w-full pl-10 pr-12 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-accent bg-main-bg text-primary-text"
+                class="form-input w-full pl-11 pr-12 py-4 rounded-xl border border-highlight-bg focus:border-accent focus:ring-4 focus:ring-accent/10 outline-none transition-all bg-white/60"
                 placeholder="••••••••">
+              <span class="input-icon absolute left-4 top-1/2 -translate-y-1/2 text-muted-text/50">
+                <i class="fas fa-lock-open"></i>
+              </span>
               <button type="button" onclick="togglePassword()"
-                class="absolute right-3 top-1/2 transform -translate-y-1/2 text-muted-text hover:text-primary-text transition">
+                class="absolute right-4 top-1/2 -translate-y-1/2 text-muted-text hover:text-accent transition">
                 <i class="fas fa-eye" id="toggle-icon"></i>
               </button>
             </div>
-            <p class="text-xs text-muted-text mt-2">
-              <i class="fas fa-info-circle mr-1"></i>
-              Password must be at least 6 characters long
-            </p>
-          </div>
-
-          <!-- Submit Button -->
-          <button type="submit"
-            class="w-full bg-accent text-primary-text py-3 rounded-lg font-bold hover:bg-opacity-80 transition shadow-md text-lg mb-4">
-            <i class="fas fa-user-plus mr-2"></i>
-            Create Account
-          </button>
-
-          <!-- Divider -->
-          <div class="relative my-6">
-            <div class="absolute inset-0 flex items-center">
-              <div class="w-full border-t border-gray-300"></div>
-            </div>
-            <div class="relative flex justify-center text-sm">
-              <span class="px-4 bg-card-bg text-muted-text">or</span>
+            <div class="flex items-center mt-3 ml-1 text-muted-text">
+              <i class="fas fa-shield-halved text-[10px] mr-2"></i>
+              <p class="text-[10px] font-bold uppercase tracking-widest">Min. 6 characters required</p>
             </div>
           </div>
 
-          <!-- Login Link -->
-          <div class="text-center">
-            <p class="text-secondary-text">
-              Already have an account?
-              <a href="/auth/login" class="text-accent hover:text-primary-text font-semibold transition">
-                Login here
-              </a>
-            </p>
+          <div class="pt-4">
+            <button type="submit"
+              class="w-full bg-accent text-primary-text py-4 rounded-xl font-black uppercase tracking-widest hover:bg-highlight-bg transition-all shadow-lg shadow-accent/20 active:scale-[0.98] flex items-center justify-center gap-3">
+              <i class="fas fa-feather-pointed"></i>
+              Register Now
+            </button>
           </div>
+
+          <p
+            class="text-[9px] text-center text-muted-text px-6 mt-4 font-bold uppercase tracking-tighter leading-relaxed">
+            By registering, you agree to our <a href="#" class="underline hover:text-accent">Terms of Service</a> & <a
+              href="#" class="underline hover:text-accent">Privacy Policy</a>.
+          </p>
         </form>
       </div>
 
-      <!-- Back to Home -->
-      <div class="text-center mt-6">
-        <a href="/" class="text-muted-text hover:text-accent transition inline-flex items-center">
-          <i class="fas fa-arrow-left mr-2"></i>
-          Back to Home
+      <div class="text-center mt-8">
+        <a href="/"
+          class="text-xs font-bold uppercase tracking-widest text-muted-text hover:text-accent transition flex items-center justify-center gap-2">
+          <i class="fas fa-arrow-left text-[10px]"></i>
+          Return to Store
         </a>
       </div>
     </div>
-  </section>
+  </main>
 
-  <!-- Footer -->
-  <footer class="bg-card-bg py-8">
-    <div class="container mx-auto px-4 text-center">
-      <p class="text-muted-text">&copy; 2024 BookStore. All rights reserved.</p>
+  <footer class="py-8 border-t border-highlight-bg bg-card-bg/30">
+    <div class="container mx-auto px-6 text-center">
+      <p class="text-[10px] font-bold uppercase tracking-[0.3em] text-muted-text/60">
+        &copy; 2026 BookStore &bull; Every Page is a New World
+      </p>
     </div>
   </footer>
 
   <script>
-    // Toggle password visibility
     function togglePassword() {
-      const passwordInput = document.getElementById('password');
-      const toggleIcon = document.getElementById('toggle-icon');
-
-      if (passwordInput.type === 'password') {
-        passwordInput.type = 'text';
-        toggleIcon.classList.remove('fa-eye');
-        toggleIcon.classList.add('fa-eye-slash');
+      const pwd = document.getElementById('password');
+      const icon = document.getElementById('toggle-icon');
+      if (pwd.type === 'password') {
+        pwd.type = 'text';
+        icon.classList.replace('fa-eye', 'fa-eye-slash');
       } else {
-        passwordInput.type = 'password';
-        toggleIcon.classList.remove('fa-eye-slash');
-        toggleIcon.classList.add('fa-eye');
+        pwd.type = 'password';
+        icon.classList.replace('fa-eye-slash', 'fa-eye');
       }
     }
 
-    // Form validation
     document.getElementById('register-form').addEventListener('submit', function (e) {
       const fullName = document.getElementById('full_name').value.trim();
       const email = document.getElementById('email').value.trim();
@@ -204,25 +190,23 @@
       if (!fullName || !email || !password) {
         e.preventDefault();
         alert('Please fill in all required fields');
-        return false;
+        return;
       }
 
       if (password.length < 6) {
         e.preventDefault();
         alert('Password must be at least 6 characters long');
-        return false;
+        return;
       }
 
-      // Basic email validation
       const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
       if (!emailRegex.test(email)) {
         e.preventDefault();
         alert('Please enter a valid email address');
-        return false;
+        return;
       }
     });
   </script>
-
 </body>
 
 </html>
