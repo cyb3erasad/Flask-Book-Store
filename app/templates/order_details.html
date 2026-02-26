@@ -1,312 +1,496 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
-
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Order #{{ order.id }} | BookStore</title>
     <script src="https://cdn.tailwindcss.com"></script>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+    />
     <script>
-        tailwind.config = {
-            theme: {
-                extend: {
-                    colors: {
-                        'main-bg': '#FCF8F8',
-                        'card-bg': '#FBEFEF',
-                        'highlight-bg': '#F9DFDF',
-                        'accent': '#F5AFAF',
-                        'primary-text': '#3A2E2E',
-                        'secondary-text': '#4A3A3A',
-                        'muted-text': '#7A6A6A'
-                    }
-                }
-            }
-        }
+      tailwind.config = {
+        theme: {
+          extend: {
+            colors: {
+              "main-bg": "#FCF8F8",
+              "card-bg": "#FBEFEF",
+              "highlight-bg": "#F9DFDF",
+              accent: "#F5AFAF",
+              "primary-text": "#3A2E2E",
+              "secondary-text": "#4A3A3A",
+              "muted-text": "#7A6A6A",
+            },
+          },
+        },
+      };
     </script>
     <style>
-        .glass-nav {
-            backdrop-filter: blur(12px);
-            background-color: rgba(245, 175, 175, 0.9);
+      .glass-nav {
+        backdrop-filter: blur(12px);
+        background-color: rgba(245, 175, 175, 0.9);
+      }
+
+      /* Print Styles - ONLY ADDITION */
+      @media print {
+        /* Hide elements not needed in print */
+        nav,
+        footer,
+        .no-print {
+          display: none !important;
         }
+
+        /* Ensure single page print */
+        body {
+          margin: 0;
+          padding: 0;
+          font-size: 10px;
+        }
+
+        main {
+          page-break-inside: avoid;
+        }
+
+        @page {
+          size: A4;
+          margin: 0.5cm;
+        }
+
+        /* Compress spacing */
+        .py-12 {
+          padding-top: 0.5rem !important;
+          padding-bottom: 0.5rem !important;
+        }
+
+        .p-6 {
+          padding: 0.5rem !important;
+        }
+
+        .space-y-6 > * + * {
+          margin-top: 0.5rem !important;
+        }
+
+        .mb-8,
+        .mt-10 {
+          margin: 0.25rem 0 !important;
+        }
+
+        .gap-8 {
+          gap: 0.5rem !important;
+        }
+
+        /* Smaller text for print */
+        .text-4xl {
+          font-size: 18px !important;
+        }
+
+        .text-2xl {
+          font-size: 14px !important;
+        }
+
+        .text-lg {
+          font-size: 12px !important;
+        }
+
+        h1,
+        h2,
+        h3 {
+          margin-bottom: 0.25rem !important;
+        }
+
+        /* Remove shadows */
+        .shadow-sm,
+        .shadow-lg {
+          box-shadow: none !important;
+        }
+      }
     </style>
-</head>
+  </head>
 
-<body class="bg-main-bg text-primary-text min-h-screen flex flex-col">
-
+  <body class="bg-main-bg text-primary-text min-h-screen flex flex-col">
     <nav class="glass-nav sticky top-0 z-50 shadow-sm border-b border-white/20">
-        <div class="container mx-auto px-6 py-4">
-            <div class="flex items-center justify-between gap-4">
-                <a href="/"
-                    class="text-2xl font-black text-primary-text flex items-center tracking-tighter shrink-0 hover:opacity-80 transition">
-                    <i class="fas fa-book-open mr-2 text-xl"></i>
-                    BookStore
-                </a>
+      <div class="container mx-auto px-6 py-4">
+        <div class="flex items-center justify-between gap-4">
+          <a
+            href="/"
+            class="text-2xl font-black text-primary-text flex items-center tracking-tighter shrink-0 hover:opacity-80 transition"
+          >
+            <i class="fas fa-book-open mr-2 text-xl"></i>
+            BookStore
+          </a>
 
-                <div class="hidden md:block flex-1 max-w-lg mx-auto">
-                    <form action="/search" method="GET" class="relative group">
-                        <input type="text" name="q" placeholder="Find your next read..."
-                            class="w-full pl-10 pr-4 py-2.5 rounded-full bg-white/40 border border-white/30 text-primary-text placeholder-primary-text/50 focus:outline-none focus:bg-white/80 focus:ring-2 focus:ring-primary-text/20 transition-all text-sm font-medium">
-                        <button type="submit"
-                            class="absolute left-3.5 top-1/2 -translate-y-1/2 text-primary-text/50 group-focus-within:text-primary-text transition">
-                            <i class="fas fa-search"></i>
-                        </button>
-                    </form>
-                </div>
+          <div class="hidden md:block flex-1 max-w-lg mx-auto">
+            <form action="/search" method="GET" class="relative group">
+              <input
+                type="text"
+                name="q"
+                placeholder="Find your next read..."
+                class="w-full pl-10 pr-4 py-2.5 rounded-full bg-white/40 border border-white/30 text-primary-text placeholder-primary-text/50 focus:outline-none focus:bg-white/80 focus:ring-2 focus:ring-primary-text/20 transition-all text-sm font-medium"
+              />
+              <button
+                type="submit"
+                class="absolute left-3.5 top-1/2 -translate-y-1/2 text-primary-text/50 group-focus-within:text-primary-text transition"
+              >
+                <i class="fas fa-search"></i>
+              </button>
+            </form>
+          </div>
 
-                <div class="flex items-center gap-6 shrink-0">
-                    <a href="/cart" class="relative group">
-                        <div class="p-2 rounded-full hover:bg-white/20 transition">
-                            <i class="fas fa-shopping-bag text-lg text-primary-text"></i>
-                        </div>
-                        <span
-                            class="absolute top-0 right-0 bg-primary-text text-accent text-[10px] font-bold rounded-full w-4 h-4 flex items-center justify-center border border-accent">0</span>
-                    </a>
+          <div class="flex items-center gap-6 shrink-0">
+            <a href="/cart" class="relative group">
+              <div class="p-2 rounded-full hover:bg-white/20 transition">
+                <i class="fas fa-shopping-bag text-lg text-primary-text"></i>
+              </div>
+              <span
+                class="absolute top-0 right-0 bg-primary-text text-accent text-[10px] font-bold rounded-full w-4 h-4 flex items-center justify-center border border-accent"
+                >0</span
+              >
+            </a>
 
-                    <div class="hidden md:flex items-center gap-6">
-                        <a href="/my-orders"
-                            class="text-xs font-black uppercase tracking-widest text-primary-text border-b-2 border-primary-text pb-0.5">Orders</a>
-                        <a href="/auth/logout"
-                            class="text-xs font-black uppercase tracking-widest text-primary-text hover:text-white transition">Logout</a>
-                    </div>
-
-                    <button id="mobile-menu-btn" class="md:hidden p-2 text-primary-text">
-                        <i class="fas fa-bars text-xl"></i>
-                    </button>
-                </div>
+            <div class="hidden md:flex items-center gap-6">
+              <a
+                href="/my-orders"
+                class="text-xs font-black uppercase tracking-widest text-primary-text border-b-2 border-primary-text pb-0.5"
+                >Orders</a
+              >
+              <a
+                href="/auth/logout"
+                class="text-xs font-black uppercase tracking-widest text-primary-text hover:text-white transition"
+                >Logout</a
+              >
             </div>
 
-            <div id="mobile-menu" class="hidden md:hidden mt-4 pt-4 border-t border-primary-text/10">
-                <a href="/my-orders" class="block py-2 font-bold text-primary-text">My Orders</a>
-                <a href="/auth/logout" class="block py-2 font-bold text-primary-text opacity-70">Logout</a>
-            </div>
+            <button
+              id="mobile-menu-btn"
+              class="md:hidden p-2 text-primary-text"
+            >
+              <i class="fas fa-bars text-xl"></i>
+            </button>
+          </div>
         </div>
+
+        <div
+          id="mobile-menu"
+          class="hidden md:hidden mt-4 pt-4 border-t border-primary-text/10"
+        >
+          <a href="/my-orders" class="block py-2 font-bold text-primary-text"
+            >My Orders</a
+          >
+          <a
+            href="/auth/logout"
+            class="block py-2 font-bold text-primary-text opacity-70"
+            >Logout</a
+          >
+        </div>
+      </div>
     </nav>
 
     <main class="container mx-auto px-6 py-12 flex-grow">
+      <div class="mb-8">
+        <a
+          href="/my-orders"
+          class="no-print inline-flex items-center text-xs font-bold text-muted-text hover:text-accent transition uppercase tracking-wider mb-4"
+        >
+          <i class="fas fa-arrow-left mr-2"></i> Back to History
+        </a>
 
-        <div class="mb-8">
-            <a href="/my-orders"
-                class="inline-flex items-center text-xs font-bold text-muted-text hover:text-accent transition uppercase tracking-wider mb-4">
-                <i class="fas fa-arrow-left mr-2"></i> Back to History
-            </a>
-
-            <div class="flex flex-col md:flex-row md:items-end justify-between gap-4">
-                <div>
-                    <div class="flex items-center gap-4 mb-2">
-                        <h1 class="text-4xl font-black text-primary-text tracking-tight">Order #{{ order.id }}</h1>
-                        <span class="inline-flex items-center px-3 py-1 rounded-full text-xs font-bold uppercase tracking-wide border
-                            {% if order.status == 'Pending' %}bg-yellow-50 text-yellow-700 border-yellow-200
-                            {% elif order.status == 'Processing' %}bg-blue-50 text-blue-700 border-blue-200
-                            {% elif order.status == 'Shipped' %}bg-purple-50 text-purple-700 border-purple-200
-                            {% elif order.status == 'Delivered' %}bg-green-50 text-green-700 border-green-200
-                            {% elif order.status == 'Cancelled' %}bg-red-50 text-red-700 border-red-200
-                            {% else %}bg-gray-50 text-gray-700 border-gray-200{% endif %}">
-                            <i class="fas 
-                                {% if order.status == 'Pending' %}fa-hourglass-start
-                                {% elif order.status == 'Processing' %}fa-cog fa-spin
-                                {% elif order.status == 'Shipped' %}fa-truck-fast
-                                {% elif order.status == 'Delivered' %}fa-check-double
-                                {% elif order.status == 'Cancelled' %}fa-ban
-                                {% else %}fa-circle{% endif %} mr-2 text-[10px]"></i>
-                            {{ order.status }}
-                        </span>
-                    </div>
-                    <p class="text-secondary-text font-medium">
-                        Placed on <span class="font-bold">{{ order.created_at.strftime('%B %d, %Y') }}</span> at {{
-                        order.created_at.strftime('%I:%M %p') }}
-                    </p>
-                </div>
-
-                <button onclick="window.print()"
-                    class="hidden md:inline-flex items-center text-xs font-black uppercase tracking-widest text-muted-text hover:text-primary-text transition">
-                    <i class="fas fa-print mr-2"></i> Print Invoice
-                </button>
+        <div
+          class="flex flex-col md:flex-row md:items-end justify-between gap-4"
+        >
+          <div>
+            <div class="flex items-center gap-4 mb-2">
+              <h1 class="text-4xl font-black text-primary-text tracking-tight">
+                Order #{{ order.id }}
+              </h1>
+              <span
+                class="inline-flex items-center px-3 py-1 rounded-full text-xs font-bold uppercase tracking-wide border {% if order.status == 'Pending' %}bg-yellow-50 text-yellow-700 border-yellow-200 {% elif order.status == 'Processing' %}bg-blue-50 text-blue-700 border-blue-200 {% elif order.status == 'Shipped' %}bg-purple-50 text-purple-700 border-purple-200 {% elif order.status == 'Delivered' %}bg-green-50 text-green-700 border-green-200 {% elif order.status == 'Cancelled' %}bg-red-50 text-red-700 border-red-200 {% else %}bg-gray-50 text-gray-700 border-gray-200{% endif %}"
+              >
+                <i
+                  class="fas {% if order.status == 'Pending' %}fa-hourglass-start {% elif order.status == 'Processing' %}fa-cog fa-spin {% elif order.status == 'Shipped' %}fa-truck-fast {% elif order.status == 'Delivered' %}fa-check-double {% elif order.status == 'Cancelled' %}fa-ban {% else %}fa-circle{% endif %} mr-2 text-[10px]"
+                ></i>
+                {{ order.status }}
+              </span>
             </div>
+            <p class="text-secondary-text font-medium">
+              Placed on
+              <span class="font-bold"
+                >{{ order.created_at.strftime('%B %d, %Y') if order.created_at
+                else 'N/A' }}</span
+              >
+              at {{ order.created_at.strftime('%I:%M %p') if order.created_at
+              else '' }}
+            </p>
+          </div>
+
+          <button
+            onclick="window.print()"
+            class="no-print hidden md:inline-flex items-center text-xs font-black uppercase tracking-widest text-muted-text hover:text-primary-text transition"
+          >
+            <i class="fas fa-print mr-2"></i> Print Invoice
+          </button>
         </div>
+      </div>
 
-        <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
-
-            <div class="lg:col-span-2 space-y-6">
-                <div class="bg-card-bg rounded-2xl border border-highlight-bg overflow-hidden shadow-sm">
-                    <div class="px-6 py-4 border-b border-highlight-bg bg-white/40">
-                        <h2 class="text-xs font-black uppercase tracking-widest text-primary-text">Collection Items ({{
-                            items|length }})</h2>
-                    </div>
-
-                    <div class="divide-y divide-highlight-bg">
-                        {% for item in items %}
-                        <div class="p-6 flex flex-col sm:flex-row gap-6 hover:bg-white/40 transition group">
-                            <div
-                                class="w-20 h-28 bg-white rounded shadow-sm flex items-center justify-center flex-shrink-0 border border-highlight-bg overflow-hidden">
-                                {% if item.book.image %}
-                                <img src="{{ url_for('static', filename=item.book.image) }}" alt="{{ item.book.title }}"
-                                    class="w-full h-full object-cover">
-                                {% else %}
-                                <i class="fas fa-book text-3xl text-accent/50"></i>
-                                {% endif %}
-                            </div>
-
-                            <div class="flex-1 flex flex-col justify-center">
-                                <h3 class="text-lg font-bold text-primary-text mb-1 group-hover:text-accent transition">
-                                    {{ item.book.title }}</h3>
-                                <p class="text-sm text-muted-text italic mb-3">by {{ item.book.author }}</p>
-
-                                <div class="flex items-center gap-6 text-sm">
-                                    <div class="px-2 py-1 bg-white/60 rounded border border-highlight-bg">
-                                        <span class="text-muted-text text-xs uppercase font-bold mr-1">Qty:</span>
-                                        <span class="font-bold text-primary-text">{{ item.quantity }}</span>
-                                    </div>
-                                    <div class="text-secondary-text">
-                                        <span class="text-xs text-muted-text">@</span> Rs {{ item.price }}
-                                    </div>
-                                </div>
-                            </div>
-
-                            <div class="flex items-center sm:justify-end">
-                                <span class="font-bold text-lg text-primary-text">Rs {{ item.price * item.quantity
-                                    }}</span>
-                            </div>
-                        </div>
-                        {% endfor %}
-                    </div>
-                </div>
+      <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+        <div class="lg:col-span-2 space-y-6">
+          <div
+            class="bg-card-bg rounded-2xl border border-highlight-bg overflow-hidden shadow-sm"
+          >
+            <div class="px-6 py-4 border-b border-highlight-bg bg-white/40">
+              <h2
+                class="text-xs font-black uppercase tracking-widest text-primary-text"
+              >
+                Collection Items ({{ items|length }})
+              </h2>
             </div>
 
-            <div class="lg:col-span-1 space-y-6">
-
+            <div class="divide-y divide-highlight-bg">
+              {% for item in items %}
+              <div
+                class="p-6 flex flex-col sm:flex-row gap-6 hover:bg-white/40 transition group"
+              >
                 <div
-                    class="bg-white rounded-2xl border border-highlight-bg p-6 shadow-lg shadow-accent/5 relative overflow-hidden">
-                    <div class="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-accent to-highlight-bg"></div>
-
-                    <h2 class="text-xs font-black uppercase tracking-widest text-primary-text mb-6">Payment Summary</h2>
-
-                    <div class="space-y-3 mb-6">
-                        <div class="flex justify-between text-sm text-secondary-text">
-                            <span>Subtotal</span>
-                            <span class="font-medium">Rs {{ order.sub_total }}</span>
-                        </div>
-                        <div class="flex justify-between text-sm text-secondary-text">
-                            <span>Shipping</span>
-                            <span class="font-medium">Rs {{ order.shipping_fee }}</span>
-                        </div>
-                    </div>
-
-                    <div class="border-t-2 border-dashed border-highlight-bg pt-4 mb-6">
-                        <div class="flex justify-between items-end">
-                            <span class="text-sm font-bold text-primary-text">Total</span>
-                            <span class="text-2xl font-black text-primary-text tracking-tight">Rs {{ order.total_amount
-                                }}</span>
-                        </div>
-                    </div>
-
-                    <div class="bg-card-bg rounded-xl p-4 border border-highlight-bg">
-                        <div class="flex items-center gap-3 mb-2">
-                            <div
-                                class="w-8 h-8 rounded-full bg-white flex items-center justify-center text-accent shadow-sm">
-                                <i class="fas fa-credit-card"></i>
-                            </div>
-                            <div>
-                                <p class="text-xs font-bold text-primary-text uppercase">{{ order.payment_method }}</p>
-                                <p class="text-[10px] text-muted-text uppercase tracking-wider">{{ order.payment_status
-                                    }}</p>
-                            </div>
-                        </div>
-                    </div>
+                  class="w-20 h-28 bg-white rounded shadow-sm flex items-center justify-center flex-shrink-0 border border-highlight-bg overflow-hidden"
+                >
+                  {% if item.book.image %}
+                  <img
+                    src="{{ url_for('static', filename=item.book.image) }}"
+                    alt="{{ item.book.title }}"
+                    class="w-full h-full object-cover"
+                  />
+                  {% else %}
+                  <i class="fas fa-book text-3xl text-accent/50"></i>
+                  {% endif %}
                 </div>
 
-                <div class="bg-card-bg rounded-2xl border border-highlight-bg p-6">
-                    <h2 class="text-xs font-black uppercase tracking-widest text-primary-text mb-6">Delivery Details
-                    </h2>
+                <div class="flex-1 flex flex-col justify-center">
+                  <h3
+                    class="text-lg font-bold text-primary-text mb-1 group-hover:text-accent transition"
+                  >
+                    {{ item.book.title }}
+                  </h3>
+                  <p class="text-sm text-muted-text italic mb-3">
+                    by {{ item.book.author }}
+                  </p>
 
-                    <div class="space-y-6">
-                        <div class="flex gap-4">
-                            <i class="fas fa-location-dot mt-1 text-accent"></i>
-                            <div class="text-sm text-secondary-text leading-relaxed">
-                                <p class="font-bold text-primary-text mb-1">{{ order.first_name }} {{ order.last_name }}
-                                </p>
-                                <p>{{ order.street_address }}</p>
-                                {% if order.appartment %}<p>{{ order.appartment }}</p>{% endif %}
-                                <p>{{ order.city }}, {{ order.state }}</p>
-                                <p>{{ order.country }}</p>
-                            </div>
-                        </div>
-
-                        <div class="border-t border-highlight-bg pt-4 flex flex-col gap-3">
-                            <div class="flex items-center gap-4 text-sm text-secondary-text">
-                                <i class="fas fa-phone w-4 text-center text-accent"></i>
-                                <span>{{ order.phone }}</span>
-                            </div>
-                            <div class="flex items-center gap-4 text-sm text-secondary-text">
-                                <i class="fas fa-envelope w-4 text-center text-accent"></i>
-                                <span class="truncate">{{ order.email }}</span>
-                            </div>
-                        </div>
+                  <div class="flex items-center gap-6 text-sm">
+                    <div
+                      class="px-2 py-1 bg-white/60 rounded border border-highlight-bg"
+                    >
+                      <span
+                        class="text-muted-text text-xs uppercase font-bold mr-1"
+                        >Qty:</span
+                      >
+                      <span class="font-bold text-primary-text"
+                        >{{ item.quantity }}</span
+                      >
                     </div>
+                    <div class="text-secondary-text">
+                      <span class="text-xs text-muted-text">@</span> Rs {{
+                      item.price }}
+                    </div>
+                  </div>
                 </div>
 
-                <div class="bg-accent/10 rounded-xl p-4 border border-accent/20 text-center">
-                    <p class="text-xs text-secondary-text mb-2">Need help with this order?</p>
-                    <a href="#"
-                        class="text-xs font-bold text-primary-text hover:text-accent underline decoration-accent transition">Contact
-                        Support</a>
+                <div class="flex items-center sm:justify-end">
+                  <span class="font-bold text-lg text-primary-text"
+                    >Rs {{ item.price * item.quantity }}</span
+                  >
                 </div>
+              </div>
+              {% endfor %}
             </div>
+          </div>
         </div>
+
+        <div class="lg:col-span-1 space-y-6">
+          <div
+            class="bg-white rounded-2xl border border-highlight-bg p-6 shadow-lg shadow-accent/5 relative overflow-hidden"
+          >
+            <div
+              class="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-accent to-highlight-bg"
+            ></div>
+
+            <h2
+              class="text-xs font-black uppercase tracking-widest text-primary-text mb-6"
+            >
+              Payment Summary
+            </h2>
+
+            <div class="space-y-3 mb-6">
+              <div class="flex justify-between text-sm text-secondary-text">
+                <span>Subtotal</span>
+                <span class="font-medium">Rs {{ order.sub_total }}</span>
+              </div>
+              <div class="flex justify-between text-sm text-secondary-text">
+                <span>Shipping</span>
+                <span class="font-medium">Rs {{ order.shipping_fee }}</span>
+              </div>
+            </div>
+
+            <div class="border-t-2 border-dashed border-highlight-bg pt-4 mb-6">
+              <div class="flex justify-between items-end">
+                <span class="text-sm font-bold text-primary-text">Total</span>
+                <span
+                  class="text-2xl font-black text-primary-text tracking-tight"
+                  >Rs {{ order.total_amount }}</span
+                >
+              </div>
+            </div>
+
+            <div class="bg-card-bg rounded-xl p-4 border border-highlight-bg">
+              <div class="flex items-center gap-3 mb-2">
+                <div
+                  class="w-8 h-8 rounded-full bg-white flex items-center justify-center text-accent shadow-sm"
+                >
+                  <i class="fas fa-credit-card"></i>
+                </div>
+                <div>
+                  <p class="text-xs font-bold text-primary-text uppercase">
+                    {{ order.payment_method }}
+                  </p>
+                  <p
+                    class="text-[10px] text-muted-text uppercase tracking-wider"
+                  >
+                    {{ order.payment_status }}
+                  </p>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="bg-card-bg rounded-2xl border border-highlight-bg p-6">
+            <h2
+              class="text-xs font-black uppercase tracking-widest text-primary-text mb-6"
+            >
+              Delivery Details
+            </h2>
+
+            <div class="space-y-6">
+              <div class="flex gap-4">
+                <i class="fas fa-location-dot mt-1 text-accent"></i>
+                <div class="text-sm text-secondary-text leading-relaxed">
+                  <p class="font-bold text-primary-text mb-1">
+                    {{ order.first_name }} {{ order.last_name }}
+                  </p>
+                  <p>{{ order.street_address }}</p>
+                  {% if order.appartment %}
+                  <p>{{ order.appartment }}</p>
+                  {% endif %}
+                  <p>{{ order.city }}, {{ order.state }}</p>
+                  <p>{{ order.country }}</p>
+                </div>
+              </div>
+
+              <div
+                class="border-t border-highlight-bg pt-4 flex flex-col gap-3"
+              >
+                <div
+                  class="flex items-center gap-4 text-sm text-secondary-text"
+                >
+                  <i class="fas fa-phone w-4 text-center text-accent"></i>
+                  <span>{{ order.phone }}</span>
+                </div>
+                <div
+                  class="flex items-center gap-4 text-sm text-secondary-text"
+                >
+                  <i class="fas fa-envelope w-4 text-center text-accent"></i>
+                  <span class="truncate">{{ order.email }}</span>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div
+            class="no-print bg-accent/10 rounded-xl p-4 border border-accent/20 text-center"
+          >
+            <p class="text-xs text-secondary-text mb-2">
+              Need help with this order?
+            </p>
+            <a
+              href="#"
+              class="text-xs font-bold text-primary-text hover:text-accent underline decoration-accent transition"
+              >Contact Support</a
+            >
+          </div>
+        </div>
+      </div>
     </main>
 
     <footer class="bg-card-bg/50 border-t border-highlight-bg pt-12 pb-8 mt-10">
-        <div class="container mx-auto px-6">
-            <div class="grid grid-cols-1 md:grid-cols-4 gap-8 mb-8">
-                <div class="md:col-span-2">
-                    <a href="/" class="text-lg font-black text-primary-text flex items-center tracking-tighter mb-4">
-                        <i class="fas fa-book-open mr-2"></i> BookStore
-                    </a>
-                    <p class="text-sm text-muted-text leading-relaxed max-w-sm">
-                        Curating stories that transport, educate, and inspire. Your trusted destination for literary
-                        excellence.
-                    </p>
-                </div>
+      <div class="container mx-auto px-6">
+        <div class="grid grid-cols-1 md:grid-cols-4 gap-8 mb-8">
+          <div class="md:col-span-2">
+            <a
+              href="/"
+              class="text-lg font-black text-primary-text flex items-center tracking-tighter mb-4"
+            >
+              <i class="fas fa-book-open mr-2"></i> BookStore
+            </a>
+            <p class="text-sm text-muted-text leading-relaxed max-w-sm">
+              Curating stories that transport, educate, and inspire. Your
+              trusted destination for literary excellence.
+            </p>
+          </div>
 
-                <div>
-                    <h4 class="text-xs font-black uppercase tracking-widest text-primary-text mb-4">Contact</h4>
-                    <ul class="space-y-2 text-sm text-secondary-text">
-                        <li><i class="fas fa-envelope w-5 text-accent"></i> info@bookstore.com</li>
-                        <li><i class="fas fa-phone w-5 text-accent"></i> +92 300 1234567</li>
-                    </ul>
-                </div>
+          <div>
+            <h4
+              class="text-xs font-black uppercase tracking-widest text-primary-text mb-4"
+            >
+              Contact
+            </h4>
+            <ul class="space-y-2 text-sm text-secondary-text">
+              <li>
+                <i class="fas fa-envelope w-5 text-accent"></i>
+                info@bookstore.com
+              </li>
+              <li>
+                <i class="fas fa-phone w-5 text-accent"></i> +92 300 1234567
+              </li>
+            </ul>
+          </div>
 
-                <div>
-                    <h4 class="text-xs font-black uppercase tracking-widest text-primary-text mb-4">Follow</h4>
-                    <div class="flex space-x-4">
-                        <a href="#"
-                            class="w-8 h-8 rounded-full bg-white flex items-center justify-center text-primary-text hover:bg-accent hover:text-white transition shadow-sm">
-                            <i class="fab fa-instagram"></i>
-                        </a>
-                        <a href="#"
-                            class="w-8 h-8 rounded-full bg-white flex items-center justify-center text-primary-text hover:bg-accent hover:text-white transition shadow-sm">
-                            <i class="fab fa-whatsapp"></i>
-                        </a>
-                    </div>
-                </div>
+          <div>
+            <h4
+              class="text-xs font-black uppercase tracking-widest text-primary-text mb-4"
+            >
+              Follow
+            </h4>
+            <div class="flex space-x-4">
+              <a
+                href="#"
+                class="w-8 h-8 rounded-full bg-white flex items-center justify-center text-primary-text hover:bg-accent hover:text-white transition shadow-sm"
+              >
+                <i class="fab fa-instagram"></i>
+              </a>
+              <a
+                href="#"
+                class="w-8 h-8 rounded-full bg-white flex items-center justify-center text-primary-text hover:bg-accent hover:text-white transition shadow-sm"
+              >
+                <i class="fab fa-whatsapp"></i>
+              </a>
             </div>
-
-            <div class="border-t border-primary-text/5 pt-8 text-center">
-                <p class="text-[10px] font-bold uppercase tracking-[0.2em] text-muted-text/60">
-                    &copy; 2024 BookStore &bull; All Rights Reserved
-                </p>
-            </div>
+          </div>
         </div>
+
+        <div class="border-t border-primary-text/5 pt-8 text-center">
+          <p
+            class="text-[10px] font-bold uppercase tracking-[0.2em] text-muted-text/60"
+          >
+            &copy; 2024 BookStore &bull; All Rights Reserved
+          </p>
+        </div>
+      </div>
     </footer>
 
     <script>
-        const mobileMenuBtn = document.getElementById('mobile-menu-btn');
-        const mobileMenu = document.getElementById('mobile-menu');
+      const mobileMenuBtn = document.getElementById("mobile-menu-btn");
+      const mobileMenu = document.getElementById("mobile-menu");
 
-        mobileMenuBtn.addEventListener('click', () => {
-            mobileMenu.classList.toggle('hidden');
-        });
+      mobileMenuBtn.addEventListener("click", () => {
+        mobileMenu.classList.toggle("hidden");
+      });
     </script>
-</body>
-
+  </body>
 </html>
