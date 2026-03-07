@@ -16,12 +16,14 @@ def create_app():
     from app.cart import cart_bp
     from app.orders import orders_bp
     from app.admin import admin_bp
+    from app.reviews import reviews_bp
 
     app.register_blueprint(auth_bp)
     app.register_blueprint(books_bp)
     app.register_blueprint(cart_bp)
     app.register_blueprint(orders_bp)
     app.register_blueprint(admin_bp)
+    app.register_blueprint(reviews_bp)
 
     @app.context_processor
     def inject_cart_count():
