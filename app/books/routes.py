@@ -1,6 +1,7 @@
-from flask import Blueprint, render_template, request, redirect, url_for, session
-from app.models import Books, Order_Item
+from flask import render_template, request, redirect, url_for, session
+from app.models import Books, Order_Item, Reviews
 from app.extension import db
+from flask_login import current_user
 from . import books_bp
 
 @books_bp.route("/")
@@ -40,4 +41,19 @@ def book_details(book_id):
     cart = session.get("cart", {})
     cart_amount = sum(cart.values())
 
-    return render_template("book_detail.html", book=book, cart_amount=cart_amount)
+    reviews = Reviews.query.filter_by(book_id=book_id).order_by(Reviews.created_at.desc()).all()
+
+    avg_rating = 0
+    if reviews:
+        avg_rating = sum(r.rating for r in reviews) / len(reviews)
+
+    user_review = None
+    if current_user.is_authenticated:
+        user_review = Reviews.query.filter_by(book_id=book_id, user_id=current_user.id).first()
+
+    return render_template("book_detail.html",
+                            book=book,
+                            cart_amount=cart_amount,
+                            reviews=reviews,
+                            avg_rating=avg_rating,
+                            user_review=user_review)
