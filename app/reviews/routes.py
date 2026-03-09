@@ -28,7 +28,7 @@ def add_review(book_id):
     flash('Review submitted successfully!', 'success')
     return redirect(url_for('books.book_details', book_id=book_id))
 
-reviews_bp.route("/edit/<int:review_id>", methods=['POST'])
+@reviews_bp.route("/edit/<int:review_id>", methods=['POST'])
 @login_required
 def edit_review(review_id):
     review = Reviews.query.get_or_404(review_id)
@@ -52,7 +52,7 @@ def edit_review(review_id):
     flash('Review updated successfully!', 'success')
     return redirect(url_for('books.book_details', book_id=review.book_id))
 
-reviews_bp.route("/delete/<int:review_id>")
+@reviews_bp.route("/delete/<int:review_id>")
 @login_required
 def delete_review(review_id):
     review = Reviews.query.get_or_404(review_id)

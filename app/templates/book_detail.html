@@ -27,7 +27,6 @@
       };
     </script>
     <style>
-      /* Custom Tab Styling for the active state */
       .tab-active {
         border-bottom: 2px solid #f5afaf;
         color: #3a2e2e;
@@ -36,7 +35,6 @@
       .tab-inactive {
         color: #7a6a6a;
       }
-      /* Hide scrollbar for number input */
       input[type="number"]::-webkit-inner-spin-button,
       input[type="number"]::-webkit-outer-spin-button {
         -webkit-appearance: none;
@@ -49,353 +47,289 @@
       <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div class="flex justify-between h-16">
           <div class="flex items-center">
-            <a
-              href="/"
-              class="text-2xl font-bold text-primary-text flex items-center"
-            >
-              <i class="fas fa-book-open mr-2 text-accent"></i>
-              BookStore
+            <a href="/" class="text-2xl font-bold text-primary-text flex items-center">
+              <i class="fas fa-book-open mr-2 text-accent"></i> BookStore
             </a>
           </div>
           <div class="flex items-center space-x-4">
-            <a
-              href="/cart"
-              class="text-primary-text hover:text-accent transition relative"
-            >
+            <a href="/cart" class="text-primary-text hover:text-accent transition relative">
               <i class="fas fa-shopping-cart text-xl"></i>
               {% if cart_amount > 0 %}
-              <span
-                class="absolute -top-2 -right-2 bg-accent text-white text-xs font-bold rounded-full h-5 w-5 flex items-center justify-center"
-              >
+              <span class="absolute -top-2 -right-2 bg-accent text-white text-xs font-bold rounded-full h-5 w-5 flex items-center justify-center">
                 {{ cart_amount }}
               </span>
               {% endif %}
             </a>
-
-            <!-- Auth Links -->
             {% if current_user.is_authenticated %}
-            <a
-              href="/my-orders"
-              class="text-primary-text hover:text-accent transition font-medium"
-              >My Orders</a
-            >
-            <a
-              href="/auth/logout"
-              class="text-primary-text hover:text-accent transition font-medium"
-              >Logout</a
-            >
+            <a href="/my-orders" class="text-primary-text hover:text-accent transition font-medium">My Orders</a>
+            <a href="/auth/logout" class="text-primary-text hover:text-accent transition font-medium">Logout</a>
             {% else %}
-            <a
-              href="/auth/login"
-              class="text-primary-text hover:text-accent transition font-medium"
-              >Login</a
-            >
+            <a href="/auth/login" class="text-primary-text hover:text-accent transition font-medium">Login</a>
             {% endif %}
           </div>
         </div>
       </div>
     </nav>
 
-    <!-- Flash Messages -->
-    {% with messages = get_flashed_messages(with_categories=true) %} {% if
-    messages %}
+    {% with messages = get_flashed_messages(with_categories=true) %} 
+    {% if messages %}
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mt-4">
       {% for category, message in messages %}
-      <div
-        class="mb-4 p-4 rounded-lg {% if category == 'success' %}bg-green-100 text-green-800{% elif category == 'danger' %}bg-red-100 text-red-800{% else %}bg-yellow-100 text-yellow-800{% endif %}"
-      >
-        <i
-          class="fas {% if category == 'success' %}fa-check-circle{% elif category == 'danger' %}fa-exclamation-circle{% else %}fa-info-circle{% endif %} mr-2"
-        ></i>
+      <div class="mb-4 p-4 rounded-lg {% if category == 'success' %}bg-green-100 text-green-800{% elif category == 'danger' %}bg-red-100 text-red-800{% else %}bg-yellow-100 text-yellow-800{% endif %}">
+        <i class="fas {% if category == 'success' %}fa-check-circle{% elif category == 'danger' %}fa-exclamation-circle{% else %}fa-info-circle{% endif %} mr-2"></i>
         {{ message }}
       </div>
       {% endfor %}
     </div>
-    {% endif %} {% endwith %}
+    {% endif %} 
+    {% endwith %}
 
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10">
-      <!-- Back Button -->
       <div class="mb-6">
-        <a
-          href="/"
-          class="text-accent hover:text-primary-text transition font-medium"
-        >
+        <a href="/" class="text-accent hover:text-primary-text transition font-medium">
           <i class="fas fa-arrow-left mr-2"></i>Back to Books
         </a>
       </div>
 
       <div class="flex flex-col md:flex-row gap-10">
-        <!-- Book Image -->
         <div class="w-full md:w-1/2">
-          <div
-            class="bg-card-bg rounded-2xl p-8 relative overflow-hidden shadow-lg aspect-square flex items-center justify-center group"
-          >
-            <div
-              class="absolute bottom-0 left-0 right-0 h-1/3 bg-primary-text opacity-10 rounded-t-[50%] transform scale-150 translate-y-10"
-            ></div>
-
-            <img
-              src="{{ url_for('static', filename=book.image) if book.image else 'https://via.placeholder.com/400x600?text=No+Cover' }}"
-              alt="{{ book.title }}"
-              class="relative z-10 w-2/3 shadow-2xl transform transition duration-500 group-hover:scale-105 object-cover rounded-md"
-            />
+          <div class="bg-card-bg rounded-2xl p-8 relative overflow-hidden shadow-lg aspect-square flex items-center justify-center group">
+            <div class="absolute bottom-0 left-0 right-0 h-1/3 bg-primary-text opacity-10 rounded-t-[50%] transform scale-150 translate-y-10"></div>
+            <img src="{{ url_for('static', filename=book.image) if book.image else 'https://via.placeholder.com/400x600?text=No+Cover' }}" alt="{{ book.title }}" class="relative z-10 w-2/3 shadow-2xl transform transition duration-500 group-hover:scale-105 object-cover rounded-md" />
           </div>
         </div>
 
-        <!-- Book Details -->
         <div class="w-full md:w-1/2 flex flex-col justify-center">
-          <h1 class="text-4xl font-bold text-primary-text mb-2">
-            {{ book.title }}
-          </h1>
-          <p class="text-lg text-secondary-text mb-4">
-            by <span class="font-semibold">{{ book.author }}</span>
-          </p>
+          <h1 class="text-4xl font-bold text-primary-text mb-2">{{ book.title }}</h1>
+          <p class="text-lg text-secondary-text mb-4">by <span class="font-semibold">{{ book.author }}</span></p>
+          <div class="text-3xl font-bold text-red-600 mb-4">Rs {{ book.price }}</div>
 
-          <div class="text-3xl font-bold text-red-600 mb-4">
-            Rs {{ book.price }}
-          </div>
-
-          <!-- Binding Display -->
           <div class="mb-4">
-            <span
-              class="inline-block bg-highlight-bg px-4 py-2 rounded-lg text-sm font-semibold text-primary-text"
-            >
-              <i class="fas fa-book mr-2"></i>{{ book.binding if book.binding
-              else 'Paperback' }}
+            <span class="inline-block bg-highlight-bg px-4 py-2 rounded-lg text-sm font-semibold text-primary-text">
+              <i class="fas fa-book mr-2"></i>{{ book.binding if book.binding else 'Paperback' }}
+            </span>
+            <span class="inline-block ml-2 px-4 py-2 rounded-lg text-sm font-semibold text-primary-text">
+              <i class="fas fa-star text-accent mr-1"></i> {{ "%.1f"|format(avg_rating) if avg_rating > 0 else "No ratings" }}
             </span>
           </div>
 
           <p class="text-sm text-secondary-text mb-6">
-            <i class="fas fa-truck mr-2"></i>Shipping charges will be calculated
-            at the checkout
+            <i class="fas fa-truck mr-2"></i>Shipping charges will be calculated at the checkout
           </p>
 
           {% if book.binding == 'Hardcover' %}
           <div class="bg-red-50 border-l-4 border-red-500 p-4 mb-6">
             <p class="text-red-700 text-sm font-medium">
-              <i class="fas fa-info-circle mr-2"></i>
-              For hardcover books delivery time is 10 days. You must select bank
-              transfer and send payment in advance, otherwise the order will be
-              cancelled.
+              <i class="fas fa-info-circle mr-2"></i> For hardcover books delivery time is 10 days. You must select bank transfer and send payment in advance, otherwise the order will be cancelled.
             </p>
           </div>
           {% endif %}
 
-          <!-- Add to Cart Form -->
           <div class="mb-6">
             <div class="flex items-center gap-4">
-              <div
-                class="flex items-center border border-gray-300 rounded-lg bg-white overflow-hidden w-32"
-              >
-                <button
-                  type="button"
-                  onclick="decrementQty()"
-                  class="px-3 py-3 text-secondary-text hover:bg-gray-100 transition"
-                >
-                  <i class="fas fa-minus text-xs"></i>
-                </button>
-                <input
-                  type="number"
-                  id="quantity"
-                  name="quantity"
-                  value="1"
-                  min="1"
-                  max="{{ book.stock }}"
-                  class="w-full text-center outline-none text-primary-text font-semibold h-full"
-                />
-                <button
-                  type="button"
-                  onclick="incrementQty()"
-                  class="px-3 py-3 text-secondary-text hover:bg-gray-100 transition"
-                >
-                  <i class="fas fa-plus text-xs"></i>
-                </button>
+              <div class="flex items-center border border-gray-300 rounded-lg bg-white overflow-hidden w-32">
+                <button type="button" onclick="decrementQty()" class="px-3 py-3 text-secondary-text hover:bg-gray-100 transition"><i class="fas fa-minus text-xs"></i></button>
+                <input type="number" id="quantity" name="quantity" value="1" min="1" max="{{ book.stock }}" class="w-full text-center outline-none text-primary-text font-semibold h-full" />
+                <button type="button" onclick="incrementQty()" class="px-3 py-3 text-secondary-text hover:bg-gray-100 transition"><i class="fas fa-plus text-xs"></i></button>
               </div>
 
               {% if book.stock > 0 %}
-              <a
-                href="{{ url_for('cart.add_to_cart', book_id=book.id) }}"
-                class="flex-1 bg-primary-text text-white py-3 px-6 rounded-lg font-bold hover:bg-opacity-90 transition shadow-lg flex items-center justify-center gap-2"
-              >
-                <i class="fas fa-shopping-bag"></i>
-                Add to cart
+              <a href="{{ url_for('cart.add_to_cart', book_id=book.id) }}" class="flex-1 bg-primary-text text-white py-3 px-6 rounded-lg font-bold hover:bg-opacity-90 transition shadow-lg flex items-center justify-center gap-2">
+                <i class="fas fa-shopping-bag"></i> Add to cart
               </a>
               {% else %}
-              <button
-                disabled
-                class="flex-1 bg-gray-300 text-gray-500 py-3 px-6 rounded-lg font-bold cursor-not-allowed flex items-center justify-center gap-2"
-              >
-                <i class="fas fa-times-circle"></i>
-                Out of Stock
+              <button disabled class="flex-1 bg-gray-300 text-gray-500 py-3 px-6 rounded-lg font-bold cursor-not-allowed flex items-center justify-center gap-2">
+                <i class="fas fa-times-circle"></i> Out of Stock
               </button>
               {% endif %}
             </div>
           </div>
 
-          <!-- Stock Status -->
           {% if book.stock > 0 %}
-          <div class="text-sm text-green-600 font-semibold">
-            <i class="fas fa-check-circle mr-1"></i> {{ book.stock }} copies
-            available in stock
-          </div>
+          <div class="text-sm text-green-600 font-semibold"><i class="fas fa-check-circle mr-1"></i> {{ book.stock }} copies available in stock</div>
           {% else %}
-          <div class="text-sm text-red-600 font-semibold">
-            <i class="fas fa-times-circle mr-1"></i> Currently out of stock
-          </div>
+          <div class="text-sm text-red-600 font-semibold"><i class="fas fa-times-circle mr-1"></i> Currently out of stock</div>
           {% endif %}
         </div>
       </div>
 
-      <!-- Tabs Section -->
       <div class="mt-20">
         <div class="flex border-b border-gray-200 justify-center mb-10">
-          <button
-            onclick="switchTab('description')"
-            id="tab-btn-description"
-            class="px-8 py-4 text-lg font-medium transition tab-active"
-          >
-            Description
-          </button>
-          <button
-            onclick="switchTab('details')"
-            id="tab-btn-details"
-            class="px-8 py-4 text-lg font-medium transition tab-inactive hover:text-primary-text"
-          >
-            Book Details
-          </button>
-          <button
-            onclick="switchTab('reviews')"
-            id="tab-btn-reviews"
-            class="px-8 py-4 text-lg font-medium transition tab-inactive hover:text-primary-text"
-          >
-            Customer Reviews
-          </button>
+          <button onclick="switchTab('description')" id="tab-btn-description" class="px-8 py-4 text-lg font-medium transition tab-active">Description</button>
+          <button onclick="switchTab('details')" id="tab-btn-details" class="px-8 py-4 text-lg font-medium transition tab-inactive hover:text-primary-text">Book Details</button>
+          <button onclick="switchTab('reviews')" id="tab-btn-reviews" class="px-8 py-4 text-lg font-medium transition tab-inactive hover:text-primary-text">Customer Reviews</button>
         </div>
 
         <div class="max-w-4xl mx-auto">
-          <!-- Description Tab -->
           <div id="content-description" class="animate-fade-in block">
             <div class="prose max-w-none text-secondary-text leading-relaxed">
               {% if book.description and book.description.strip() %}
-              <div class="text-base whitespace-pre-line">
-                {{ book.description }}
-              </div>
+              <div class="text-base whitespace-pre-line">{{ book.description }}</div>
               {% else %}
               <div class="text-center py-10 bg-card-bg rounded-lg">
                 <i class="fas fa-book-open text-4xl text-muted-text mb-3"></i>
-                <p class="text-muted-text">
-                  No description available for this book.
-                </p>
+                <p class="text-muted-text">No description available for this book.</p>
               </div>
               {% endif %}
             </div>
           </div>
 
-          <!-- Details Tab -->
           <div id="content-details" class="hidden">
-            <div
-              class="grid grid-cols-1 md:grid-cols-2 gap-y-4 text-secondary-text"
-            >
-              <div class="flex border-b border-dashed border-gray-200 pb-2">
-                <span class="font-bold w-1/3">Title:</span>
-                <span>{{ book.title }}</span>
-              </div>
-              <div class="flex border-b border-dashed border-gray-200 pb-2">
-                <span class="font-bold w-1/3">Author:</span>
-                <span>{{ book.author }}</span>
-              </div>
-              <div class="flex border-b border-dashed border-gray-200 pb-2">
-                <span class="font-bold w-1/3">Price:</span>
-                <span class="font-semibold text-red-600"
-                  >Rs {{ book.price }}</span
-                >
-              </div>
-              <div class="flex border-b border-dashed border-gray-200 pb-2">
-                <span class="font-bold w-1/3">Binding:</span>
-                <span>{{ book.binding if book.binding else 'Paperback' }}</span>
-              </div>
-              <div class="flex border-b border-dashed border-gray-200 pb-2">
-                <span class="font-bold w-1/3">Stock:</span>
-                <span
-                  class="{% if book.stock > 0 %}text-green-600{% else %}text-red-600{% endif %} font-semibold"
-                >
-                  {{ book.stock }} available
-                </span>
-              </div>
-              <div class="flex border-b border-dashed border-gray-200 pb-2">
-                <span class="font-bold w-1/3">Language:</span>
-                <span>English</span>
-              </div>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-y-4 text-secondary-text">
+              <div class="flex border-b border-dashed border-gray-200 pb-2"><span class="font-bold w-1/3">Title:</span><span>{{ book.title }}</span></div>
+              <div class="flex border-b border-dashed border-gray-200 pb-2"><span class="font-bold w-1/3">Author:</span><span>{{ book.author }}</span></div>
+              <div class="flex border-b border-dashed border-gray-200 pb-2"><span class="font-bold w-1/3">Price:</span><span class="font-semibold text-red-600">Rs {{ book.price }}</span></div>
+              <div class="flex border-b border-dashed border-gray-200 pb-2"><span class="font-bold w-1/3">Binding:</span><span>{{ book.binding if book.binding else 'Paperback' }}</span></div>
+              <div class="flex border-b border-dashed border-gray-200 pb-2"><span class="font-bold w-1/3">Stock:</span><span class="{% if book.stock > 0 %}text-green-600{% else %}text-red-600{% endif %} font-semibold">{{ book.stock }} available</span></div>
+              <div class="flex border-b border-dashed border-gray-200 pb-2"><span class="font-bold w-1/3">Language:</span><span>English</span></div>
             </div>
           </div>
 
-          <!-- Reviews Tab -->
-          <div id="content-reviews" class="hidden text-center py-10">
-            <div class="bg-card-bg rounded-lg p-8 inline-block">
-              <i class="far fa-comment-dots text-4xl text-accent mb-4"></i>
-              <p class="text-secondary-text">
-                No reviews yet. Be the first to review this book!
-              </p>
+          <div id="content-reviews" class="hidden animate-fade-in">
+            
+            <div class="flex items-center gap-6 mb-8 bg-white p-6 rounded-xl border border-gray-100 shadow-sm">
+              <div class="text-5xl font-bold text-primary-text">{{ "%.1f"|format(avg_rating) if avg_rating > 0 else "0.0" }}</div>
+              <div>
+                <div class="text-accent text-xl mb-1">
+                  {% for i in range(5) %}
+                    {% if i < avg_rating|int %}
+                      <i class="fas fa-star"></i>
+                    {% else %}
+                      <i class="far fa-star"></i>
+                    {% endif %}
+                  {% endfor %}
+                </div>
+                <p class="text-muted-text font-medium">{{ reviews|length }} Review{% if reviews|length != 1 %}s{% endif %}</p>
+              </div>
             </div>
+
+            <div class="mb-10 bg-card-bg p-8 rounded-xl border border-highlight-bg shadow-sm">
+              {% if current_user.is_authenticated %}
+                
+                {% if user_review %}
+                  <h3 class="text-xl font-bold text-primary-text mb-4">Edit Your Review</h3>
+                  <form action="{{ url_for('reviews.edit_review', review_id=user_review.id) }}" method="POST">
+                    <div class="mb-4">
+                      <label class="block text-sm font-semibold text-primary-text mb-2">Rating</label>
+                      <select name="rating" class="w-full md:w-48 px-4 py-3 rounded-lg bg-white border border-gray-200 focus:outline-none focus:border-accent focus:ring-1 focus:ring-accent" required>
+                        <option value="5" {% if user_review.rating|string == '5' %}selected{% endif %}>5 Stars - Excellent</option>
+                        <option value="4" {% if user_review.rating|string == '4' %}selected{% endif %}>4 Stars - Very Good</option>
+                        <option value="3" {% if user_review.rating|string == '3' %}selected{% endif %}>3 Stars - Good</option>
+                        <option value="2" {% if user_review.rating|string == '2' %}selected{% endif %}>2 Stars - Fair</option>
+                        <option value="1" {% if user_review.rating|string == '1' %}selected{% endif %}>1 Star - Poor</option>
+                      </select>
+                    </div>
+                    <div class="mb-4">
+                      <label class="block text-sm font-semibold text-primary-text mb-2">Review (Optional)</label>
+                      <textarea name="review_text" rows="3" class="w-full px-4 py-3 rounded-lg bg-white border border-gray-200 focus:outline-none focus:border-accent focus:ring-1 focus:ring-accent">{{ user_review.review_text if user_review.review_text else '' }}</textarea>
+                    </div>
+                    <div class="flex gap-4">
+                      <button type="submit" class="bg-accent text-primary-text px-6 py-2.5 rounded-lg font-bold hover:brightness-95 transition shadow-sm">Update Review</button>
+                      <a href="{{ url_for('reviews.delete_review', review_id=user_review.id) }}" class="bg-red-100 text-red-600 px-6 py-2.5 rounded-lg font-bold hover:bg-red-200 transition text-center" onclick="return confirm('Are you sure you want to delete this review?');">Delete</a>
+                    </div>
+                  </form>
+                
+                {% else %}
+                  <h3 class="text-xl font-bold text-primary-text mb-4">Write a Review</h3>
+                  <form action="{{ url_for('reviews.add_review', book_id=book.id) }}" method="POST">
+                    <div class="mb-4">
+                      <label class="block text-sm font-semibold text-primary-text mb-2">Rating</label>
+                      <select name="rating" class="w-full md:w-48 px-4 py-3 rounded-lg bg-white border border-gray-200 focus:outline-none focus:border-accent focus:ring-1 focus:ring-accent" required>
+                        <option value="" disabled selected>Select a rating...</option>
+                        <option value="5">5 Stars - Excellent</option>
+                        <option value="4">4 Stars - Very Good</option>
+                        <option value="3">3 Stars - Good</option>
+                        <option value="2">2 Stars - Fair</option>
+                        <option value="1">1 Star - Poor</option>
+                      </select>
+                    </div>
+                    <div class="mb-4">
+                      <label class="block text-sm font-semibold text-primary-text mb-2">Review (Optional)</label>
+                      <textarea name="review_text" rows="3" class="w-full px-4 py-3 rounded-lg bg-white border border-gray-200 focus:outline-none focus:border-accent focus:ring-1 focus:ring-accent" placeholder="What did you think about this book?"></textarea>
+                    </div>
+                    <button type="submit" class="bg-accent text-primary-text px-8 py-2.5 rounded-lg font-bold hover:brightness-95 transition shadow-sm">Submit Review</button>
+                  </form>
+                {% endif %}
+
+              {% else %}
+                <div class="text-center py-6">
+                  <i class="fas fa-lock text-3xl text-muted-text mb-3"></i>
+                  <p class="text-primary-text font-medium mb-4">Please log in to share your thoughts about this book.</p>
+                  <a href="/auth/login" class="inline-block bg-primary-text text-white px-8 py-2.5 rounded-lg font-bold hover:bg-opacity-90 transition shadow-sm">Login to Review</a>
+                </div>
+              {% endif %}
+            </div>
+
+            <div>
+              <h3 class="text-2xl font-bold text-primary-text mb-6">Customer Reviews</h3>
+              {% if reviews %}
+                <div class="space-y-6">
+                  {% for review in reviews %}
+                    <div class="bg-white p-6 rounded-xl border border-gray-100 shadow-sm">
+                      <div class="flex items-start justify-between mb-3">
+                        <div class="flex items-center gap-3">
+                          <div class="w-12 h-12 rounded-full bg-highlight-bg text-primary-text flex items-center justify-center font-bold text-lg">
+                            {{ (review.user.full_name|default('U'))[0]|upper if review.user else 'U' }}
+                          </div>
+                          <div>
+                            <p class="font-bold text-primary-text">{{ review.user.full_name if review.user else 'Customer' }}</p>
+                            <div class="text-accent text-sm mt-0.5">
+                              {% for i in range(5) %}
+                                {% if i < review.rating|int %}
+                                  <i class="fas fa-star"></i>
+                                {% else %}
+                                  <i class="far fa-star"></i>
+                                {% endif %}
+                              {% endfor %}
+                            </div>
+                          </div>
+                        </div>
+                        <span class="text-sm text-muted-text font-medium">
+                          {{ (review.created_at|string)[:10] if review.created_at else '' }}
+                        </span>
+                      </div>
+                      
+                      {% if review.review_text %}
+                        <p class="text-secondary-text leading-relaxed mt-4 pl-15">{{ review.review_text }}</p>
+                      {% endif %}
+                    </div>
+                  {% endfor %}
+                </div>
+              {% else %}
+                <div class="text-center py-12 bg-white rounded-xl border border-gray-100 border-dashed">
+                  <i class="far fa-comment-dots text-4xl text-accent mb-4"></i>
+                  <p class="text-secondary-text text-lg">No reviews yet. Be the first to review this book!</p>
+                </div>
+              {% endif %}
+            </div>
+
           </div>
         </div>
       </div>
     </div>
 
-    <!-- Footer -->
     <footer class="bg-card-bg py-12 mt-16">
       <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
-          <!-- About Section -->
           <div>
-            <h3 class="text-xl font-bold text-primary-text mb-4">
-              About BookStore
-            </h3>
-            <p class="text-secondary-text leading-relaxed">
-              Your trusted online destination for discovering and purchasing
-              books across all genres. We bring stories to your doorstep.
-            </p>
+            <h3 class="text-xl font-bold text-primary-text mb-4">About BookStore</h3>
+            <p class="text-secondary-text leading-relaxed">Your trusted online destination for discovering and purchasing books across all genres. We bring stories to your doorstep.</p>
           </div>
-
-          <!-- Contact Info -->
           <div>
             <h3 class="text-xl font-bold text-primary-text mb-4">Contact Us</h3>
-            <p class="text-secondary-text mb-2">
-              <i class="fas fa-envelope mr-2"></i>info@bookstore.com
-            </p>
-            <p class="text-secondary-text">
-              <i class="fas fa-phone mr-2"></i>+92 306 3052278
-            </p>
+            <p class="text-secondary-text mb-2"><i class="fas fa-envelope mr-2"></i>info@bookstore.com</p>
+            <p class="text-secondary-text"><i class="fas fa-phone mr-2"></i>+92 306 3052278</p>
           </div>
-
-          <!-- Social Links -->
           <div>
             <h3 class="text-xl font-bold text-primary-text mb-4">Follow Us</h3>
             <div class="flex space-x-4">
-              <a
-                href="https://instagram.com"
-                target="_blank"
-                class="text-primary-text hover:text-accent transition text-2xl"
-              >
-                <i class="fab fa-instagram"></i>
-              </a>
-              <a
-                href="https://wa.me/923001234567"
-                target="_blank"
-                class="text-primary-text hover:text-accent transition text-2xl"
-              >
-                <i class="fab fa-whatsapp"></i>
-              </a>
+              <a href="https://instagram.com" target="_blank" class="text-primary-text hover:text-accent transition text-2xl"><i class="fab fa-instagram"></i></a>
+              <a href="https://wa.me/923001234567" target="_blank" class="text-primary-text hover:text-accent transition text-2xl"><i class="fab fa-whatsapp"></i></a>
             </div>
           </div>
         </div>
-
-        <div
-          class="border-t border-primary-text border-opacity-20 mt-8 pt-8 text-center"
-        >
-          <p class="text-muted-text">
-            &copy; 2026 BookStore. All rights reserved.
-          </p>
+        <div class="border-t border-primary-text border-opacity-20 mt-8 pt-8 text-center">
+          <p class="text-muted-text">&copy; 2026 BookStore. All rights reserved.</p>
         </div>
       </div>
     </footer>
@@ -421,17 +355,12 @@
 
       // Tab Switching Logic
       function switchTab(tabName) {
-        // Hide all contents
         document.getElementById("content-description").classList.add("hidden");
         document.getElementById("content-details").classList.add("hidden");
         document.getElementById("content-reviews").classList.add("hidden");
 
-        // Show selected content
-        document
-          .getElementById("content-" + tabName)
-          .classList.remove("hidden");
+        document.getElementById("content-" + tabName).classList.remove("hidden");
 
-        // Reset tab styles
         const tabs = ["description", "details", "reviews"];
         tabs.forEach((t) => {
           const btn = document.getElementById("tab-btn-" + t);
@@ -441,12 +370,11 @@
           btn.style.color = "#7A6A6A";
         });
 
-        // Activate selected tab style
         const activeBtn = document.getElementById("tab-btn-" + tabName);
         activeBtn.classList.remove("tab-inactive");
         activeBtn.classList.add("tab-active");
-        activeBtn.style.borderBottom = "2px solid #F5AFAF"; // Accent color
-        activeBtn.style.color = "#3A2E2E"; // Primary text
+        activeBtn.style.borderBottom = "2px solid #F5AFAF"; 
+        activeBtn.style.color = "#3A2E2E"; 
       }
     </script>
   </body>
