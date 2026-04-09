@@ -11,8 +11,7 @@
 8. [Blueprints & Routes](#blueprints--routes)
 9. [User Guide](#user-guide)
 10. [Admin Guide](#admin-guide)
-11. [API Reference](#api-reference)
-12. [Troubleshooting](#troubleshooting)
+11. [Troubleshooting](#troubleshooting)
 
 ---
 
@@ -373,10 +372,6 @@ The dashboard displays:
 
 ---
 
-## API Reference
-
-### Session Management
-
 #### Cart Session Structure
 ```python
 session['cart'] = {
@@ -512,22 +507,6 @@ Potential features to add:
 
 ---
 
-## Support & Contact
-
-For issues, questions, or contributions:
-- Email: info@bookstore.com
-- Phone: +92 306 3052278
-- Instagram: [Your Instagram]
-- WhatsApp: +92 300 1234567
-
----
-
-## License
-
-This project is developed for educational purposes.
-
----
-
 ## Credits
 
 **Developed by**: Asad Nadeem
@@ -536,5 +515,3 @@ This project is developed for educational purposes.
 **Design**: Tailwind CSS
 
 ---
-
-**Happy Reading! 📚**
